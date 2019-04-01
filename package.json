@@ -1,6 +1,6 @@
 {
-  "name": "patternfly-react-demo-app",
-  "version": "0.3.0",
+  "name": "visual-qontract",
+  "version": "0.0.0",
   "private": true,
   "dependencies": {
     "classnames": "^2.2.5",
@@ -51,7 +51,6 @@
     "analyze": "source-map-explorer build/static/js/main.*",
     "lint": "yarn lint:js",
     "lint:js": "eslint --max-warnings 0 src",
-    "docker:build": "docker build -t patternfly-react-demo-app .",
     "preinstall": "node -v; npm -v;",
     "postbuild": "[ \"$BUILD_ENV\" != OCP ] && exit 0; yarn install --production --ignore-scripts --prefer-offline;"
   }
