@@ -2,6 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { Route, Redirect, Switch } from 'react-router-dom';
+import { ApolloProvider } from 'react-apollo';
+import ApolloClient from 'apollo-boost';
+
 import {
   VerticalNav,
   VerticalNavItem,
@@ -17,6 +20,10 @@ import pfLogo from 'patternfly/dist/img/logo-alt.svg';
 import pfBrand from 'patternfly/dist/img/brand-alt.svg';
 import { routes } from './routes';
 import './App.css';
+
+const client = new ApolloClient({
+  uri: 'http://localhost:4000/graphql'
+});
 
 class App extends React.Component {
   constructor() {
@@ -38,11 +45,6 @@ class App extends React.Component {
     const allRoutes = [];
     this.menu.map((item, index) => {
       allRoutes.push(<Route key={index} exact path={item.to} component={item.component} />);
-      if (item.subItems) {
-        item.subItems.map((secondaryItem, subIndex) =>
-          allRoutes.push(<Route key={subIndex} exact path={secondaryItem.to} component={secondaryItem.component} />)
-        );
-      }
       return allRoutes;
     });
 
@@ -89,42 +91,13 @@ class App extends React.Component {
     const dropdownComponentClass = props => <li className={props.className}>{props.children}</li>;
 
     return (
-      <React.Fragment>
+      <ApolloProvider client={client}>
         <VerticalNav persistentSecondary={false}>
-          <VerticalNavMasthead>
-            <VerticalNavBrand titleImg={pfBrand} iconImg={pfLogo} />
-            <VerticalNavIconBar>
-              <Dropdown componentClass={dropdownComponentClass} id="help">
-                <Dropdown.Toggle className="nav-item-iconic" bsStyle="link" noCaret>
-                  <Icon type="pf" name="help" />
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <MenuItem eventKey="1">Help</MenuItem>
-                  <MenuItem eventKey="2">About</MenuItem>
-                </Dropdown.Menu>
-              </Dropdown>
-              <Dropdown componentClass={dropdownComponentClass} id="user">
-                <Dropdown.Toggle className="nav-item-iconic" bsStyle="link">
-                  <Icon type="pf" name="user" /> <span className="dropdown-title">Brian Johnson</span>
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <MenuItem eventKey="1">Preferences</MenuItem>
-                  <MenuItem eventKey="2">Logout</MenuItem>
-                </Dropdown.Menu>
-              </Dropdown>
-            </VerticalNavIconBar>
-          </VerticalNavMasthead>
+          <VerticalNavMasthead title="APP-INTERFACE" />
           {vertNavItems}
-          {/* <VerticalNavItem
-            key="abc"
-            title="Ipsum"
-            iconClass="fa fa-dashboard"
-            active
-            onClick={() => this.navigateTo('/')}
-          /> */}
         </VerticalNav>
         {this.renderContent()}
-      </React.Fragment>
+      </ApolloProvider>
     );
   }
 }

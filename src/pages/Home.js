@@ -3,12 +3,8 @@ import { Alert, Grid } from 'patternfly-react';
 
 const logo = require('../logo.svg');
 
-interface State {
-  alertVisible: boolean;
-}
-
-class IpsumPage extends React.Component<any, State> {
-  constructor(props: any) {
+class HomePage extends React.Component {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -45,4 +41,4 @@ class IpsumPage extends React.Component<any, State> {
   }
 }
 
-export default IpsumPage;
+export default HomePage;

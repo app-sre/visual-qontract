@@ -3,12 +3,16 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
+    "apollo-boost": "^0.3.1",
     "classnames": "^2.2.6",
+    "graphql": "^14.2.1",
     "lodash.orderby": "^4.6.0",
     "numeral": "^2.0.6",
     "patternfly-react": "^2.33.0",
+    "patternfly-react-extensions": "^2.17.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
+    "react-apollo": "^2.5.3",
     "react-dom": "^16.8.6",
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
@@ -30,6 +34,7 @@
   "sassIncludes": {
     "src": "--include-path src",
     "patternflyReact": "--include-path node_modules/patternfly-react/dist/sass",
+    "patternflyReactExtensions": "--include-path node_modules/patternfly-react-extensions/dist/sass",
     "patternfly": "--include-path node_modules/patternfly/dist/sass",
     "bootstrap": "--include-path node_modules/bootstrap-sass/assets/stylesheets",
     "fontAwesome": "--include-path node_modules/font-awesome-sass/assets/stylesheets"
@@ -37,8 +42,8 @@
   "scripts": {
     "copy-fonts": "ncp node_modules/patternfly/dist/fonts src/fonts",
     "copy-img": "ncp node_modules/patternfly/dist/img src/img",
-    "build-css": "node-sass-chokidar src/ --output-style compressed $npm_package_sassIncludes_src $npm_package_sassIncludes_patternfly $npm_package_sassIncludes_patternflyReact $npm_package_sassIncludes_bootstrap $npm_package_sassIncludes_fontAwesome -o src/",
-    "watch-css": "yarn build-css && node-sass-chokidar src/ --output-style compressed $npm_package_sassIncludes_src $npm_package_sassIncludes_patternfly $npm_package_sassIncludes_patternflyReact $npm_package_sassIncludes_bootstrap $npm_package_sassIncludes_fontAwesome -o src/ --watch --recursive",
+    "build-css": "echo node-sass-chokidar src/ --output-style compressed $npm_package_sassIncludes_src $npm_package_sassIncludes_patternfly $npm_package_sassIncludes_patternflyReact $npm_package_sassIncludes_patternflyReactExtensions $npm_package_sassIncludes_bootstrap $npm_package_sassIncludes_fontAwesome -o src/",
+    "watch-css": "yarn build-css && node-sass-chokidar src/ --output-style compressed $npm_package_sassIncludes_src $npm_package_sassIncludes_patternfly $npm_package_sassIncludes_patternflyReact $npm_package_sassIncludes_patternflyReactExtensions $npm_package_sassIncludes_bootstrap $npm_package_sassIncludes_fontAwesome -o src/ --watch --recursive",
     "build-js": "react-scripts build",
     "start:dev": "npm-run-all -p watch-css start:local",
     "start:local": "react-scripts start",
