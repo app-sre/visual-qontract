@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
 import { baseName } from './routes';
 import App from './App';
 
@@ -13,11 +11,9 @@ it('renders without crashing', () => {
   // https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#debugging-tests-in-chrome
   const div = document.createElement('div');
   ReactDOM.render(
-    <Provider store={store}>
-      <Router basename={baseName}>
-        <App />
-      </Router>
-    </Provider>,
+    <Router basename={baseName}>
+      <App />
+    </Router>,
     div
   );
 });

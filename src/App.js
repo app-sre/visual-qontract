@@ -24,9 +24,9 @@ class App extends React.Component {
 
     this.menu = routes();
   }
-  handleNavClick = (event: Event) => {
+  handleNavClick = event => {
     event.preventDefault();
-    const target = (event.currentTarget: any);
+    const target = event.currentTarget;
     const { history } = this.props;
     if (target.getAttribute) {
       const href = target.getAttribute('href');
@@ -37,19 +37,10 @@ class App extends React.Component {
   renderContent = () => {
     const allRoutes = [];
     this.menu.map((item, index) => {
-      allRoutes.push(
-        <Route key={index} exact path={item.to} component={item.component} />
-      );
+      allRoutes.push(<Route key={index} exact path={item.to} component={item.component} />);
       if (item.subItems) {
         item.subItems.map((secondaryItem, subIndex) =>
-          allRoutes.push(
-            <Route
-              key={subIndex}
-              exact
-              path={secondaryItem.to}
-              component={secondaryItem.component}
-            />
-          )
+          allRoutes.push(<Route key={subIndex} exact path={secondaryItem.to} component={secondaryItem.component} />)
         );
       }
       return allRoutes;
@@ -72,9 +63,7 @@ class App extends React.Component {
     const { location } = this.props;
     const vertNavItems = this.menu.map(item => {
       const active = location.pathname === item.to;
-      const subItemActive = item.subItems && item.subItems.some(
-        item => location.pathname === item.to
-      );
+      const subItemActive = item.subItems && item.subItems.some(item => location.pathname === item.to);
       return (
         <VerticalNavItem
           key={item.to}
@@ -97,9 +86,7 @@ class App extends React.Component {
       );
     });
 
-    const dropdownComponentClass = props => (
-      <li className={props.className}>{props.children}</li>
-    );
+    const dropdownComponentClass = props => <li className={props.className}>{props.children}</li>;
 
     return (
       <React.Fragment>
@@ -108,11 +95,7 @@ class App extends React.Component {
             <VerticalNavBrand titleImg={pfBrand} iconImg={pfLogo} />
             <VerticalNavIconBar>
               <Dropdown componentClass={dropdownComponentClass} id="help">
-                <Dropdown.Toggle
-                  className="nav-item-iconic"
-                  bsStyle="link"
-                  noCaret
-                >
+                <Dropdown.Toggle className="nav-item-iconic" bsStyle="link" noCaret>
                   <Icon type="pf" name="help" />
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
@@ -122,8 +105,7 @@ class App extends React.Component {
               </Dropdown>
               <Dropdown componentClass={dropdownComponentClass} id="user">
                 <Dropdown.Toggle className="nav-item-iconic" bsStyle="link">
-                  <Icon type="pf" name="user" />{' '}
-                  <span className="dropdown-title">Brian Johnson</span>
+                  <Icon type="pf" name="user" /> <span className="dropdown-title">Brian Johnson</span>
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <MenuItem eventKey="1">Preferences</MenuItem>
