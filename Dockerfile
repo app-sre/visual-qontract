@@ -13,9 +13,7 @@ WORKDIR /opt/visual-qontract
 ADD . /opt/visual-qontract
 ADD deployment/nginx.conf /etc/nginx/nginx.conf
 
-RUN yarn install
-
-RUN yarn --production --non-interactive \
+RUN yarn install && yarn --production --non-interactive \
     && yarn build
 
 EXPOSE 8080
