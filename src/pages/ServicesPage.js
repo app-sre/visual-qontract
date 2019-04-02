@@ -3,54 +3,61 @@ import { Grid } from 'patternfly-react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 
-import Users from './elements/Users';
-import User from './elements/User';
+import Services from './elements/Services';
+import Service from './elements/Service';
 
-const GET_USER = gql`
-  query User($path: String) {
-    users_v1(path: $path) {
+const GET_APP = gql`
+  query App($path: String) {
+    apps_v1(path: $path) {
       path
       name
-      redhat_username
-      github_username
-      quay_username
+      description
+      serviceDocs
+      serviceOwner {
+        name
+        email
+      }
+      performanceParameters {
+        SLO
+      }
     }
   }
 `;
 
-const GET_USERS = gql`
-  query Users {
-    users_v1 {
+const GET_APPS = gql`
+  query Apps {
+    apps_v1 {
       path
       name
-      redhat_username
-      github_username
-      quay_username
+      description
+      performanceParameters {
+        SLO
+      }
     }
   }
 `;
 
-const UsersPage = props => {
+const ServicesPage = props => {
   const path = props.location.hash.substring(1);
 
   let viewElement;
   if (path) {
     viewElement = (
-      <Query query={GET_USER} variables={{ path }}>
+      <Query query={GET_APP} variables={{ path }}>
         {({ loading, error, data }) => {
           if (loading) return 'Loading...';
           if (error) return `Error! ${error.message}`;
-          return <User user={data.users_v1[0]} />;
+          return <Service service={data.apps_v1[0]} />;
         }}
       </Query>
     );
   } else {
     viewElement = (
-      <Query query={GET_USERS}>
+      <Query query={GET_APPS}>
         {({ loading, error, data }) => {
           if (loading) return 'Loading...';
           if (error) return `Error! ${error.message}`;
-          return <Users users={data.users_v1} />;
+          return <Services services={data.apps_v1} />;
         }}
       </Query>
     );
@@ -61,7 +68,7 @@ const UsersPage = props => {
       <Grid.Row>
         <Grid.Col xs={12}>
           <div className="page-header">
-            <h1>Users</h1>
+            <h1>Services</h1>
           </div>
         </Grid.Col>
       </Grid.Row>
@@ -70,4 +77,4 @@ const UsersPage = props => {
   );
 };
 
-export default UsersPage;
+export default ServicesPage;

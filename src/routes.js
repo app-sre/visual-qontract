@@ -1,10 +1,10 @@
 import Home from './pages/Home';
 import Ipsum1A from './pages/Ipsum-1-A';
 import Ipsum1B from './pages/Ipsum-1-B';
-import Dolor from './pages/Dolor';
 import Amet from './pages/Amet';
 import Orbis from './pages/Orbis';
 import UsersPage from './pages/UsersPage';
+import ServicesPage from './pages/ServicesPage';
 
 const baseName = '/';
 
@@ -23,9 +23,9 @@ const routes = () => [
   },
   {
     iconClass: 'fa fa-star',
-    title: 'Dolor',
-    to: '/dolor',
-    component: Dolor
+    title: 'Services',
+    to: '/services',
+    component: ServicesPage
   },
   {
     iconClass: 'fa fa-bell',

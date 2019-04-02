@@ -21,8 +21,10 @@ import pfBrand from 'patternfly/dist/img/brand-alt.svg';
 import { routes } from './routes';
 import './App.css';
 
+const graphqlUri = process.env.GRAPHQL_URI || 'http://localhost:4000/graphql';
+
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/graphql'
+  uri: graphqlUri
 });
 
 class App extends React.Component {
