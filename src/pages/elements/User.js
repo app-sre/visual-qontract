@@ -1,26 +1,34 @@
 import React from 'react';
+import Definition from '../../components/Definition';
+import { Button } from 'patternfly-react';
 
 function User({ user }) {
   return (
-    <ul>
-      <li>
-        <strong>Name</strong>: {user.name}
-      </li>
-      <li>
-        <strong>Red Hat Username: </strong>
-        <a href={`https://mojo.redhat.com/people/${user.redhat_username}`}>{user.redhat_username}</a>
-      </li>
-      <li>
-        <strong>GitHub Username: </strong>
-        <a href={`https://github.com/${user.github_username}`}>{user.github_username}</a>
-      </li>
-      {user.quay_username && (
-        <li>
-          <strong>Quay Username: </strong>
-          <a href={`https://quay.io/user/${user.quay_username}`}>{user.quay_username}</a>
-        </li>
-      )}
-    </ul>
+    <React.Fragment>
+      <h2>
+        {user.name}
+        <span className="edit-button">
+          <Button href={`${window.DATA_DIR_URL}${user.path}`}>Edit</Button>
+        </span>
+      </h2>
+
+      <h4>Info</h4>
+      <Definition
+        items={[
+          ['Name', user.name],
+          [
+            'Red Hat Username',
+            <a href={`https://mojo.redhat.com/people/${user.redhat_username}`}>{user.redhat_username}</a>
+          ],
+          ['GitHub Username', <a href={`https://github.com/${user.github_username}`}>{user.github_username}</a>],
+          [
+            'Quay Username',
+            (user.quay_username && <a href={`https://quay.io/user/${user.quay_username}`}>{user.quay_username}</a>) ||
+              '-'
+          ]
+        ]}
+      />
+    </React.Fragment>
   );
 }
 

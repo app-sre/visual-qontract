@@ -2,19 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { chunk } from 'lodash';
 import { CardGrid, Row, Col, Card, CardHeading, CardBody, CardFooter, CardTitle, Label } from 'patternfly-react';
-
-function sortServices(a, b) {
-  if (a.name > b.name) return 1;
-  if (a.name < b.name) return -1;
-  return 0;
-}
+import { sortByName } from '../../components/Utils';
 
 function Services({ services }) {
   // cardsWidth * cardsPerRow must be <= 12 (bootstrap grid)
   const cardWidth = 4;
   const cardsPerRow = 3;
 
-  const rows = chunk(services.sort(sortServices), cardsPerRow).map(c => (
+  const rows = chunk(sortByName(services), cardsPerRow).map(c => (
     <Row key={c[0].path}>
       {c.map(s => (
         <Col xs={cardWidth} key={s.path}>
