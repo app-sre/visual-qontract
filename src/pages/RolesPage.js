@@ -17,6 +17,7 @@ const GET_ROLE = gql`
         path
         name
         description
+        service
       }
       users {
         path

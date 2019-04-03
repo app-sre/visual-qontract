@@ -36,6 +36,16 @@ function Role({ role }) {
         },
         {
           header: {
+            label: 'Provider',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'service'
+        },
+        {
+          header: {
             label: 'Description',
             formatters: [headerFormat]
           },
