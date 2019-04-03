@@ -9,10 +9,8 @@ import { VerticalNav, VerticalNavItem, VerticalNavSecondaryItem, VerticalNavMast
 import { routes } from './routes';
 import './App.css';
 
-const graphqlUri = process.env.REACT_APP_GRAPHQL_URI || 'http://localhost:4000/graphql';
-
 const client = new ApolloClient({
-  uri: graphqlUri
+  uri: window.GRAPHQL_URI
 });
 
 class App extends React.Component {

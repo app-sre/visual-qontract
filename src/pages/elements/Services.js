@@ -8,6 +8,7 @@ function sortServices(a, b) {
   if (a.name < b.name) return -1;
   return 0;
 }
+
 function Services({ services }) {
   // cardsWidth * cardsPerRow must be <= 12 (bootstrap grid)
   const cardWidth = 4;

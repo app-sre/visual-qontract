@@ -4,8 +4,6 @@ import { Grid } from 'patternfly-react';
 import Definition from '../components/Definition';
 
 function HomePage() {
-  const graphql_uri = process.env.REACT_APP_GRAPHQL_URI || 'http://localhost:4000/graphql';
-
   return (
     <Grid fluid className="container-pf-nav-pf-vertical">
       <Grid.Row>
@@ -22,10 +20,10 @@ function HomePage() {
         <Grid.Col xs={12}>
           <Definition
             items={[
-              ['Data', <a href={process.env.REACT_APP_DATA_DIR_URL}>{process.env.REACT_APP_DATA_DIR_URL}</a>],
-              ['Docs', <a href={process.env.REACT_APP_DOCS_BASE_URL}>{process.env.REACT_APP_DOCS_BASE_URL}</a>],
-              ['Schemas', <a href={process.env.REACT_APP_SCHEMAS_DIR}>{process.env.REACT_APP_SCHEMAS_DIR}</a>],
-              ['GraphQL', <a href={graphql_uri}>{graphql_uri}</a>]
+              ['Data', <a href={window.DATA_DIR_URL}>{window.DATA_DIR_URL}</a>],
+              ['Docs', <a href={window.DOCS_BASE_URL}>{window.DOCS_BASE_URL}</a>],
+              ['Schemas', <a href={window.SCHEMAS_DIR}>{window.SCHEMAS_DIR}</a>],
+              ['GraphQL', <a href={window.GRAPHQL_URI}>{window.GRAPHQL_URI}</a>]
             ]}
           />
         </Grid.Col>

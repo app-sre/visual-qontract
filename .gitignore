@@ -1,5 +1,8 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
+# env
+public/env.js
+
 # css
 src/**/*.css
 
@@ -21,9 +24,9 @@ src/**/*.css
 
 # compiled patternfly assets
 src/css/*
-!src/css/.gitkeep 
+!src/css/.gitkeep
 src/img/*
-!src/img/.gitkeep 
+!src/img/.gitkeep
 src/fonts/*
 !src/fonts/.gitkeep
 src/sass/*

@@ -134,7 +134,7 @@ function Service({ service }) {
       <h2>
         {service.name}
         <span className="edit-button">
-          <Button href={`${process.env.REACT_APP_DATA_DIR_URL}${service.path}`}>Edit</Button>
+          <Button href={`${window.DATA_DIR_URL}${service.path}`}>Edit</Button>
         </span>
       </h2>
 
@@ -150,7 +150,7 @@ function Service({ service }) {
           <ul>
             {service.serviceDocs.map(d => (
               <li>
-                <a href={d.startsWith('http') ? d : `${process.env.REACT_APP_DOCS_BASE_URL}${d}`}>{d}</a>
+                <a href={d.startsWith('http') ? d : `${window.DOCS_BASE_URL}${d}`}>{d}</a>
               </li>
             ))}
           </ul>
