@@ -1,6 +1,7 @@
 import Home from './pages/Home';
-import UsersPage from './pages/UsersPage';
 import ServicesPage from './pages/ServicesPage';
+import UsersPage from './pages/UsersPage';
+import RolesPage from './pages/RolesPage';
 
 const baseName = '/';
 
@@ -14,16 +15,22 @@ const routes = () => [
     component: Home
   },
   {
+    iconClass: 'fa fa-th-list',
+    title: 'Services',
+    to: '/services',
+    component: ServicesPage
+  },
+  {
     iconClass: 'fa fa-user',
     title: 'Users',
     to: '/users',
     component: UsersPage
   },
   {
-    iconClass: 'fa fa-th-list',
-    title: 'Services',
-    to: '/services',
-    component: ServicesPage
+    iconClass: 'fa fa-users',
+    title: 'Roles',
+    to: '/roles',
+    component: RolesPage
   }
 ];
 

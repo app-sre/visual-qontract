@@ -1,6 +1,5 @@
 import React from 'react';
 import Definition from '../../components/Definition';
-import { Button } from 'patternfly-react';
 
 function User({ user }) {
   return (
@@ -9,6 +8,7 @@ function User({ user }) {
       <Definition
         items={[
           ['Name', user.name],
+          ['Path', <a href={`${window.DATA_DIR_URL}${user.path}`}>{user.path}</a>],
           [
             'Red Hat Username',
             <a href={`https://mojo.redhat.com/people/${user.redhat_username}`}>{user.redhat_username}</a>

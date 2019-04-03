@@ -1,0 +1,103 @@
+import React from 'react';
+import Definition from '../../components/Definition';
+import { Table } from 'patternfly-react';
+import { Link } from 'react-router-dom';
+import { sortByName } from '../../components/Utils';
+
+function Role({ role }) {
+  const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
+  const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
+  const linkFormat = url => value => <a href={`${url || ''}${value}`}>{value}</a>;
+
+  const permissionsTable = (
+    <Table.PfProvider
+      striped
+      bordered
+      columns={[
+        {
+          header: {
+            label: 'Name',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'name'
+        },
+        {
+          header: {
+            label: 'Path',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [linkFormat(window.DATA_DIR_URL), cellFormat]
+          },
+          property: 'path'
+        },
+        {
+          header: {
+            label: 'Description',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'description'
+        }
+      ]}
+    >
+      <Table.Header />
+      <Table.Body rows={sortByName(role.permissions)} rowKey="path" />
+    </Table.PfProvider>
+  );
+
+  return (
+    <React.Fragment>
+      <h4>Info</h4>
+      <Definition
+        items={[['Name', role.name], ['Path', <a href={`${window.DATA_DIR_URL}${role.path}`}>{role.path}</a>]]}
+      />
+
+      <h4>Description</h4>
+      {role.description || '-'}
+
+      <h4>Permissions</h4>
+      {permissionsTable}
+
+      {role.users.length > 0 && (
+        <React.Fragment>
+          <h4>Users</h4>
+          <ul>
+            {role.users.map(user => (
+              <li>
+                <Link
+                  to={{
+                    pathname: '/users',
+                    hash: user.path
+                  }}
+                >
+                  {user.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </React.Fragment>
+      )}
+
+      {role.bots.length > 0 && (
+        <React.Fragment>
+          <h4>Bots</h4>
+          <ul>
+            {role.bots.map(bot => (
+              <li>
+                <a href={`${window.DATA_DIR_URL}/${bot.path}`}>{bot.name}</a>
+              </li>
+            ))}
+          </ul>
+        </React.Fragment>
+      )}
+    </React.Fragment>
+  );
+}
+
+export default Role;
