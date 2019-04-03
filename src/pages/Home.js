@@ -28,34 +28,6 @@ function HomePage() {
               ['GraphQL', <a href={graphql_uri}>{graphql_uri}</a>]
             ]}
           />
-          {/* <div className="app-definition">
-            <div className="app-definition-row">
-              <div className="app-definition-key">Data</div>
-              <div className="app-definition-val">
-                <a href={process.env.REACT_APP_DATA_DIR_URL}>{process.env.REACT_APP_DATA_DIR_URL}</a>
-              </div>
-            </div>
-            <div className="app-definition-row">
-              <div className="app-definition-key">Docs</div>
-              <div className="app-definition-val">
-                <a href={process.env.REACT_APP_DOCS_BASE_URL}>{process.env.REACT_APP_DOCS_BASE_URL}</a>
-              </div>
-            </div>
-            <div className="app-definition-row">
-              <div className="app-definition-key">Schemas</div>
-              <div className="app-definition-val">
-                <a href={process.env.REACT_APP_SCHEMAS_DIR}>{process.env.REACT_APP_SCHEMAS_DIR}</a>
-              </div>
-            </div>
-            <div className="app-definition-row">
-              <div className="app-definition-key">GraphQL</div>
-              <div className="app-definition-val">
-                <a href={process.env.REACT_APP_GRAPHQL_URI || 'http://localhost:4000/graphql'}>
-                  {process.env.REACT_APP_GRAPHQL_URI || 'http://localhost:4000/graphql'}
-                </a>
-              </div>
-            </div>
-          </div> */}
         </Grid.Col>
       </Grid.Row>
     </Grid>
