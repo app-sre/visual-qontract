@@ -9,28 +9,7 @@ function Roles({ roles }) {
   const linkFormat = url => value => <a href={`${url || ''}${value}`}>{value}</a>;
 
   const processedRoles = sortByName(roles).map(r => {
-    r.internalLink = (
-      <Link
-        to={{
-          pathname: '/roles',
-          hash: r.path
-        }}
-      >
-        {r.name}
-      </Link>
-    );
-
-    r.internalPath = (
-      <Link
-        to={{
-          pathname: '/roles',
-          hash: r.path
-        }}
-      >
-        {r.path}
-      </Link>
-    );
-
+    r.name_path = [r.name, r.path];
     return r;
   });
 
@@ -45,9 +24,21 @@ function Roles({ roles }) {
             formatters: [headerFormat]
           },
           cell: {
-            formatters: [cellFormat]
+            formatters: [
+              value => (
+                <Link
+                  to={{
+                    pathname: '/roles',
+                    hash: value[1]
+                  }}
+                >
+                  {value[0]}
+                </Link>
+              ),
+              cellFormat
+            ]
           },
-          property: 'internalLink'
+          property: 'name_path'
         },
         {
           header: {
@@ -55,9 +46,21 @@ function Roles({ roles }) {
             formatters: [headerFormat]
           },
           cell: {
-            formatters: [cellFormat]
+            formatters: [
+              value => (
+                <Link
+                  to={{
+                    pathname: '/roles',
+                    hash: value[1]
+                  }}
+                >
+                  {value[1]}
+                </Link>
+              ),
+              cellFormat
+            ]
           },
-          property: 'internalPath'
+          property: 'name_path'
         },
         {
           header: {

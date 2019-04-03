@@ -8,17 +8,8 @@ function Users({ users }) {
   const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
   const linkFormat = url => value => <a href={`${url || ''}${value}`}>{value}</a>;
 
-  const processedUsers = sortByName(users).map(u => {
-    u.internalLink = (
-      <Link
-        to={{
-          pathname: '/users',
-          hash: u.path
-        }}
-      >
-        {u.name}
-      </Link>
-    );
+  const processedUsers = sortByName(users.slice()).map(u => {
+    u.name_path = [u.name, u.path];
     return u;
   });
 
@@ -33,9 +24,43 @@ function Users({ users }) {
             formatters: [headerFormat]
           },
           cell: {
-            formatters: [cellFormat]
+            formatters: [
+              value => (
+                <Link
+                  to={{
+                    pathname: '/users',
+                    hash: value[1]
+                  }}
+                >
+                  {value[0]}
+                </Link>
+              ),
+              cellFormat
+            ]
           },
-          property: 'internalLink'
+          property: 'name_path'
+        },
+        {
+          header: {
+            label: 'Path',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [
+              value => (
+                <Link
+                  to={{
+                    pathname: '/users',
+                    hash: value[1]
+                  }}
+                >
+                  {value[1]}
+                </Link>
+              ),
+              cellFormat
+            ]
+          },
+          property: 'name_path'
         },
         {
           header: {
