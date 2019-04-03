@@ -22,8 +22,7 @@ function HomePage() {
             items={[
               ['Data', <a href={window.DATA_DIR_URL}>{window.DATA_DIR_URL}</a>],
               ['Docs', <a href={window.DOCS_BASE_URL}>{window.DOCS_BASE_URL}</a>],
-              ['Schemas', <a href={window.SCHEMAS_DIR}>{window.SCHEMAS_DIR}</a>],
-              ['GraphQL', <a href={window.GRAPHQL_URI}>{window.GRAPHQL_URI}</a>]
+              ['Schemas', <a href={window.SCHEMAS_DIR}>{window.SCHEMAS_DIR}</a>]
             ]}
           />
         </Grid.Col>
