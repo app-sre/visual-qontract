@@ -14,6 +14,10 @@ const GET_USER = gql`
       redhat_username
       github_username
       quay_username
+      roles {
+        path
+        name
+      }
     }
   }
 `;

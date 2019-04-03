@@ -4,6 +4,8 @@ import { Table } from 'patternfly-react';
 import { Link } from 'react-router-dom';
 import { sortByName } from '../../components/Utils';
 
+import Users from './Users';
+
 function Role({ role }) {
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
   const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
@@ -77,20 +79,7 @@ function Role({ role }) {
       {role.users.length > 0 && (
         <React.Fragment>
           <h4>Users</h4>
-          <ul>
-            {role.users.map(user => (
-              <li>
-                <Link
-                  to={{
-                    pathname: '/users',
-                    hash: user.path
-                  }}
-                >
-                  {user.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <Users users={role.users} />
         </React.Fragment>
       )}
 

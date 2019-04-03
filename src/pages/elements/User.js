@@ -1,5 +1,7 @@
 import React from 'react';
 import Definition from '../../components/Definition';
+import { Link } from 'react-router-dom';
+import Roles from './Roles';
 
 function User({ user }) {
   return (
@@ -21,6 +23,9 @@ function User({ user }) {
           ]
         ]}
       />
+
+      <h4>Roles</h4>
+      <Roles roles={user.roles} />
     </React.Fragment>
   );
 }
