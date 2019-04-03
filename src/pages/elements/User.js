@@ -5,13 +5,6 @@ import { Button } from 'patternfly-react';
 function User({ user }) {
   return (
     <React.Fragment>
-      <h2>
-        {user.name}
-        <span className="edit-button">
-          <Button href={`${window.DATA_DIR_URL}${user.path}`}>Edit</Button>
-        </span>
-      </h2>
-
       <h4>Info</h4>
       <Definition
         items={[

@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Grid } from 'patternfly-react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 
+import Page from '../components/Page';
 import Users from './elements/Users';
 import User from './elements/User';
 
@@ -33,40 +33,31 @@ const GET_USERS = gql`
 const UsersPage = props => {
   const path = props.location.hash.substring(1);
 
-  let viewElement;
   if (path) {
-    viewElement = (
+    return (
       <Query query={GET_USER} variables={{ path }}>
         {({ loading, error, data }) => {
           if (loading) return 'Loading...';
           if (error) return `Error! ${error.message}`;
-          return <User user={data.users_v1[0]} />;
-        }}
-      </Query>
-    );
-  } else {
-    viewElement = (
-      <Query query={GET_USERS}>
-        {({ loading, error, data }) => {
-          if (loading) return 'Loading...';
-          if (error) return `Error! ${error.message}`;
-          return <Users users={data.users_v1} />;
+
+          const user = data.users_v1[0];
+          const body = <User user={user} />;
+          return <Page title={user.name} body={body} path={user.path} />;
         }}
       </Query>
     );
   }
 
   return (
-    <Grid fluid className="container-pf-nav-pf-vertical">
-      <Grid.Row>
-        <Grid.Col xs={12}>
-          <div className="page-header">
-            <h1>Users</h1>
-          </div>
-        </Grid.Col>
-      </Grid.Row>
-      {viewElement}
-    </Grid>
+    <Query query={GET_USERS}>
+      {({ loading, error, data }) => {
+        if (loading) return 'Loading...';
+        if (error) return `Error! ${error.message}`;
+
+        const body = <Users users={data.users_v1} />;
+        return <Page title="Users" body={body} />;
+      }}
+    </Query>
   );
 };
 

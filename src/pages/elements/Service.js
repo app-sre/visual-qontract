@@ -131,13 +131,6 @@ function Service({ service }) {
 
   return (
     <React.Fragment>
-      <h2>
-        {service.name}
-        <span className="edit-button">
-          <Button href={`${window.DATA_DIR_URL}${service.path}`}>Edit</Button>
-        </span>
-      </h2>
-
       <h4>Description</h4>
       <p>{service.description}</p>
 

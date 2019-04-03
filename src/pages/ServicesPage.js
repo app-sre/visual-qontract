@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Grid } from 'patternfly-react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 
+import Page from '../components/Page';
 import Services from './elements/Services';
 import Service from './elements/Service';
 
-const GET_APP = gql`
+const GET_SERVICE = gql`
   query App($path: String) {
     apps_v1(path: $path) {
       path
@@ -41,7 +41,7 @@ const GET_APP = gql`
   }
 `;
 
-const GET_APPS = gql`
+const GET_SERVICES = gql`
   query Apps {
     apps_v1 {
       path
@@ -57,40 +57,31 @@ const GET_APPS = gql`
 const ServicesPage = props => {
   const path = props.location.hash.substring(1);
 
-  let viewElement;
   if (path) {
-    viewElement = (
-      <Query query={GET_APP} variables={{ path }}>
+    return (
+      <Query query={GET_SERVICE} variables={{ path }}>
         {({ loading, error, data }) => {
           if (loading) return 'Loading...';
           if (error) return `Error! ${error.message}`;
-          return <Service service={data.apps_v1[0]} />;
-        }}
-      </Query>
-    );
-  } else {
-    viewElement = (
-      <Query query={GET_APPS}>
-        {({ loading, error, data }) => {
-          if (loading) return 'Loading...';
-          if (error) return `Error! ${error.message}`;
-          return <Services services={data.apps_v1} />;
+
+          const service = data.apps_v1[0];
+          const body = <Service service={service} />;
+          return <Page title={service.name} body={body} path={service.path} />;
         }}
       </Query>
     );
   }
 
   return (
-    <Grid fluid className="container-pf-nav-pf-vertical">
-      <Grid.Row>
-        <Grid.Col xs={12}>
-          <div className="page-header">
-            <h1>Services</h1>
-          </div>
-        </Grid.Col>
-      </Grid.Row>
-      {viewElement}
-    </Grid>
+    <Query query={GET_SERVICES}>
+      {({ loading, error, data }) => {
+        if (loading) return 'Loading...';
+        if (error) return `Error! ${error.message}`;
+
+        const body = <Services services={data.apps_v1} />;
+        return <Page title="Services" body={body} />;
+      }}
+    </Query>
   );
 };
 
