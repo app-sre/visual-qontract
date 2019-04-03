@@ -37,6 +37,16 @@ const GET_SERVICE = gql`
         }
       }
       serviceDocs
+      endPoints {
+        name
+        description
+        url
+      }
+      codeComponents {
+        name
+        resource
+        url
+      }
     }
   }
 `;

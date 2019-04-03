@@ -1,6 +1,8 @@
 import React from 'react';
 import { Label, Button, Table } from 'patternfly-react';
 import Definition from '../../components/Definition';
+import CodeComponents from '../../components/ServiceCodeComponents';
+import EndPoints from '../../components/ServiceEndPoints';
 
 function Service({ service }) {
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
@@ -147,6 +149,20 @@ function Service({ service }) {
               </li>
             ))}
           </ul>
+        </React.Fragment>
+      )}
+
+      {service.codeComponents && (
+        <React.Fragment>
+          <h4>Code Components</h4>
+          <CodeComponents components={service.codeComponents} />
+        </React.Fragment>
+      )}
+
+      {service.endPoints && (
+        <React.Fragment>
+          <h4>End Points</h4>
+          <EndPoints endPoints={service.endPoints} />
         </React.Fragment>
       )}
 
