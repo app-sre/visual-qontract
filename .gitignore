@@ -1,7 +1,7 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
 # env
-public/env.js
+public/env/env.js
 
 # css
 src/**/*.css
