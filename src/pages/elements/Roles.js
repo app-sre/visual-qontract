@@ -6,7 +6,6 @@ import { sortByName } from '../../components/Utils';
 function Roles({ roles }) {
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
   const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
-  const linkFormat = url => value => <a href={`${url || ''}${value}`}>{value}</a>;
 
   const processedRoles = sortByName(roles).map(r => {
     r.name_path = [r.name, r.path];

@@ -14,8 +14,9 @@ const GET_CLUSTER = gql`
       description
       serverUrl
       namespaces {
-        name
         path
+        name
+        description
       }
     }
   }
@@ -28,6 +29,15 @@ const GET_CLUSTERS = gql`
       name
       description
       serverUrl
+      namespaces {
+        path
+        name
+        description
+        cluster {
+          name
+          path
+        }
+      }
     }
   }
 `;

@@ -1,7 +1,6 @@
 import React from 'react';
 import Definition from '../../components/Definition';
 import { Table } from 'patternfly-react';
-import { Link } from 'react-router-dom';
 import { sortByName } from '../../components/Utils';
 
 import Users from './Users';

@@ -1,52 +1,111 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { TableGrid } from 'patternfly-react-extensions';
+import { Table } from 'patternfly-react';
 import { sortByName } from '../../components/Utils';
 
 function Namespaces({ namespaces }) {
-  const rows = sortByName(namespaces).map(namespace => (
-    <TableGrid.Row key={namespace.path}>
-      <TableGrid.Col md={2}>
-        <Link
-          to={{
-            pathname: '/namespaces',
-            hash: namespace.path
-          }}
-        >
-          {namespace.name}
-        </Link>
-      </TableGrid.Col>
-      <TableGrid.Col md={4}>
-        <Link
-          to={{
-            pathname: '/namespaces',
-            hash: namespace.path
-          }}
-        >
-          {namespace.path}
-        </Link>
-      </TableGrid.Col>
-      <TableGrid.Col md={5}>{namespace.description}</TableGrid.Col>
-    </TableGrid.Row>
-  ));
+  const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
+  const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
+
+  const processedNamespaces = sortByName(namespaces.slice()).map(ns => {
+    ns.name_path = [ns.name, ns.path];
+
+    if (typeof ns.cluster !== 'undefined') {
+      ns.cluster_name_path = [ns.cluster.name, ns.cluster.path];
+    }
+    return ns;
+  });
+
+  const colName = {
+    header: {
+      label: 'Name',
+      formatters: [headerFormat]
+    },
+    cell: {
+      formatters: [
+        value => (
+          <Link
+            to={{
+              pathname: '/namespaces',
+              hash: value[1]
+            }}
+          >
+            {value[0]}
+          </Link>
+        ),
+        cellFormat
+      ]
+    },
+    property: 'name_path'
+  };
+
+  const colPath = {
+    header: {
+      label: 'Path',
+      formatters: [headerFormat]
+    },
+    cell: {
+      formatters: [
+        value => (
+          <Link
+            to={{
+              pathname: '/namespaces',
+              hash: value[1]
+            }}
+          >
+            {value[1]}
+          </Link>
+        ),
+        cellFormat
+      ]
+    },
+    property: 'name_path'
+  };
+
+  const colCluster = {
+    header: {
+      label: 'Cluster',
+      formatters: [headerFormat]
+    },
+    cell: {
+      formatters: [
+        value => (
+          <Link
+            to={{
+              pathname: '/clusters',
+              hash: value[1]
+            }}
+          >
+            {value[0]}
+          </Link>
+        ),
+        cellFormat
+      ]
+    },
+    property: 'cluster_name_path'
+  };
+
+  const colDescription = {
+    header: {
+      label: 'Description',
+      formatters: [headerFormat]
+    },
+    cell: {
+      formatters: [cellFormat]
+    },
+    property: 'description'
+  };
+
+  const tableCols =
+    typeof namespaces[0].cluster === 'undefined'
+      ? [colName, colPath, colDescription]
+      : [colName, colPath, colCluster, colDescription];
 
   return (
-    <React.Fragment>
-      <TableGrid>
-        <TableGrid.Head>
-          <TableGrid.ColumnHeader id="title" md={2}>
-            Name
-          </TableGrid.ColumnHeader>
-          <TableGrid.ColumnHeader id="path" md={4}>
-            path
-          </TableGrid.ColumnHeader>
-          <TableGrid.ColumnHeader id="description" md={5}>
-            Description
-          </TableGrid.ColumnHeader>
-        </TableGrid.Head>
-        <TableGrid.Body>{rows}</TableGrid.Body>
-      </TableGrid>
-    </React.Fragment>
+    <Table.PfProvider striped bordered columns={tableCols}>
+      <Table.Header />
+      <Table.Body rows={processedNamespaces} rowKey="path" />
+    </Table.PfProvider>
   );
 }
 

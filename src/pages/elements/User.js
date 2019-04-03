@@ -1,6 +1,5 @@
 import React from 'react';
 import Definition from '../../components/Definition';
-import { Link } from 'react-router-dom';
 import Roles from './Roles';
 
 function User({ user }) {

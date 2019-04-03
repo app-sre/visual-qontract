@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Grid } from 'patternfly-react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import Definition from '../../components/Definition';
-import { Link } from 'react-router-dom';
+import Namespaces from './Namespaces';
 
 function Cluster({ cluster }) {
   return (
@@ -17,18 +17,7 @@ function Cluster({ cluster }) {
       {cluster.description}
 
       <h4>Namespaces</h4>
-      {cluster.namespaces.map(ns => (
-        <li>
-          <Link
-            to={{
-              pathname: '/namespaces',
-              hash: ns.path
-            }}
-          >
-            {ns.name}
-          </Link>
-        </li>
-      ))}
+      <Namespaces namespaces={cluster.namespaces} />
     </React.Fragment>
   );
 }

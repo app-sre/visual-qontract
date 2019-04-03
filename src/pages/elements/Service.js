@@ -1,5 +1,5 @@
 import React from 'react';
-import { Label, Button, Table } from 'patternfly-react';
+import { Label, Table } from 'patternfly-react';
 import Definition from '../../components/Definition';
 import CodeComponents from '../../components/ServiceCodeComponents';
 import EndPoints from '../../components/ServiceEndPoints';
@@ -127,7 +127,9 @@ function Service({ service }) {
   const serviceOwner = [
     service.serviceOwner.name,
     ' <',
-    <a href={`mailto:${service.serviceOwner.email}`}>{service.serviceOwner.email}</a>,
+    <a key={service.serviceOwner.email} href={`mailto:${service.serviceOwner.email}`}>
+      {service.serviceOwner.email}
+    </a>,
     '>'
   ];
 
