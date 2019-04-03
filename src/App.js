@@ -5,23 +5,11 @@ import { Route, Redirect, Switch } from 'react-router-dom';
 import { ApolloProvider } from 'react-apollo';
 import ApolloClient from 'apollo-boost';
 
-import {
-  VerticalNav,
-  VerticalNavItem,
-  VerticalNavSecondaryItem,
-  VerticalNavMasthead,
-  VerticalNavBrand,
-  VerticalNavIconBar,
-  Dropdown,
-  Icon,
-  MenuItem
-} from 'patternfly-react';
-import pfLogo from 'patternfly/dist/img/logo-alt.svg';
-import pfBrand from 'patternfly/dist/img/brand-alt.svg';
+import { VerticalNav, VerticalNavItem, VerticalNavSecondaryItem, VerticalNavMasthead } from 'patternfly-react';
 import { routes } from './routes';
 import './App.css';
 
-const graphqlUri = process.env.GRAPHQL_URI || 'http://localhost:4000/graphql';
+const graphqlUri = process.env.REACT_APP_GRAPHQL_URI || 'http://localhost:4000/graphql';
 
 const client = new ApolloClient({
   uri: graphqlUri
@@ -89,8 +77,6 @@ class App extends React.Component {
         </VerticalNavItem>
       );
     });
-
-    const dropdownComponentClass = props => <li className={props.className}>{props.children}</li>;
 
     return (
       <ApolloProvider client={client}>

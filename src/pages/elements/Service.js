@@ -1,35 +1,169 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Label, Button } from 'patternfly-react';
+import { Label, Button, Table } from 'patternfly-react';
+import Definition from '../../components/Definition';
 
-class Service extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+function Service({ service }) {
+  const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
+  const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
+  const linkFormat = url => value => <a href={`${url || ''}${value}`}>{value}</a>;
+  const emptyFormat = value => value || '-';
+  const booleanFormat = (t, f) => value => (value ? t : f);
 
-  render() {
-    const service = this.props.service;
+  const quayRepos = service.quayRepos
+    .map(orgGroup =>
+      orgGroup.items.map(repo => {
+        repo.id = `${orgGroup.org.name}-${repo.name}`;
+        repo.repo_name = `${orgGroup.org.name}/${repo.name}`;
+        repo.org_name = orgGroup.org.name;
+        return repo;
+      })
+    )
+    .reduce((flat, next) => flat.concat(next), [])
+    .sort((a, b) => {
+      if (a.id > b.id) return 1;
+      if (a.id < b.id) return -1;
+      return 0;
+    });
 
-    return (
-      <React.Fragment>
-        <h3>
-          {service.name}
-          <span className="edit-button">
-            <Button href={`https://gitlab.cee.redhat.com/service/app-interface/tree/master/data/${service.path}`}>
-              Edit
-            </Button>
-          </span>
-        </h3>
+  const dependenciesTable = (
+    <Table.PfProvider
+      striped
+      bordered
+      columns={[
+        {
+          header: {
+            label: 'Name',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'name'
+        },
+        {
+          header: {
+            label: 'Status Page',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [linkFormat(), cellFormat]
+          },
+          property: 'statusPage'
+        },
+        {
+          header: {
+            label: 'SLA',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'SLA'
+        }
+      ]}
+    >
+      <Table.Header />
+      <Table.Body rows={service.dependencies} rowKey="path" />
+    </Table.PfProvider>
+  );
 
-        <p>
-          <dl className="service-definition">
-            <dt>SLO</dt>
-            <dd>{service.performanceParameters.SLO}</dd>
-          </dl>
-        </p>
-      </React.Fragment>
-    );
-  }
+  const quayReposTable = (
+    <Table.PfProvider
+      striped
+      bordered
+      columns={[
+        {
+          header: {
+            label: 'Name',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [v => <a href={`https://quay.io/repository/${v}`}>{v.split('/')[1]}</a>, cellFormat]
+          },
+          property: 'repo_name'
+        },
+        {
+          header: {
+            label: 'Quay Org',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [linkFormat('https://quay.io/organization/'), cellFormat]
+          },
+          property: 'org_name'
+        },
+        {
+          header: {
+            label: 'Description',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [emptyFormat, cellFormat]
+          },
+          property: 'description'
+        },
+        {
+          header: {
+            label: 'Public',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [
+              booleanFormat(<Label bsStyle="success">Public</Label>, <Label bsStyle="danger">Private</Label>),
+              cellFormat
+            ]
+          },
+          property: 'public'
+        }
+      ]}
+    >
+      <Table.Header />
+      <Table.Body rows={quayRepos} rowKey="id" />
+    </Table.PfProvider>
+  );
+
+  const serviceOwner = [
+    service.serviceOwner.name,
+    ' <',
+    <a href={`mailto:${service.serviceOwner.email}`}>{service.serviceOwner.email}</a>,
+    '>'
+  ];
+
+  return (
+    <React.Fragment>
+      <h2>
+        {service.name}
+        <span className="edit-button">
+          <Button href={`${process.env.REACT_APP_DATA_DIR_URL}${service.path}`}>Edit</Button>
+        </span>
+      </h2>
+
+      <h4>Description</h4>
+      <p>{service.description}</p>
+
+      <h4>Info</h4>
+      <Definition items={[['SLO', service.performanceParameters.SLO], ['Service Owner', serviceOwner]]} />
+
+      {service.serviceDocs && (
+        <React.Fragment>
+          <h4>Service Docs</h4>
+          <ul>
+            {service.serviceDocs.map(d => (
+              <li>
+                <a href={d.startsWith('http') ? d : `${process.env.REACT_APP_DOCS_BASE_URL}${d}`}>{d}</a>
+              </li>
+            ))}
+          </ul>
+        </React.Fragment>
+      )}
+
+      <h4>Dependencies</h4>
+      {dependenciesTable}
+
+      <h4>Quay Repos</h4>
+      {quayReposTable}
+    </React.Fragment>
+  );
 }
 
 export default Service;

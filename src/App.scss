@@ -94,21 +94,30 @@ a:focus {
   margin-right: 20px;
 }
 
-.service-labels {
-  margin-bottom: 40px;
-}
-
-.service-definition dt {
-  float: left;
-  clear: left;
-  margin-right: 20px;
-  width: 80px;
-}
-
-.card-pf-body {
+.container-pf-nav-pf-vertical.container-fluid
+  .container-cards-pf.container
+  .card-pf-body {
   overflow: hidden;
 }
 
 .edit-button {
   margin-left: 20px;
+}
+
+.app-definition {
+  margin: 10px 0;
+  display: table;
+}
+
+.app-definition-row {
+  display: table-row;
+}
+
+.app-definition-key {
+  display: table-cell;
+  padding-right: 20px;
+  font-weight: 200;
+}
+.app-definition-val {
+  display: table-cell;
 }

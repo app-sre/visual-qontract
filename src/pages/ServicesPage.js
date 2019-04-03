@@ -20,6 +20,23 @@ const GET_APP = gql`
       performanceParameters {
         SLO
       }
+      dependencies {
+        path
+        name
+        statusPage
+        SLA
+      }
+      quayRepos {
+        org {
+          name
+        }
+        items {
+          name
+          description
+          public
+        }
+      }
+      serviceDocs
     }
   }
 `;

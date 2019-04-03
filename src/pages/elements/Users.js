@@ -3,10 +3,6 @@ import { Link } from 'react-router-dom';
 import { TableGrid } from 'patternfly-react-extensions';
 
 class Users extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   sortUsers = users =>
     users.sort((a, b) => {
       if (a.name > b.name) return 1;

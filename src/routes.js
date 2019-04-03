@@ -1,12 +1,10 @@
 import Home from './pages/Home';
-import Ipsum1A from './pages/Ipsum-1-A';
-import Ipsum1B from './pages/Ipsum-1-B';
-import Amet from './pages/Amet';
-import Orbis from './pages/Orbis';
 import UsersPage from './pages/UsersPage';
 import ServicesPage from './pages/ServicesPage';
 
 const baseName = '/';
+
+// https://fontawesome.com/v4.7.0/icons/
 
 const routes = () => [
   {
@@ -22,22 +20,10 @@ const routes = () => [
     component: UsersPage
   },
   {
-    iconClass: 'fa fa-star',
+    iconClass: 'fa fa-th-list',
     title: 'Services',
     to: '/services',
     component: ServicesPage
-  },
-  {
-    iconClass: 'fa fa-bell',
-    title: 'Amet',
-    to: '/amet',
-    component: Amet
-  },
-  {
-    iconClass: 'fa fa-shield',
-    title: 'Orbis',
-    to: '/orbis',
-    component: Orbis
   }
 ];
 
