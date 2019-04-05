@@ -10,7 +10,7 @@ import { routes } from './routes';
 import './App.css';
 
 const client = new ApolloClient({
-  uri: window.GRAPHQL_URI
+  uri: window.GRAPHQL_URI || '/graphql'
 });
 
 class App extends React.Component {

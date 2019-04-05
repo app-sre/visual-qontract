@@ -23,5 +23,10 @@ http {
         location / {
             try_files $uri $uri/ /index.html =404;
         }
+
+        location /graphql {
+            proxy_set_header Authorization "%AUTHORIZATION%";
+            proxy_pass %GRAPHQL_URI%;
+        }
     }
 }

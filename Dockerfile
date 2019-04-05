@@ -1,20 +1,25 @@
 FROM centos:7
 
-RUN printf "[nginx]\nname=nginx repo\nbaseurl=http://nginx.org/packages/centos/7/x86_64/\ngpgcheck=0\nenabled=1" > /etc/yum.repos.d/nginx.repo && \
-    curl --silent --location https://rpm.nodesource.com/setup_10.x | bash - && \
-    curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | tee /etc/yum.repos.d/yarn.repo && \
-    yum install nginx nodejs yarn -y && \
-    yum clean all && \
-    sed -i 's/listen[[:space:]]*80;/listen 8080;/' /etc/nginx/conf.d/default.conf
+# Set PATH, because "scl enable" does not have any effects to "docker build"
+ENV PATH /opt/rh/rh-nodejs10/root/usr/bin:$PATH
 
-RUN chmod 777 /var/log/nginx && chmod 777 /var/cache/nginx && chmod 777 /var/run && rm -rf /var/log/nginx/* && rm -rf /var/cache/nginx/*
+RUN yum install -y centos-release-scl-rh epel-release && \
+    yum install -y rh-nodejs10 rh-nodejs10-npm nginx && \
+    yum clean all && \
+    npm install -g yarn
+
+RUN chmod 777 /var/log/nginx /var/run && \
+    rm -rf /var/log/nginx/*
+
+COPY deployment/nginx.conf.template /etc/nginx/nginx.conf.template
+COPY deployment/entrypoint.sh /
+ADD . /opt/visual-qontract
 
 WORKDIR /opt/visual-qontract
-ADD . /opt/visual-qontract
-ADD deployment/nginx.conf /etc/nginx/nginx.conf
 
-RUN yarn install && yarn build-css && yarn --production --non-interactive \
-    && yarn build
+RUN yarn --production --non-interactive && \
+    yarn build && \
+    rm -rf node_modules
 
 EXPOSE 8080
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["/entrypoint.sh"]
