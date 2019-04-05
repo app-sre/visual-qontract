@@ -163,7 +163,7 @@ parameters:
   displayName: visual qontract image
   description: visual qontract docker image. Defaults to quay.io/app-sre/visual-qontract
 - name: IMAGE_TAG
-  value: 7b0d377
+  value: latest
   displayName: visual qontract version
   description: visual qontract version which defaults to latest
 - name: MEMORY_LIMIT
