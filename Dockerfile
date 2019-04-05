@@ -8,12 +8,13 @@ RUN yum install -y centos-release-scl-rh epel-release && \
     yum clean all && \
     npm install -g yarn
 
-RUN chmod 777 /var/log/nginx /var/run && \
-    rm -rf /var/log/nginx/*
-
 COPY deployment/nginx.conf.template /etc/nginx/nginx.conf.template
 COPY deployment/entrypoint.sh /
 ADD . /opt/visual-qontract
+
+RUN chmod 777 /var/log/nginx /var/run && \
+    chmod +x /entrypoint.sh && \
+    rm -rf /var/log/nginx/*
 
 WORKDIR /opt/visual-qontract
 
