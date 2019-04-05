@@ -1,0 +1,178 @@
+---
+apiVersion: v1
+kind: Template
+metadata:
+  name: visual-qontract
+objects:
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app: visual-qontract
+    name: visual-qontract
+  spec:
+    replicas: 1
+    selector:
+      app: visual-qontract
+      deploymentconfig: visual-qontract
+    strategy:
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        labels:
+          app: visual-qontract
+          deploymentconfig: visual-qontract
+      spec:
+        containers:
+        - image: ${IMAGE}:${IMAGE_TAG}
+          imagePullPolicy: Always
+          name: visual-qontract
+          env:
+          - name: GRAPHQL_URI
+            valueFrom:
+              configMapKeyRef:
+                key: graphql.uri
+                name: visual-qontract
+          - name: AUTHORIZATION
+            valueFrom:
+              secretKeyRef:
+                  key: authorization
+                  name: visual-qontract
+          ports:
+          - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            timeoutSeconds: 3
+          resources:
+            limits:
+              memory: ${MEMORY_LIMIT}
+          volumeMounts:
+            - name: visual-qontract-env
+              mountPath: /opt/visual-qontract/build/env/
+              readOnly: true
+        - image: ${IMAGE_OAUTH2_PROXY}:${IMAGE_OAUTH2_PROXY_TAG}
+          imagePullPolicy: Always
+          name: visual-qontract-oauth2-proxy
+          env:
+          - name: OAUTH2_PROXY_PROVIDER
+            valueFrom:
+              configMapKeyRef:
+                key: oauth2.proxy.provider
+                name: oauth2-proxy
+          - name: OAUTH2_PROXY_GITHUB_ORG
+            valueFrom:
+              configMapKeyRef:
+                key: oauth2.proxy.github.org
+                name: oauth2-proxy
+          - name: OAUTH2_PROXY_REDIRECT_URL
+            valueFrom:
+              configMapKeyRef:
+                key: oauth2.proxy.redirect.url
+                name: oauth2-proxy
+          - name: OAUTH2_PROXY_COOKIE_SECRET
+            valueFrom:
+              secretKeyRef:
+                  key: oauth2.proxy.cookie.secret
+                  name: oauth2-proxy
+          - name: OAUTH2_PROXY_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                  key: oauth2.proxy.client.id
+                  name: oauth2-proxy
+          - name: OAUTH2_PROXY_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                  key: oauth2.proxy.client.secret
+                  name: oauth2-proxy
+          args:
+          - -http-address=0.0.0.0:4180
+          - -pass-basic-auth=true
+          - -pass-user-headers=true
+          - -set-xauthrequest=true
+          - -email-domain=*
+          - -upstream=http://localhost:8080
+          - -cookie-secret=$(OAUTH2_PROXY_COOKIE_SECRET)
+          - -client-id=$(OAUTH2_PROXY_CLIENT_ID)
+          - -client-secret=$(OAUTH2_PROXY_CLIENT_SECRET)
+          - -provider=$(OAUTH2_PROXY_PROVIDER)
+          - -github-org=$(OAUTH2_PROXY_GITHUB_ORG)
+          - -redirect-url=$(OAUTH2_PROXY_REDIRECT_URL)
+          resources:
+            limits:
+              memory: ${OAUTH2_PROXY_MEMORY_LIMIT}
+          ports:
+          - containerPort: 4180
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: 4180
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: 4180
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            timeoutSeconds: 3
+        volumes:
+        - name: visual-qontract-env
+          configMap:
+            name: visual-qontract
+            items:
+            - key: env
+              path: env.js
+    triggers:
+    - type: ConfigChange
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: oauth2-proxy
+    labels:
+      app: visual-qontract
+  spec:
+    type: ClusterIP
+    ports:
+      - name: https
+        port: 443
+        targetPort: 4180
+        protocol: TCP
+    selector:
+      deploymentconfig: visual-qontract
+parameters:
+- name: IMAGE
+  value: quay.io/app-sre/visual-qontract
+  displayName: visual qontract image
+  description: visual qontract docker image. Defaults to quay.io/app-sre/visual-qontract
+- name: IMAGE_TAG
+  value: latest
+  displayName: visual qontract version
+  description: visual qontract version which defaults to latest
+- name: MEMORY_LIMIT
+  value: 256Mi
+  displayName: Memory Limit
+  description: Maximum amount of memory the container can use. Defaults 256Mi
+- name: IMAGE_OAUTH2_PROXY
+  value: quay.io/pusher/oauth2_proxy
+- name: IMAGE_OAUTH2_PROXY_TAG
+  value: v3.1.0-amd64
+- name: OAUTH2_PROXY_MEMORY_LIMIT
+  value: 256Mi
