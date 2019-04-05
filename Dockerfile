@@ -13,6 +13,7 @@ COPY deployment/entrypoint.sh /
 ADD . /opt/visual-qontract
 
 RUN chmod 777 /var/log/nginx /var/run && \
+    chmod -R 777 /var/lib/nginx && \
     chmod 666 /etc/nginx/nginx.conf && \
     rm -rf /var/log/nginx/*
 
@@ -23,4 +24,5 @@ RUN yarn --production --non-interactive && \
     rm -rf node_modules
 
 EXPOSE 8080
+USER 1001
 ENTRYPOINT ["/entrypoint.sh"]
