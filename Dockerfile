@@ -13,7 +13,7 @@ COPY deployment/entrypoint.sh /
 ADD . /opt/visual-qontract
 
 RUN chmod 777 /var/log/nginx /var/run && \
-    chmod +x /entrypoint.sh && \
+    chmod 666 /etc/nginx/nginx.conf && \
     rm -rf /var/log/nginx/*
 
 WORKDIR /opt/visual-qontract
