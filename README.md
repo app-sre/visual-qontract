@@ -6,15 +6,18 @@ It is written in [React](https://reactjs.org/) and uses [PatternFly 3](https://w
 
 ## Usage
 
-```
+```sh
 $ cp public/env/env.js.example public/env/env.js
 $ sed -i.bk '/GRAPHQL_URI/d' public/env/env.js
-$ docker run --rm -p 8080:8080 -e AUTHORIZATION="Basic <TOKEN>" -e GRAPHQL_URI="<URL>" -v $PWD/public/env:/opt/visual-qontract/build/env:z quay.io/app-sre/visual-qontract:latest
+$ docker run --rm -p 8080:8080 \
+    -e AUTHORIZATION="Basic <TOKEN>" -e GRAPHQL_URI="<URL>" \
+    -v $PWD/public/env:/opt/visual-qontract/build/env:z \
+    quay.io/app-sre/visual-qontract:latest
 ```
 
 ## Development Environment
 
-```
+```sh
 $ cp public/env/env.js.example public/env/env.js
 $ yarn
 $ yarn start:dev
