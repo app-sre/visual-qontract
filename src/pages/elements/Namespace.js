@@ -20,7 +20,8 @@ function Namespace({ namespace }) {
             >
               {namespace.cluster.name}
             </Link>
-          ]
+          ],
+          ['Health', <a href={`${namespace.cluster.grafanaUrl}/d/85a562078cdf77779eaa1add43ccec1e?var-namespace=${namespace.name}`} target={`_blank`}>Grafana</a>],
         ]}
       />
 

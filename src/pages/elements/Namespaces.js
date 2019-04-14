@@ -10,9 +10,16 @@ function Namespaces({ namespaces }) {
   const processedNamespaces = sortByName(namespaces.slice()).map(ns => {
     ns.name_path = [ns.name, ns.path];
 
+    ns.grafana_link = 'Grafana';
     if (typeof ns.cluster !== 'undefined') {
       ns.cluster_name_path = [ns.cluster.name, ns.cluster.path];
+
+      if (typeof ns.cluster.grafanaUrl !== 'undefined' && ns.cluster.grafanaUrl !== null) {
+        ns.grafanaUrl = ns.cluster.grafanaUrl + '/d/85a562078cdf77779eaa1add43ccec1e?var-namespace=' + ns.name;
+        ns.grafana_link = <a href={ns.grafanaUrl} target={'_blank'}>Grafana</a>
+      }
     }
+
     return ns;
   });
 
@@ -85,6 +92,20 @@ function Namespaces({ namespaces }) {
     property: 'cluster_name_path'
   };
 
+  const colHealth = {
+    header: {
+      label: 'Health',
+      formatters: [headerFormat]
+    },
+    cell: {
+      formatters: [
+        value => value,
+        cellFormat
+      ]
+    },
+    property: 'grafana_link'
+  };
+
   const colDescription = {
     header: {
       label: 'Description',
@@ -97,9 +118,9 @@ function Namespaces({ namespaces }) {
   };
 
   const tableCols =
-    typeof namespaces[0].cluster === 'undefined'
-      ? [colName, colPath, colDescription]
-      : [colName, colPath, colCluster, colDescription];
+  typeof namespaces[0] === 'undefined' || typeof namespaces[0].cluster === 'undefined' || typeof namespaces[0].cluster.name === 'undefined'
+      ? [colName, colPath, colHealth, colDescription]
+      : [colName, colPath, colCluster, colHealth, colDescription];
 
   return (
     <Table.PfProvider striped bordered columns={tableCols}>

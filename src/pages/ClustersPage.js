@@ -17,6 +17,9 @@ const GET_CLUSTER = gql`
         path
         name
         description
+        cluster {
+          grafanaUrl
+        }
       }
     }
   }
@@ -29,6 +32,7 @@ const GET_CLUSTERS = gql`
       name
       description
       serverUrl
+      grafanaUrl
       namespaces {
         path
         name
