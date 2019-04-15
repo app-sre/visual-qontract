@@ -103,9 +103,6 @@ objects:
                   name: oauth2-proxy
           args:
           - -http-address=0.0.0.0:4180
-          - -pass-basic-auth=true
-          - -pass-user-headers=true
-          - -set-xauthrequest=true
           - -email-domain=*
           - -upstream=http://localhost:8080
           - -cookie-secret=$(OAUTH2_PROXY_COOKIE_SECRET)
