@@ -54,7 +54,9 @@ const GET_SERVICE = gql`
         cluster {
           name
           path
-          grafanaUrl
+          jumpHost {
+            hostname
+          }
         }
       }
     }
@@ -77,7 +79,9 @@ const GET_SERVICES = gql`
         cluster {
           name
           path
-          grafanaUrl
+          jumpHost {
+            hostname
+          }
         }
         app {
           name
