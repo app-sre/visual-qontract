@@ -15,7 +15,9 @@ const GET_NAMESPACE = gql`
       cluster {
         name
         path
-        grafanaUrl
+        jumpHost {
+          hostname
+        }
       }
     }
   }
@@ -30,7 +32,9 @@ const GET_NAMESPACES = gql`
       cluster {
         name
         path
-        grafanaUrl
+        jumpHost {
+          hostname
+        }
       }
     }
   }

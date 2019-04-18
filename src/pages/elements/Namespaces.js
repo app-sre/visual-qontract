@@ -1,4 +1,5 @@
 import React from 'react';
+import GrafanaUrl from './GrafanaUrl';
 import { Link } from 'react-router-dom';
 import { Table } from 'patternfly-react';
 import { sortByName } from '../../components/Utils';
@@ -9,15 +10,9 @@ function Namespaces({ namespaces }) {
 
   const processedNamespaces = sortByName(namespaces.slice()).map(ns => {
     ns.name_path = [ns.name, ns.path];
-
-    ns.grafana_link = 'Grafana';
     if (typeof ns.cluster !== 'undefined') {
       ns.cluster_name_path = [ns.cluster.name, ns.cluster.path];
-
-      if (typeof ns.cluster.grafanaUrl !== 'undefined' && ns.cluster.grafanaUrl !== null) {
-        ns.grafanaUrl = ns.cluster.grafanaUrl + '/d/85a562078cdf77779eaa1add43ccec1e?var-namespace=' + ns.name;
-        ns.grafana_link = <a href={ns.grafanaUrl} target={'_blank'}>Grafana</a>
-      }
+      ns.grafana_url = [ns.cluster.jumpHost, ns.cluster.name, ns.name]
     }
 
     return ns;
@@ -92,18 +87,18 @@ function Namespaces({ namespaces }) {
     property: 'cluster_name_path'
   };
 
-  const colHealth = {
+  const colGrafana = {
     header: {
-      label: 'Health',
+      label: 'Grafana',
       formatters: [headerFormat]
     },
     cell: {
       formatters: [
-        value => value,
+        value => <GrafanaUrl jump_host={value[0]} cluster={value[1]} namespace={value[2]} />,
         cellFormat
       ]
     },
-    property: 'grafana_link'
+    property: 'grafana_url',
   };
 
   const colDescription = {
@@ -119,8 +114,8 @@ function Namespaces({ namespaces }) {
 
   const tableCols =
   typeof namespaces[0] === 'undefined' || typeof namespaces[0].cluster === 'undefined' || typeof namespaces[0].cluster.name === 'undefined'
-      ? [colName, colPath, colHealth, colDescription]
-      : [colName, colPath, colCluster, colHealth, colDescription];
+      ? [colName, colPath, colGrafana, colDescription]
+      : [colName, colPath, colCluster, colGrafana, colDescription];
 
   return (
     <Table.PfProvider striped bordered columns={tableCols}>

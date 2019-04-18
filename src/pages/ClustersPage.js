@@ -13,12 +13,17 @@ const GET_CLUSTER = gql`
       name
       description
       serverUrl
+      jumpHost {
+        hostname
+      }
       namespaces {
         path
         name
         description
         cluster {
-          grafanaUrl
+          jumpHost {
+            hostname
+          }
         }
       }
     }
@@ -32,7 +37,9 @@ const GET_CLUSTERS = gql`
       name
       description
       serverUrl
-      grafanaUrl
+      jumpHost {
+        hostname
+      }
       namespaces {
         path
         name

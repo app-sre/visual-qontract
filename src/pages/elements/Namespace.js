@@ -22,7 +22,7 @@ function Namespace({ namespace }) {
               {namespace.cluster.name}
             </Link>
           ],
-          ['Grafana', GrafanaUrl(namespace.cluster.name, namespace.name)]
+          ['Grafana', <GrafanaUrl jump_host={namespace.cluster.jumpHost} cluster={namespace.cluster.name} namespace={namespace.name}/>]
         ]}
       />
 
