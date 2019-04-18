@@ -113,7 +113,7 @@ function Namespaces({ namespaces }) {
   };
 
   const tableCols =
-  typeof namespaces[0].cluster.name === 'undefined'
+    typeof namespaces[0].cluster.name === 'undefined'
       ? [colName, colPath, colGrafana, colDescription]
       : [colName, colPath, colCluster, colGrafana, colDescription];
 
