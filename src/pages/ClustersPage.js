@@ -21,6 +21,7 @@ const GET_CLUSTER = gql`
         name
         description
         cluster {
+          name
           jumpHost {
             hostname
           }

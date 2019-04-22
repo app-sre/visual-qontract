@@ -10,7 +10,7 @@ function GrafanaUrl({ jumpHost, cluster, namespace }) {
   let additionalVars = '';
   if (typeof namespace !== 'undefined') {
     dashboardName = 'k8s-compute-resources-namespace';
-    additionalVars = `&var-namespace=-${namespace}`;
+    additionalVars = `&var-namespace=${namespace}`;
   }
   const grafanaUrl = `${window.GF_ROOT_URL}/d/${dashboardName}?var-datasource=${dataSource}${additionalVars}`;
 
