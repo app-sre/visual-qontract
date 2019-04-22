@@ -11,7 +11,7 @@ function Cluster({ cluster }) {
         items={[
           ['Cluster', cluster.name],
           ['Path', <a href={`${window.DATA_DIR_URL}${cluster.path}`}>{cluster.path}</a>],
-          ['Grafana', <GrafanaUrl jump_host={cluster.jumpHost} cluster={cluster.name} />]
+          ['Grafana', <GrafanaUrl jumpHost={cluster.jumpHost} cluster={cluster.name} />]
         ]}
       />
 

@@ -1,21 +1,24 @@
 import React from 'react';
 
-function GrafanaUrl({ jump_host, cluster, namespace }) {
-  if (jump_host !== null) {
-    return 'Not available'
+function GrafanaUrl({ jumpHost, cluster, namespace }) {
+  if (jumpHost !== null) {
+    return 'Not available';
   }
 
-  var rootUrl = window.GF_ROOT_URL;
-  var dataSource = cluster + '-cluster-prometheus';
-  var additionalVars = '';
-  var dashboardName = 'k8s-compute-resources-cluster';
+  const dataSource = `${cluster}-cluster-prometheus`;
+  let dashboardName = 'k8s-compute-resources-cluster';
+  let additionalVars = '';
   if (typeof namespace !== 'undefined') {
     dashboardName = 'k8s-compute-resources-namespace';
-    additionalVars = '&var-namespace=' + namespace;
+    additionalVars = `&var-namespace=-${namespace}`;
   }
-  var grafanaUrl = rootUrl + '/d/' + dashboardName + '?var-datasource=' + dataSource + additionalVars;
+  const grafanaUrl = `${window.GF_ROOT_URL}/d/${dashboardName}?var-datasource=${dataSource}${additionalVars}`;
 
-  return <a href={grafanaUrl} target={`_blank`}>Link</a>;
+  return (
+    <a href={grafanaUrl} target="_blank" rel="noopener noreferrer">
+      Link
+    </a>
+  );
 }
 
 export default GrafanaUrl;

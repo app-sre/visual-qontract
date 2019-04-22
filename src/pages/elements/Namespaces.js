@@ -1,7 +1,7 @@
 import React from 'react';
-import GrafanaUrl from './GrafanaUrl';
 import { Link } from 'react-router-dom';
 import { Table } from 'patternfly-react';
+import GrafanaUrl from './GrafanaUrl';
 import { sortByName } from '../../components/Utils';
 
 function Namespaces({ namespaces }) {
@@ -12,7 +12,7 @@ function Namespaces({ namespaces }) {
     ns.name_path = [ns.name, ns.path];
     if (typeof ns.cluster !== 'undefined') {
       ns.cluster_name_path = [ns.cluster.name, ns.cluster.path];
-      ns.grafana_url = [ns.cluster.jumpHost, ns.cluster.name, ns.name]
+      ns.grafana_url = [ns.cluster.jumpHost, ns.cluster.name, ns.name];
     }
 
     return ns;
@@ -93,12 +93,9 @@ function Namespaces({ namespaces }) {
       formatters: [headerFormat]
     },
     cell: {
-      formatters: [
-        value => <GrafanaUrl jump_host={value[0]} cluster={value[1]} namespace={value[2]} />,
-        cellFormat
-      ]
+      formatters: [value => <GrafanaUrl jumpHost={value[0]} cluster={value[1]} namespace={value[2]} />, cellFormat]
     },
-    property: 'grafana_url',
+    property: 'grafana_url'
   };
 
   const colDescription = {
