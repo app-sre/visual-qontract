@@ -47,6 +47,18 @@ const GET_SERVICE = gql`
         resource
         url
       }
+      namespaces {
+        path
+        name
+        description
+        cluster {
+          name
+          path
+          jumpHost {
+            hostname
+          }
+        }
+      }
     }
   }
 `;
@@ -59,6 +71,22 @@ const GET_SERVICES = gql`
       description
       performanceParameters {
         SLO
+      }
+      namespaces {
+        path
+        name
+        description
+        cluster {
+          name
+          path
+          jumpHost {
+            hostname
+          }
+        }
+        app {
+          name
+          path
+        }
       }
     }
   }

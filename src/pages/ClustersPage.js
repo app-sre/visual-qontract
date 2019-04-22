@@ -13,10 +13,19 @@ const GET_CLUSTER = gql`
       name
       description
       serverUrl
+      jumpHost {
+        hostname
+      }
       namespaces {
         path
         name
         description
+        cluster {
+          name
+          jumpHost {
+            hostname
+          }
+        }
       }
     }
   }
@@ -29,6 +38,9 @@ const GET_CLUSTERS = gql`
       name
       description
       serverUrl
+      jumpHost {
+        hostname
+      }
       namespaces {
         path
         name

@@ -1,6 +1,7 @@
 import React from 'react';
 import Definition from '../../components/Definition';
 import Namespaces from './Namespaces';
+import GrafanaUrl from './GrafanaUrl';
 
 function Cluster({ cluster }) {
   return (
@@ -9,7 +10,8 @@ function Cluster({ cluster }) {
       <Definition
         items={[
           ['Cluster', cluster.name],
-          ['Path', <a href={`${window.DATA_DIR_URL}${cluster.path}`}>{cluster.path}</a>]
+          ['Path', <a href={`${window.DATA_DIR_URL}${cluster.path}`}>{cluster.path}</a>],
+          ['Grafana', <GrafanaUrl jumpHost={cluster.jumpHost} cluster={cluster.name} />]
         ]}
       />
 

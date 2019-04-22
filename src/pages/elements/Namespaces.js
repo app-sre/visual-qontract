@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Table } from 'patternfly-react';
+import GrafanaUrl from './GrafanaUrl';
 import { sortByName } from '../../components/Utils';
 
 function Namespaces({ namespaces }) {
@@ -9,10 +10,11 @@ function Namespaces({ namespaces }) {
 
   const processedNamespaces = sortByName(namespaces.slice()).map(ns => {
     ns.name_path = [ns.name, ns.path];
-
     if (typeof ns.cluster !== 'undefined') {
       ns.cluster_name_path = [ns.cluster.name, ns.cluster.path];
+      ns.grafana_url = [ns.cluster.jumpHost, ns.cluster.name, ns.name];
     }
+
     return ns;
   });
 
@@ -85,6 +87,17 @@ function Namespaces({ namespaces }) {
     property: 'cluster_name_path'
   };
 
+  const colGrafana = {
+    header: {
+      label: 'Grafana',
+      formatters: [headerFormat]
+    },
+    cell: {
+      formatters: [value => <GrafanaUrl jumpHost={value[0]} cluster={value[1]} namespace={value[2]} />, cellFormat]
+    },
+    property: 'grafana_url'
+  };
+
   const colDescription = {
     header: {
       label: 'Description',
@@ -97,9 +110,9 @@ function Namespaces({ namespaces }) {
   };
 
   const tableCols =
-    typeof namespaces[0].cluster === 'undefined'
-      ? [colName, colPath, colDescription]
-      : [colName, colPath, colCluster, colDescription];
+    typeof namespaces[0].cluster.path === 'undefined'
+      ? [colName, colPath, colGrafana, colDescription]
+      : [colName, colPath, colCluster, colGrafana, colDescription];
 
   return (
     <Table.PfProvider striped bordered columns={tableCols}>

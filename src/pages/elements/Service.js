@@ -3,6 +3,7 @@ import { Label, Table } from 'patternfly-react';
 import Definition from '../../components/Definition';
 import CodeComponents from '../../components/ServiceCodeComponents';
 import EndPoints from '../../components/ServiceEndPoints';
+import Namespaces from '../elements/Namespaces';
 
 function Service({ service }) {
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
@@ -167,6 +168,9 @@ function Service({ service }) {
           <EndPoints endPoints={service.endPoints} />
         </React.Fragment>
       )}
+
+      <h4>Namespaces</h4>
+      <Namespaces namespaces={service.namespaces} />
 
       <h4>Dependencies</h4>
       {dependenciesTable}

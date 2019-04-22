@@ -22,7 +22,8 @@ function HomePage() {
             items={[
               ['Data', <a href={window.DATA_DIR_URL}>{window.DATA_DIR_URL}</a>],
               ['Docs', <a href={window.DOCS_BASE_URL}>{window.DOCS_BASE_URL}</a>],
-              ['Schemas', <a href={window.SCHEMAS_DIR}>{window.SCHEMAS_DIR}</a>]
+              ['Schemas', <a href={window.SCHEMAS_DIR}>{window.SCHEMAS_DIR}</a>],
+              ['Grafana', <a href={window.GF_ROOT_URL}>Grafana</a>]
             ]}
           />
         </Grid.Col>

@@ -1,6 +1,7 @@
 import React from 'react';
-import Definition from '../../components/Definition';
 import { Link } from 'react-router-dom';
+import GrafanaUrl from './GrafanaUrl';
+import Definition from '../../components/Definition';
 
 function Namespace({ namespace }) {
   return (
@@ -20,6 +21,14 @@ function Namespace({ namespace }) {
             >
               {namespace.cluster.name}
             </Link>
+          ],
+          [
+            'Grafana',
+            <GrafanaUrl
+              jumpHost={namespace.cluster.jumpHost}
+              cluster={namespace.cluster.name}
+              namespace={namespace.name}
+            />
           ]
         ]}
       />
