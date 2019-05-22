@@ -93,7 +93,7 @@ function User({ user }) {
               '-'
           ],
           [ 
-            'Public gpg Key',   <button onClick={downloadKey}> {key} </button> 
+            'Public gpg Key',   key 
           ]
         ]}
       />
