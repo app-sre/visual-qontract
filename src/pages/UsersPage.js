@@ -14,6 +14,7 @@ const GET_USER = gql`
       redhat_username
       github_username
       quay_username
+      public_gpg_key
       roles {
         path
         name
@@ -30,6 +31,7 @@ const GET_USERS = gql`
       redhat_username
       github_username
       quay_username
+      public_gpg_key
     }
   }
 `;
