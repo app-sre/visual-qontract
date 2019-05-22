@@ -10,20 +10,23 @@ function User({ user }) {
     key = "-";
   }
   else if (user.public_gpg_key.length>= 50) {
-     key = user.public_gpg_key.substring(0,50) + '...';
+     key = <button onClick={downloadKey}> {user.public_gpg_key.substring(0,50) + '...'} </button>;
   }
   else {
-     key = user.public_gpg_key;
+    key = <button onClick={downloadKey}> {user.public_gpg_key} </button>;
   }
   //taken from: https://stackoverflow.com/questions/44656610/download-a-string-as-txt-file-in-react
+  //there probably is a better way in react to do this 
   function downloadKey(e) {
-    e.preventDefault();
-    const element = document.createElement("a");
-    const file = new Blob([user.public_gpg_key], {type: 'text/plain'});
-    element.href = URL.createObjectURL(file);
-    element.download = `${user.redhat_username}_public_gpg_key.txt`;
-    document.body.appendChild(element); 
-    element.click();
+    if(user.public_gpg_key != null){
+      e.preventDefault();
+      const element = document.createElement("a");
+      const file = new Blob([user.public_gpg_key], {type: 'text/plain'});
+      element.href = URL.createObjectURL(file);
+      element.download = `${user.redhat_username}_public_gpg_key.asc`;
+      document.body.appendChild(element); 
+      element.click();
+    }
   }
   return (
     <React.Fragment>
@@ -43,7 +46,7 @@ function User({ user }) {
               '-'
           ],
           [ 
-            'Public gpg Key',   <button onClick={downloadKey}> {key} </button> 
+            'Public gpg Key',   key 
           ]
         ]}
       />
