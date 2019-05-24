@@ -85,7 +85,7 @@ function User({ user }) {
           [
             'Public gpg Key',
             <div>
-              {key} {showMoreButton} {downloadKeyButton}
+              {showMoreButton} {downloadKeyButton} <br /> {key}
             </div>
           ]
         ]}
