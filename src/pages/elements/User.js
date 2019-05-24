@@ -89,7 +89,7 @@ function User({ user }) {
             )) ||
               '-'
           ],
-          ['Public gpg Key', key ],
+          ['Public gpg Key', key],
           ['-', showMoreButton],
           ['', downloadKeyButton]
         ]}
