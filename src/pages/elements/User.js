@@ -52,7 +52,6 @@ function User({ user }) {
       element.click();
     }
   }
-
   return (
     <React.Fragment>
       <h4>Info</h4>
@@ -90,7 +89,9 @@ function User({ user }) {
             )) ||
               '-'
           ],
-          ['Public gpg Key', key]
+          ['Public gpg Key', key ],
+          ['-', showMoreButton],
+          ['', downloadKeyButton]
         ]}
       />
       <h5> Public GPG Key </h5>
