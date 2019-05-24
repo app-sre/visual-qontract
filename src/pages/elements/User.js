@@ -89,9 +89,12 @@ function User({ user }) {
             )) ||
               '-'
           ],
-          ['Public gpg Key', key],
-          ['-', showMoreButton],
-          ['', downloadKeyButton]
+          [
+            'Public gpg Key',
+            <div>
+              {key} {showMoreButton} {downloadKeyButton}
+            </div>
+          ]
         ]}
       />
       <h5> Public GPG Key </h5>
