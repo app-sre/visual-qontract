@@ -1,4 +1,4 @@
-import React, { useState }from 'react';
+import React, { useState } from 'react';
 import Definition from '../../components/Definition';
 import Roles from './Roles';
 
@@ -7,24 +7,24 @@ function User({ user }) {
   let showMoreKey;
   let keyState;
   if (user.public_gpg_key == null) {
-    keyState= '-';
+    keyState = '-';
     downloadKeyButton = '';
     showMoreKey = '';
   } else if (user.public_gpg_key.length >= 50) {
-      keyState= user.public_gpg_key.substring(0, 50)
-      downloadKeyButton =  (
-        <button type="button" onClick={downloadKey}>
-          Download Key
-        </button>
+    keyState = user.public_gpg_key.substring(0, 50);
+    downloadKeyButton = (
+      <button type="button" onClick={downloadKey}>
+        Download Key
+      </button>
     );
-      showMoreKey = (
-        <button type="button" onClick={expandKey}>
-          Show More
-       </button>
-    )
+    showMoreKey = (
+      <button type="button" onClick={expandKey}>
+        Show More
+      </button>
+    );
   } else {
-    keyState=user.public_gpg_key
-    downloadKeyButton =  (
+    keyState = user.public_gpg_key;
+    downloadKeyButton = (
       <button type="button" onClick={downloadKey}>
         Download Key
       </button>
@@ -46,7 +46,7 @@ function User({ user }) {
       element.click();
     }
   }
-  function expandKey (e) {
+  function expandKey(e) {
     e.preventDefault();
     changeKey(user.public_gpg_key);
     changeButton(
@@ -56,16 +56,14 @@ function User({ user }) {
     );
     console.log(showMoreButton);
   }
-  function shrinkKey(e){
+  function shrinkKey(e) {
     e.preventDefault();
-    changeKey(user.public_gpg_key.substring(0,50));
+    changeKey(user.public_gpg_key.substring(0, 50));
     changeButton(
       <button type="button" onClick={expandKey}>
-          Show More
-       </button>
+        Show More
+      </button>
     );
-    console.log(showMoreButton);
-
   }
   return (
     <React.Fragment>
@@ -84,7 +82,7 @@ function User({ user }) {
             (user.quay_username && <a href={`https://quay.io/user/${user.quay_username}`}>{user.quay_username}</a>) ||
               '-'
           ],
-          ['Public gpg Key', key ],
+          ['Public gpg Key', key],
           ['-', showMoreButton],
           ['', downloadKeyButton]
         ]}
