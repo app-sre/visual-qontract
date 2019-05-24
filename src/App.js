@@ -19,6 +19,7 @@ class App extends React.Component {
 
     this.menu = routes();
   }
+
   handleNavClick = event => {
     event.preventDefault();
     const target = event.currentTarget;
@@ -53,7 +54,7 @@ class App extends React.Component {
     const { location } = this.props;
     const vertNavItems = this.menu.map(item => {
       const active = location.pathname === item.to;
-      const subItemActive = item.subItems && item.subItems.some(item => location.pathname === item.to);
+      const subItemActive = item.subItems && item.subItems.some(itemB => location.pathname === item.to);
       return (
         <VerticalNavItem
           key={item.to}

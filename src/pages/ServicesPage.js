@@ -92,8 +92,8 @@ const GET_SERVICES = gql`
   }
 `;
 
-const ServicesPage = props => {
-  const path = props.location.hash.substring(1);
+const ServicesPage = ({ location }) => {
+  const path = location.hash.substring(1);
 
   if (path) {
     return (

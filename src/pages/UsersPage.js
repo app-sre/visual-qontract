@@ -36,8 +36,8 @@ const GET_USERS = gql`
   }
 `;
 
-const UsersPage = props => {
-  const path = props.location.hash.substring(1);
+const UsersPage = ({ location }) => {
+  const path = location.hash.substring(1);
 
   if (path) {
     return (

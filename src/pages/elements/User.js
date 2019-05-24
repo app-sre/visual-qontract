@@ -2,29 +2,33 @@ import React from 'react';
 import Definition from '../../components/Definition';
 import Roles from './Roles';
 
-
-
 function User({ user }) {
-  var key;
-  if(user.public_gpg_key == null){
-    key = "-";
+  let key;
+  if (user.public_gpg_key == null) {
+    key = '-';
+  } else if (user.public_gpg_key.length >= 50) {
+    key = (
+      <button type="button" onClick={downloadKey}>
+        {user.public_gpg_key.substring(0, 50)}
+      </button>
+    );
+  } else {
+    key = (
+      <button type="button" onClick={downloadKey}>
+        {user.public_gpg_key}
+      </button>
+    );
   }
-  else if (user.public_gpg_key.length>= 50) {
-     key = <button onClick={downloadKey}> {user.public_gpg_key.substring(0,50) + '...'} </button>;
-  }
-  else {
-    key = <button onClick={downloadKey}> {user.public_gpg_key} </button>;
-  }
-  //taken from: https://stackoverflow.com/questions/44656610/download-a-string-as-txt-file-in-react
-  //there probably is a better way in react to do this 
+  // taken from: https://stackoverflow.com/questions/44656610/download-a-string-as-txt-file-in-react
+  // there probably is a better way in react to do this
   function downloadKey(e) {
-    if(user.public_gpg_key != null){
+    if (user.public_gpg_key != null) {
       e.preventDefault();
-      const element = document.createElement("a");
-      const file = new Blob([user.public_gpg_key], {type: 'text/plain'});
+      const element = document.createElement('a');
+      const file = new Blob([user.public_gpg_key], { type: 'text/plain' });
       element.href = URL.createObjectURL(file);
-      element.download = `${user.redhat_username}_public_gpg_key.asc`;
-      document.body.appendChild(element); 
+      element.download = `${user.redhat_username}_public_gpg_key.gpg`;
+      document.body.appendChild(element);
       element.click();
     }
   }
@@ -45,13 +49,10 @@ function User({ user }) {
             (user.quay_username && <a href={`https://quay.io/user/${user.quay_username}`}>{user.quay_username}</a>) ||
               '-'
           ],
-          [ 
-            'Public gpg Key',   key 
-          ]
+          ['Public gpg Key', key]
         ]}
       />
       <h4>Roles</h4>
-      console.log(key);
       <Roles roles={user.roles} />
     </React.Fragment>
   );
