@@ -82,9 +82,12 @@ function User({ user }) {
             (user.quay_username && <a href={`https://quay.io/user/${user.quay_username}`}>{user.quay_username}</a>) ||
               '-'
           ],
-          ['Public gpg Key', key],
-          ['-', showMoreButton],
-          ['', downloadKeyButton]
+          [
+            'Public gpg Key',
+            <div>
+              {key} {showMoreButton} {downloadKeyButton}
+            </div>
+          ]
         ]}
       />
       <h4>Roles</h4>
