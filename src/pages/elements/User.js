@@ -37,6 +37,16 @@ function User({ user }) {
         <GridItem span={4}> {downloadKeyButton}</GridItem>
       </Grid>
     );
+    gpg = (
+      <div>
+        <Col style={{ width: 500 }}>
+          <ClipboardCopy isReadOnly variant={ClipboardCopyVariant.expansion}>
+            {user.public_gpg_key}
+          </ClipboardCopy>
+          {downloadKeyButton}
+        </Col>
+      </div>
+    );
   }
 
   // taken from: https://stackoverflow.com/questions/44656610/download-a-string-as-txt-file-in-react
@@ -88,12 +98,6 @@ function User({ user }) {
               </a>
             )) ||
               '-'
-          ],
-          [
-            'Public gpg Key',
-            <div>
-              {showMoreButton} {downloadKeyButton} <br /> {key}
-            </div>
           ]
         ]}
       />
