@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { ClipboardCopy, ClipboardCopyVariant } from '@patternfly/react-core';
+import { Col } from 'patternfly-react';
 import Definition from '../../components/Definition';
 import Roles from './Roles';
 
@@ -6,28 +8,28 @@ function User({ user }) {
   let downloadKeyButton;
   let showMoreKey;
   let keyState;
+  let gpg;
   if (user.public_gpg_key == null) {
     keyState = '-';
     downloadKeyButton = '';
     showMoreKey = '';
-  } else if (user.public_gpg_key.length >= 50) {
-    keyState = user.public_gpg_key.substring(0, 50);
-    downloadKeyButton = (
-      <button type="button" onClick={downloadKey}>
-        Download Key
-      </button>
-    );
-    showMoreKey = (
-      <button type="button" onClick={expandKey}>
-        Show More
-      </button>
-    );
+    gpg = <div> - </div>;
   } else {
     keyState = user.public_gpg_key;
     downloadKeyButton = (
       <button type="button" onClick={downloadKey}>
         Download Key
       </button>
+    );
+    gpg = (
+      <div>
+        <Col style={{ width: 500 }}>
+          <ClipboardCopy isReadOnly variant={ClipboardCopyVariant.expansion}>
+            {user.public_gpg_key}
+          </ClipboardCopy>
+          {downloadKeyButton}
+        </Col>
+      </div>
     );
   }
   const [key, changeKey] = useState(keyState);
@@ -81,15 +83,11 @@ function User({ user }) {
             'Quay Username',
             (user.quay_username && <a href={`https://quay.io/user/${user.quay_username}`}>{user.quay_username}</a>) ||
               '-'
-          ],
-          [
-            'Public gpg Key',
-            <div>
-              {showMoreButton} {downloadKeyButton} <br /> {key}
-            </div>
           ]
         ]}
       />
+      <h5> Public GPG Key </h5>
+      {gpg}
       <h4>Roles</h4>
       <Roles roles={user.roles} />
     </React.Fragment>
