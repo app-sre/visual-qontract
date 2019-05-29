@@ -1,39 +1,43 @@
-import React, { useState } from 'react';
-import { ClipboardCopy, ClipboardCopyVariant } from '@patternfly/react-core';
-import { Col } from 'patternfly-react';
+import React from 'react';
+import { ClipboardCopy, ClipboardCopyVariant, Grid, GridItem, Button, Tooltip } from '@patternfly/react-core';
+import { ExportIcon } from '@patternfly/react-icons';
 import Definition from '../../components/Definition';
 import Roles from './Roles';
 
 function User({ user }) {
   let downloadKeyButton;
-  let showMoreKey;
-  let keyState;
   let gpg;
   if (user.public_gpg_key == null) {
-    keyState = '-';
     downloadKeyButton = '';
-    showMoreKey = '';
     gpg = <div> - </div>;
   } else {
-    keyState = user.public_gpg_key;
     downloadKeyButton = (
-      <button type="button" onClick={downloadKey}>
-        Download Key
-      </button>
+      <Tooltip position="top" content={<div>Download</div>} exitdelay={50} entrydelay={550}>
+        <span>
+          <Button type="button" variant="plain" ishover="true" onClick={downloadKey}>
+            <ExportIcon />
+          </Button>
+        </span>
+      </Tooltip>
     );
     gpg = (
-      <div>
-        <Col style={{ width: 500 }}>
-          <ClipboardCopy isReadOnly variant={ClipboardCopyVariant.expansion}>
+      <Grid gutter="md">
+        <GridItem span={6}>
+          <ClipboardCopy
+            isReadOnly
+            style={{ marginRight: 5 }}
+            variant={ClipboardCopyVariant.expansion}
+            exitDelay={50}
+            entryDelay={550}
+            clickTip=""
+          >
             {user.public_gpg_key}
           </ClipboardCopy>
-          {downloadKeyButton}
-        </Col>
-      </div>
+        </GridItem>
+        <GridItem span={4}> {downloadKeyButton}</GridItem>
+      </Grid>
     );
   }
-  const [key, changeKey] = useState(keyState);
-  const [showMoreButton, changeButton] = useState(showMoreKey);
 
   // taken from: https://stackoverflow.com/questions/44656610/download-a-string-as-txt-file-in-react
   // there probably is a better way in react to do this
@@ -48,25 +52,7 @@ function User({ user }) {
       element.click();
     }
   }
-  function expandKey(e) {
-    e.preventDefault();
-    changeKey(user.public_gpg_key);
-    changeButton(
-      <button type="button" onClick={shrinkKey}>
-        Show Less
-      </button>
-    );
-    console.log(showMoreButton);
-  }
-  function shrinkKey(e) {
-    e.preventDefault();
-    changeKey(user.public_gpg_key.substring(0, 50));
-    changeButton(
-      <button type="button" onClick={expandKey}>
-        Show More
-      </button>
-    );
-  }
+
   return (
     <React.Fragment>
       <h4>Info</h4>
