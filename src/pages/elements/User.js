@@ -38,14 +38,21 @@ function User({ user }) {
       </Grid>
     );
     gpg = (
-      <div>
-        <Col style={{ width: 500 }}>
-          <ClipboardCopy isReadOnly variant={ClipboardCopyVariant.expansion}>
+      <Grid gutter="md">
+        <GridItem span={6}>
+          <ClipboardCopy
+            isReadOnly
+            style={{ marginRight: 5 }}
+            variant={ClipboardCopyVariant.expansion}
+            exitDelay={50}
+            entryDelay={550}
+            clickTip=""
+          >
             {user.public_gpg_key}
           </ClipboardCopy>
-          {downloadKeyButton}
-        </Col>
-      </div>
+        </GridItem>
+        <GridItem span={4}> {downloadKeyButton}</GridItem>
+      </Grid>
     );
   }
 
