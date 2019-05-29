@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Table } from 'patternfly-react';
 import { sortByName } from '../../components/Utils';
+import SearchBar from '../../components/SearchBar';
 
 function Users({ users }) {
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
@@ -16,91 +17,101 @@ function Users({ users }) {
     u.name_path = [u.name, u.path];
     return u;
   });
+  const [filterText, changeFilterText] = useState('Search...');
+
+  console.log({ filterText });
+
+  function handleFilterTextChange(txt) {
+    changeFilterText(txt);
+  }
 
   return (
-    <Table.PfProvider
-      striped
-      bordered
-      columns={[
-        {
-          header: {
-            label: 'Name',
-            formatters: [headerFormat]
+    <div>
+      <SearchBar filterText handleFilterTextChange />
+      <Table.PfProvider
+        striped
+        bordered
+        columns={[
+          {
+            header: {
+              label: 'Name',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [
+                value => (
+                  <Link
+                    to={{
+                      pathname: '/users',
+                      hash: value[1]
+                    }}
+                  >
+                    {value[0]}
+                  </Link>
+                ),
+                cellFormat
+              ]
+            },
+            property: 'name_path'
           },
-          cell: {
-            formatters: [
-              value => (
-                <Link
-                  to={{
-                    pathname: '/users',
-                    hash: value[1]
-                  }}
-                >
-                  {value[0]}
-                </Link>
-              ),
-              cellFormat
-            ]
+          {
+            header: {
+              label: 'Path',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [
+                value => (
+                  <Link
+                    to={{
+                      pathname: '/users',
+                      hash: value[1]
+                    }}
+                  >
+                    {value[1]}
+                  </Link>
+                ),
+                cellFormat
+              ]
+            },
+            property: 'name_path'
           },
-          property: 'name_path'
-        },
-        {
-          header: {
-            label: 'Path',
-            formatters: [headerFormat]
+          {
+            header: {
+              label: 'Red Hat',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [linkFormat('https://mojo.redhat.com/people/'), cellFormat]
+            },
+            property: 'redhat_username'
           },
-          cell: {
-            formatters: [
-              value => (
-                <Link
-                  to={{
-                    pathname: '/users',
-                    hash: value[1]
-                  }}
-                >
-                  {value[1]}
-                </Link>
-              ),
-              cellFormat
-            ]
+          {
+            header: {
+              label: 'GitHub',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [linkFormat('https://github.com/'), cellFormat]
+            },
+            property: 'github_username'
           },
-          property: 'name_path'
-        },
-        {
-          header: {
-            label: 'Red Hat',
-            formatters: [headerFormat]
-          },
-          cell: {
-            formatters: [linkFormat('https://mojo.redhat.com/people/'), cellFormat]
-          },
-          property: 'redhat_username'
-        },
-        {
-          header: {
-            label: 'GitHub',
-            formatters: [headerFormat]
-          },
-          cell: {
-            formatters: [linkFormat('https://github.com/'), cellFormat]
-          },
-          property: 'github_username'
-        },
-        {
-          header: {
-            label: 'Quay',
-            formatters: [headerFormat]
-          },
-          cell: {
-            formatters: [linkFormat('https://quay.io/user/'), cellFormat]
-          },
-          property: 'quay_username'
-        }
-      ]}
-    >
-      <Table.Header />
-      <Table.Body rows={processedUsers} rowKey="path" />
-    </Table.PfProvider>
+          {
+            header: {
+              label: 'Quay',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [linkFormat('https://quay.io/user/'), cellFormat]
+            },
+            property: 'quay_username'
+          }
+        ]}
+      >
+        <Table.Header />
+        <Table.Body rows={processedUsers} rowKey="path" />
+      </Table.PfProvider>
+    </div>
   );
 }
 
