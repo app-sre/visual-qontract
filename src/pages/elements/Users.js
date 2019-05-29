@@ -17,17 +17,19 @@ function Users({ users }) {
     u.name_path = [u.name, u.path];
     return u;
   });
-  const [filterText, changeFilterText] = useState('Search...');
-
-  console.log({ filterText });
-
+  let i;
+  for (i = 0; i < processedUsers.length; i++) {
+    if (processedUsers[i].name.toLowerCase().indexOf(filterText.toLowerCase()) !== -1) {
+      matchedUsers[matchedUsers.length] = processedUsers[i];
+    }
+  }
   function handleFilterTextChange(txt) {
     changeFilterText(txt);
   }
 
   return (
     <div>
-      <SearchBar filterText handleFilterTextChange />
+      <SearchBar filterText={filterText} handleFilterTextChange={handleFilterTextChange} />
       <Table.PfProvider
         striped
         bordered
@@ -109,7 +111,7 @@ function Users({ users }) {
         ]}
       >
         <Table.Header />
-        <Table.Body rows={processedUsers} rowKey="path" />
+        <Table.Body rows={matchedUsers} rowKey="path" />
       </Table.PfProvider>
     </div>
   );
