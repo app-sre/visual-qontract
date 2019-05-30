@@ -40,9 +40,8 @@ const GET_NAMESPACES = gql`
   }
 `;
 
-const NamespacesPage = props => {
-  const path = props.location.hash.substring(1);
-
+const NamespacesPage = ({ location }) => {
+  const path = location.hash.substring(1);
   if (path) {
     return (
       <Query query={GET_NAMESPACE} variables={{ path }}>

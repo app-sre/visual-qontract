@@ -4,8 +4,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { baseName } from './routes';
 import App from './App';
 
-const store = createStore((state = []) => state);
-
 it('renders without crashing', () => {
   // Would you like to debug Jest tests in Chrome? See the following note:
   // https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#debugging-tests-in-chrome

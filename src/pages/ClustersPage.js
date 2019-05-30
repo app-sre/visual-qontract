@@ -54,8 +54,8 @@ const GET_CLUSTERS = gql`
   }
 `;
 
-const ClustersPage = props => {
-  const path = props.location.hash.substring(1);
+const ClustersPage = ({ location }) => {
+  const path = location.hash.substring(1);
 
   if (path) {
     return (
