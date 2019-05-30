@@ -11,7 +11,9 @@ function Page({ title, body, path }) {
               {title}
               {path && (
                 <span className="edit-button">
-                  <Button href={`${window.DATA_DIR_URL}${path}`}>Edit</Button>
+                  <Button href={`${window.DATA_DIR_URL}${path}`} target="_blank" rel="noopener noreferrer">
+                    Edit
+                  </Button>
                 </span>
               )}
             </h1>
