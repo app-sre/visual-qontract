@@ -7,12 +7,9 @@ import SearchBar from '../../components/SearchBar';
 function Users({ users }) {
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
   const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
-  const linkFormat = url => value => (
-    <a href={`${url || ''}${value}`} target="_blank" rel="noopener noreferrer">
-      {value}
-    </a>
-  );
-
+  const linkFormat = url => value => <a href={`${url || ''}${value}`}>{value}</a>;
+  const [filterText, changeFilterText] = useState('');
+  const matchedUsers = [];
   const processedUsers = sortByName(users.slice()).map(u => {
     u.name_path = [u.name, u.path];
     return u;
@@ -26,7 +23,6 @@ function Users({ users }) {
   function handleFilterTextChange(txt) {
     changeFilterText(txt);
   }
-
   return (
     <div>
       <SearchBar filterText={filterText} handleFilterTextChange={handleFilterTextChange} />
