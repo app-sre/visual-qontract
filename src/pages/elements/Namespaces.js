@@ -18,9 +18,9 @@ function Namespaces({ namespaces }) {
       ns.cluster_name_path = [ns.cluster.name, ns.cluster.path];
       ns.grafana_url = [ns.cluster.jumpHost, ns.cluster.name, ns.name];
     }
-
     return ns;
   });
+  console.log(processedNamespaces);
 
   const colName = {
     header: {
