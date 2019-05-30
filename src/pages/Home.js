@@ -23,7 +23,8 @@ function HomePage() {
               ['Data', <a href={window.DATA_DIR_URL}>{window.DATA_DIR_URL}</a>],
               ['Docs', <a href={window.DOCS_BASE_URL}>{window.DOCS_BASE_URL}</a>],
               ['Schemas', <a href={window.SCHEMAS_DIR}>{window.SCHEMAS_DIR}</a>],
-              ['Grafana', <a href={window.GF_ROOT_URL}>Grafana</a>]
+              ['Grafana', <a href={window.GF_ROOT_URL}>Grafana</a>],
+              ["This UI's source", <a href="https://github.com/app-sre/visual-qontract">https://github.com/app-sre/visual-qontract</a>]
             ]}
           />
         </Grid.Col>
