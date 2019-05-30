@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { sortByName } from '../../components/Utils';
 import { Table } from 'patternfly-react';
+import { sortByName } from '../../components/Utils';
 
 function Users({ users }) {
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;

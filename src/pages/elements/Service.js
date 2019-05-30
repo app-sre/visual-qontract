@@ -3,7 +3,7 @@ import { Label, Table } from 'patternfly-react';
 import Definition from '../../components/Definition';
 import CodeComponents from '../../components/ServiceCodeComponents';
 import EndPoints from '../../components/ServiceEndPoints';
-import Namespaces from '../elements/Namespaces';
+import Namespaces from './Namespaces';
 
 function Service({ service }) {
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;

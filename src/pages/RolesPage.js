@@ -43,8 +43,8 @@ const GET_ROLES = gql`
   }
 `;
 
-const RolesPage = props => {
-  const path = props.location.hash.substring(1);
+const RolesPage = ({ location }) => {
+  const path = location.hash.substring(1);
 
   if (path) {
     return (
