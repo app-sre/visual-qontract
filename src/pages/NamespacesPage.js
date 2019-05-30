@@ -12,6 +12,7 @@ const GET_NAMESPACE = gql`
       path
       name
       description
+      grafanaUrl
       cluster {
         name
         path
@@ -29,6 +30,7 @@ const GET_NAMESPACES = gql`
       path
       name
       description
+      grafanaUrl
       cluster {
         name
         path
