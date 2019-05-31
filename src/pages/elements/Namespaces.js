@@ -20,8 +20,6 @@ function Namespaces({ namespaces }) {
     }
     return ns;
   });
-  console.log(processedNamespaces);
-
   const colName = {
     header: {
       label: 'Name',
