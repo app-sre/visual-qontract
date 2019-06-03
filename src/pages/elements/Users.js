@@ -6,7 +6,11 @@ import { sortByName } from '../../components/Utils';
 function Users({ users }) {
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
   const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
-  const linkFormat = url => value => <a href={`${url || ''}${value}`}>{value}</a>;
+  const linkFormat = url => value => (
+    <a href={`${url || ''}${value}`} target="_blank" rel="noopener noreferrer">
+      {value}
+    </a>
+  );
 
   const processedUsers = sortByName(users.slice()).map(u => {
     u.name_path = [u.name, u.path];

@@ -10,7 +10,12 @@ function Namespace({ namespace }) {
       <Definition
         items={[
           ['Name', namespace.name],
-          ['Path', <a href={`${window.DATA_DIR_URL}${namespace.path}`}>{namespace.path}</a>],
+          [
+            'Path',
+            <a href={`${window.DATA_DIR_URL}${namespace.path}`} target="_blank" rel="noopener noreferrer">
+              {namespace.path}
+            </a>
+          ],
           [
             'Cluster',
             <Link
