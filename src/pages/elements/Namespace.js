@@ -8,7 +8,7 @@ function Namespace({ namespace }) {
   if (namespace.grafanaUrl !== null) {
     grafana = (
       <a href={namespace.grafanaUrl} target="_blank" rel="noopener noreferrer">
-        Grafana
+        Link
       </a>
     );
   } else {
