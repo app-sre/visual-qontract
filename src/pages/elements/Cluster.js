@@ -8,7 +8,7 @@ function Cluster({ cluster }) {
   if (cluster.grafanaUrl !== null) {
     grafana = (
       <a href={cluster.grafanaUrl} target="_blank" rel="noopener noreferrer">
-        Grafana
+        Link
       </a>
     );
   } else {
