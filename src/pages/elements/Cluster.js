@@ -27,6 +27,7 @@ function Cluster({ cluster }) {
             </a>
           ],
           ['Grafana', grafana]
+
         ]}
       />
 
