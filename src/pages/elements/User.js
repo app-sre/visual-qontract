@@ -59,15 +59,35 @@ function User({ user }) {
       <Definition
         items={[
           ['Name', user.name],
-          ['Path', <a href={`${window.DATA_DIR_URL}${user.path}`}>{user.path}</a>],
+          [
+            'Path',
+            <a href={`${window.DATA_DIR_URL}${user.path}`} target="_blank" rel="noopener noreferrer">
+              {user.path}
+            </a>
+          ],
           [
             'Red Hat Username',
-            <a href={`https://mojo.redhat.com/people/${user.redhat_username}`}>{user.redhat_username}</a>
+            <a
+              href={`https://mojo.redhat.com/people/${user.redhat_username}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {user.redhat_username}
+            </a>
           ],
-          ['GitHub Username', <a href={`https://github.com/${user.github_username}`}>{user.github_username}</a>],
+          [
+            'GitHub Username',
+            <a href={`https://github.com/${user.github_username}`} target="_blank" rel="noopener noreferrer">
+              {user.github_username}
+            </a>
+          ],
           [
             'Quay Username',
-            (user.quay_username && <a href={`https://quay.io/user/${user.quay_username}`}>{user.quay_username}</a>) ||
+            (user.quay_username && (
+              <a href={`https://quay.io/user/${user.quay_username}`} target="_blank" rel="noopener noreferrer">
+                {user.quay_username}
+              </a>
+            )) ||
               '-'
           ]
         ]}

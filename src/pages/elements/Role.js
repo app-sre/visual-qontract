@@ -8,7 +8,11 @@ import Users from './Users';
 function Role({ role }) {
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
   const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
-  const linkFormat = url => value => <a href={`${url || ''}${value}`}>{value}</a>;
+  const linkFormat = url => value => (
+    <a href={`${url || ''}${value}`} target="_blank" rel="noopener noreferrer">
+      {value}
+    </a>
+  );
 
   const permissionsTable = (
     <Table.PfProvider

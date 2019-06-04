@@ -8,7 +8,11 @@ import Namespaces from './Namespaces';
 function Service({ service }) {
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
   const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
-  const linkFormat = url => value => <a href={`${url || ''}${value}`}>{value}</a>;
+  const linkFormat = url => value => (
+    <a href={`${url || ''}${value}`} target="_blank" rel="noopener noreferrer">
+      {value}
+    </a>
+  );
   const emptyFormat = value => value || '-';
   const booleanFormat = (t, f) => value => (value ? t : f);
 
@@ -81,7 +85,14 @@ function Service({ service }) {
             formatters: [headerFormat]
           },
           cell: {
-            formatters: [v => <a href={`https://quay.io/repository/${v}`}>{v.split('/')[1]}</a>, cellFormat]
+            formatters: [
+              v => (
+                <a href={`https://quay.io/repository/${v}`} target="_blank" rel="noopener noreferrer">
+                  {v.split('/')[1]}
+                </a>
+              ),
+              cellFormat
+            ]
           },
           property: 'repo_name'
         },

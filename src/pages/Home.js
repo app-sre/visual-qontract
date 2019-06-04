@@ -20,10 +20,36 @@ function HomePage() {
         <Grid.Col xs={12}>
           <Definition
             items={[
-              ['Data', <a href={window.DATA_DIR_URL}>{window.DATA_DIR_URL}</a>],
-              ['Docs', <a href={window.DOCS_BASE_URL}>{window.DOCS_BASE_URL}</a>],
-              ['Schemas', <a href={window.SCHEMAS_DIR}>{window.SCHEMAS_DIR}</a>],
-              ['Grafana', <a href={window.GF_ROOT_URL}>Grafana</a>]
+              [
+                'Data',
+                <a href={window.DATA_DIR_URL} target="_blank" rel="noopener noreferrer">
+                  {window.DATA_DIR_URL}
+                </a>
+              ],
+              [
+                'Docs',
+                <a href={window.DOCS_BASE_URL} target="_blank" rel="noopener noreferrer">
+                  {window.DOCS_BASE_URL}
+                </a>
+              ],
+              [
+                'Schemas',
+                <a href={window.SCHEMAS_DIR} target="_blank" rel="noopener noreferrer">
+                  {window.SCHEMAS_DIR}
+                </a>
+              ],
+              [
+                'Grafana',
+                <a href={window.GF_ROOT_URL} target="_blank" rel="noopener noreferrer">
+                  Grafana
+                </a>
+              ],
+              [
+                "This UI's source",
+                <a href="https://github.com/app-sre/visual-qontract" target="_blank" rel="noopener noreferrer">
+                  https://github.com/app-sre/visual-qontract
+                </a>
+              ]
             ]}
           />
         </Grid.Col>
