@@ -4,6 +4,7 @@ import Namespaces from './Namespaces';
 import GrafanaUrl from './GrafanaUrl';
 
 function Cluster({ cluster }) {
+  const grafana = <GrafanaUrl jumpHost={cluster.jumpHost} cluster={cluster.name} url={cluster.grafanaUrl} />;
   return (
     <React.Fragment>
       <h4>Info</h4>
@@ -16,7 +17,7 @@ function Cluster({ cluster }) {
               {cluster.path}
             </a>
           ],
-          ['Grafana', <GrafanaUrl jumpHost={cluster.jumpHost} cluster={cluster.name} />]
+          ['Grafana', grafana]
         ]}
       />
 

@@ -4,6 +4,14 @@ import GrafanaUrl from './GrafanaUrl';
 import Definition from '../../components/Definition';
 
 function Namespace({ namespace }) {
+  const grafana = (
+    <GrafanaUrl
+      jumpHost={namespace.cluster.jumpHost}
+      cluster={namespace.cluster.name}
+      namespace={namespace.name}
+      url={namespace.grafanaUrl}
+    />
+  );
   return (
     <React.Fragment>
       <h4>Info</h4>
@@ -27,14 +35,7 @@ function Namespace({ namespace }) {
               {namespace.cluster.name}
             </Link>
           ],
-          [
-            'Grafana',
-            <GrafanaUrl
-              jumpHost={namespace.cluster.jumpHost}
-              cluster={namespace.cluster.name}
-              namespace={namespace.name}
-            />
-          ]
+          ['Grafana', grafana]
         ]}
       />
 
