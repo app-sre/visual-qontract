@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { OptionsMenuItem, OptionsMenu, OptionsMenuToggle, Grid, GridItem } from '@patternfly/react-core';
 
 function SearchBar({ filterText, handleFilterTextChange, handleSelect, options, selected }) {
-  let optionsMenu;
   const [isOpen, toggle] = useState(false);
+  let optionsMenu;
   function handleChange(e) {
     handleFilterTextChange(e.target.value);
   }
@@ -40,7 +40,7 @@ function SearchBar({ filterText, handleFilterTextChange, handleSelect, options, 
       />
     );
   } else {
-    optionsMenu = "";
+    optionsMenu = '';
   }
   return (
     <div className="searchBar">
