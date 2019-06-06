@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Table } from 'patternfly-react';
-import { OptionsMenuItem, OptionsMenu, OptionsMenuToggle, Grid, GridItem } from '@patternfly/react-core';
 import { sortByName } from '../../components/Utils';
 import SearchBar from '../../components/SearchBar';
 
@@ -10,31 +9,31 @@ function Users({ users }) {
   const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
   const linkFormat = url => value => <a href={`${url || ''}${value}`}>{value}</a>;
   const [filterText, changeFilterText] = useState('');
-  const [isOpen, toggle] = useState(false);
-  const [selected, changeSelected] = useState('name');
   const matchedUsers = [];
+  const options = ['Name', 'Red Hat Username', 'GitHub Username', 'Quay Username'];
+  const [selected, changeSelected] = useState(options[0]);
   const processedUsers = sortByName(users.slice()).map(u => {
     u.name_path = [u.name, u.path];
     return u;
   });
   let i;
   for (i = 0; i < processedUsers.length; i++) {
-    if (selected === 'name') {
+    if (selected === 'Name') {
       if (processedUsers[i].name.toLowerCase().indexOf(filterText.toLowerCase()) !== -1) {
         matchedUsers[matchedUsers.length] = processedUsers[i];
       }
     }
-    if (selected === 'redhat') {
+    if (selected === 'Red Hat Username') {
       if (processedUsers[i].redhat_username.toLowerCase().indexOf(filterText.toLowerCase()) !== -1) {
         matchedUsers[matchedUsers.length] = processedUsers[i];
       }
     }
-    if (selected === 'github') {
+    if (selected === 'GitHub Username') {
       if (processedUsers[i].github_username.toLowerCase().indexOf(filterText.toLowerCase()) !== -1) {
         matchedUsers[matchedUsers.length] = processedUsers[i];
       }
     }
-    if (selected === 'quay') {
+    if (selected === 'Quay Username') {
       if (processedUsers[i].quay_username !== null) {
         if (processedUsers[i].quay_username.toLowerCase().indexOf(filterText.toLowerCase()) !== -1) {
           matchedUsers[matchedUsers.length] = processedUsers[i];
@@ -46,49 +45,18 @@ function Users({ users }) {
     changeFilterText(txt);
   }
 
-  function onToggle() {
-    toggle(!isOpen);
+  function handleSelect(newSelection) {
+    changeSelected(newSelection);
   }
-
-  function onSelect(e) {
-    const { id } = e.target;
-    changeSelected(id);
-    onToggle();
-    return selected;
-  }
-
-  function toggleTemplate({ toggleTemplateProps }) {
-    const { text } = toggleTemplateProps;
-    return <React.Fragment>{text}</React.Fragment>;
-  }
-
-  const menuItems = [
-    <OptionsMenuItem onSelect={onSelect} isSelected={selected === 'name'} id="name" key="name">
-      Name
-    </OptionsMenuItem>,
-    <OptionsMenuItem onSelect={onSelect} isSelected={selected === 'redhat'} id="redhat" key="redhat">
-      Red Hat Username
-    </OptionsMenuItem>,
-    <OptionsMenuItem onSelect={onSelect} isSelected={selected === 'github'} id="github" key="github">
-      GitHub Username
-    </OptionsMenuItem>,
-    <OptionsMenuItem onSelect={onSelect} isSelected={selected === 'quay'} id="quay" key="quay">
-      Quay Username
-    </OptionsMenuItem>
-  ];
-  const menuToggle = (
-    <OptionsMenuToggle onToggle={onToggle} toggleTemplate={toggleTemplate} toggleTemplateProps={{ text: selected }} />
-  );
   return (
     <div>
-      <Grid gutter="md">
-        <GridItem span={1}>
-          <OptionsMenu id="options-menu" menuItems={menuItems} isOpen={isOpen} toggle={menuToggle} />
-        </GridItem>
-        <GridItem span={6}>
-          <SearchBar filterText={filterText} handleFilterTextChange={handleFilterTextChange} />
-        </GridItem>
-      </Grid>
+      <SearchBar
+        filterText={filterText}
+        handleFilterTextChange={handleFilterTextChange}
+        handleSelect={handleSelect}
+        options={options}
+        selected={selected}
+      />
       <Table.PfProvider
         striped
         bordered
