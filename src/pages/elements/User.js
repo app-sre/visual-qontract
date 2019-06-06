@@ -1,11 +1,6 @@
 import React from 'react';
-<<<<<<< HEAD
 import { ClipboardCopy, ClipboardCopyVariant, Grid, GridItem, Button, Tooltip } from '@patternfly/react-core';
 import { ExportIcon } from '@patternfly/react-icons';
-=======
-import { ClipboardCopy, ClipboardCopyVariant } from '@patternfly/react-core';
-import { Col } from 'patternfly-react';
->>>>>>> 17eb103... working search bar for searching by name
 import Definition from '../../components/Definition';
 import Roles from './Roles';
 
