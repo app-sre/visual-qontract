@@ -117,3 +117,33 @@ a:focus {
   display: table-cell;
 }
 
+.optionsMenu li{
+  background-color: white;
+  display: block;
+  text-align: center;
+  padding: 8px 10px;
+  border: gray .5px solid;
+}
+
+.optionsMenu ul{
+  list-style-type: none;
+  text-align: center;
+}
+
+.optionsMenu{
+  background-color: white;
+  text-align: center;
+}
+
+.optionsMenu li:hover {
+  background-color: #e6e6e6;
+}
+
+.searchBar{
+  padding: 20px;
+}
+
+.search{
+  border-radius: 5px;
+  width: 200px;
+}
