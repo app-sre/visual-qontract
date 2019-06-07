@@ -44,13 +44,13 @@ function SearchBar({ filterText, handleFilterTextChange, handleSelect, options, 
   }
   return (
     <div className="searchBar">
-      <Grid gutter="md">
+      <Grid>
         <GridItem span={2}>
           <form>
             <input className="search" type="text" placeholder="Search..." value={filterText} onChange={handleChange} />
           </form>
         </GridItem>
-        <GridItem span={1}> {optionsMenu} </GridItem>
+        <GridItem span={3}> {optionsMenu} </GridItem>
       </Grid>
     </div>
   );

@@ -1,17 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Table } from 'patternfly-react';
 import GrafanaUrl from './GrafanaUrl';
 import { sortByName } from '../../components/Utils';
+import SearchBar from '../../components/SearchBar';
 
 function Namespaces({ namespaces }) {
+  const options = ['Name', 'Cluster', 'Description'];
+  const [selected, changeSelected] = useState(options[0]);
+  const [filterText, changeFilterText] = useState('');
   if (namespaces.length === 0) {
     return <p style={{ 'font-style': 'italic' }}>No namespaces.</p>;
   }
-
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
   const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
-
+  const matchedNamespaces = [];
   const processedNamespaces = sortByName(namespaces.slice()).map(ns => {
     ns.name_path = [ns.name, ns.path];
     if (typeof ns.cluster !== 'undefined') {
@@ -20,6 +23,33 @@ function Namespaces({ namespaces }) {
     }
     return ns;
   });
+  let i;
+  for (i = 0; i < processedNamespaces.length; i++) {
+    if (selected === 'Name') {
+      if (processedNamespaces[i].name.toLowerCase().indexOf(filterText.toLowerCase()) !== -1) {
+        matchedNamespaces[matchedNamespaces.length] = processedNamespaces[i];
+      }
+    }
+    if (selected === 'Cluster') {
+      if (processedNamespaces[i].cluster.name.toLowerCase().indexOf(filterText.toLowerCase()) !== -1) {
+        matchedNamespaces[matchedNamespaces.length] = processedNamespaces[i];
+      }
+    }
+    if (selected === 'Description') {
+      if (processedNamespaces[i].description !== null) {
+        if (processedNamespaces[i].description.toLowerCase().indexOf(filterText.toLowerCase()) !== -1) {
+          matchedNamespaces[matchedNamespaces.length] = processedNamespaces[i];
+        }
+      }
+    }
+  }
+  function handleFilterTextChange(txt) {
+    changeFilterText(txt);
+  }
+
+  function handleSelect(newSelection) {
+    changeSelected(newSelection);
+  }
   const colName = {
     header: {
       label: 'Name',
@@ -120,10 +150,19 @@ function Namespaces({ namespaces }) {
       : [colName, colPath, colCluster, colGrafana, colDescription];
 
   return (
-    <Table.PfProvider striped bordered columns={tableCols}>
-      <Table.Header />
-      <Table.Body rows={processedNamespaces} rowKey="path" />
-    </Table.PfProvider>
+    <div>
+      <SearchBar
+        filterText={filterText}
+        handleFilterTextChange={handleFilterTextChange}
+        handleSelect={handleSelect}
+        options={options}
+        selected={selected}
+      />
+      <Table.PfProvider striped bordered columns={tableCols}>
+        <Table.Header />
+        <Table.Body rows={matchedNamespaces} rowKey="path" />
+      </Table.PfProvider>
+    </div>
   );
 }
 
