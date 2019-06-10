@@ -4,6 +4,7 @@ import UsersPage from './pages/UsersPage';
 import RolesPage from './pages/RolesPage';
 import ClustersPage from './pages/ClustersPage';
 import NamespacesPage from './pages/NamespacesPage';
+import PermissionsPage from './pages/PermissionsPage';
 
 const baseName = '/';
 
@@ -45,6 +46,12 @@ const routes = () => [
     title: 'Roles',
     to: '/roles',
     component: RolesPage
+  },
+  {
+    iconClass: 'fa fa-key',
+    title: 'Permissions',
+    to: '/permissions',
+    component: PermissionsPage
   }
 ];
 
