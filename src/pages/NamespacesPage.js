@@ -7,7 +7,7 @@ import Namespaces from './elements/Namespaces';
 import Namespace from './elements/Namespace';
 
 const GET_NAMESPACE = gql`
-  query Namespace($path: String) {
+  query Namespace($path: String, $namespaceName: String) {
     namespaces_v1(path: $path) {
       path
       name
@@ -18,6 +18,19 @@ const GET_NAMESPACE = gql`
         path
         jumpHost {
           hostname
+        }
+      }
+    }
+    users_v1(namespace: $namespaceName) {
+      name
+      roles {
+        name
+        permissions {
+          ... on PermissionOpenshiftRolebinding_v1 {
+            service
+            cluster
+            name
+          }
         }
       }
     }
@@ -50,9 +63,10 @@ const NamespacesPage = ({ location }) => {
         {({ loading, error, data }) => {
           if (loading) return 'Loading...';
           if (error) return `Error! ${error.message}`;
-
+          console.log(data);
           const namespace = data.namespaces_v1[0];
-          const body = <Namespace namespace={namespace} />;
+          const users = data.users_v1[0];
+          const body = <Namespace namespace={namespace} users={users} />;
           return <Page title={namespace.name} body={body} path={namespace.path} />;
         }}
       </Query>
@@ -64,7 +78,6 @@ const NamespacesPage = ({ location }) => {
       {({ loading, error, data }) => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
-
         const body = <Namespaces namespaces={data.namespaces_v1} />;
         return <Page title="Namespaces" body={body} />;
       }}
