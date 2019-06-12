@@ -5,10 +5,14 @@ import GrafanaUrl from './GrafanaUrl';
 import { sortByName } from '../../components/Utils';
 import TableSearch from '../../components/TableSearch';
 
+<<<<<<< HEAD
 function Namespaces({ namespaces }) {
   const options = ['Name', 'Cluster', 'Description'];
   const [selected, changeSelected] = useState(options[0]);
   const [filterText, changeFilterText] = useState('');
+=======
+function Namespaces({ namespaces, users }) {
+>>>>>>> 2f9118b... testing
   if (namespaces.length === 0) {
     return <p style={{ 'font-style': 'italic' }}>No namespaces.</p>;
   }
