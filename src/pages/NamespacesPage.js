@@ -7,7 +7,7 @@ import Namespaces from './elements/Namespaces';
 import Namespace from './elements/Namespace';
 
 const GET_NAMESPACE = gql`
-  query Namespace($path: String, $namespaceName: String) {
+  query Namespace($path: String) {
     namespaces_v1(path: $path) {
       path
       name
@@ -21,8 +21,9 @@ const GET_NAMESPACE = gql`
         }
       }
     }
-    users_v1(namespace: $namespaceName) {
+    users_v1 {
       name
+      path
       roles {
         name
         permissions {
@@ -30,6 +31,7 @@ const GET_NAMESPACE = gql`
             service
             cluster
             name
+            namespace
           }
         }
       }
@@ -54,7 +56,6 @@ const GET_NAMESPACES = gql`
     }
   }
 `;
-
 const NamespacesPage = ({ location }) => {
   const path = location.hash.substring(1);
   if (path) {
@@ -63,9 +64,8 @@ const NamespacesPage = ({ location }) => {
         {({ loading, error, data }) => {
           if (loading) return 'Loading...';
           if (error) return `Error! ${error.message}`;
-          console.log(data);
           const namespace = data.namespaces_v1[0];
-          const users = data.users_v1[0];
+          const users = data.users_v1;
           const body = <Namespace namespace={namespace} users={users} />;
           return <Page title={namespace.name} body={body} path={namespace.path} />;
         }}
