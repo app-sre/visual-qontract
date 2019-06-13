@@ -14,6 +14,17 @@ const GET_PERMISSION = gql`
       description
       service
     }
+    roles_v1 {
+      name
+      path
+      description
+      permissions {
+        name
+      }
+      users {
+        name
+      }
+    }
   }
 `;
 
@@ -38,7 +49,8 @@ const PermissionsPage = ({ location }) => {
           if (error) return `Error! ${error.message}`;
 
           const permission = data.permissions_v1[0];
-          const body = <Permission permission={permission} />;
+          const roles = data.roles_v1;
+          const body = <Permission permission={permission} roles={roles} />;
           return <Page title={permission.name} body={body} path={permission.path} />;
         }}
       </Query>
