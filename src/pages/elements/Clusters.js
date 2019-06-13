@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
+import { Row, Col, Card, CardHeading, CardBody, CardFooter, CardTitle } from 'patternfly-react';
 import { Link } from 'react-router-dom';
 import { chunk } from 'lodash';
-import { CardGrid, Row, Col, Card, CardHeading, CardBody, CardFooter, CardTitle } from 'patternfly-react';
+import GridSearch from '../../components/GridSearch';
 import { sortByName } from '../../components/Utils';
-import SearchBar from '../../components/SearchBar';
 
 function Clusters({ clusters }) {
   // cardsWidth * cardsPerRow must be <= 12 (bootstrap grid)
@@ -11,24 +11,12 @@ function Clusters({ clusters }) {
   const cardsPerRow = 3;
   const [selected, changeSelected] = useState('Name');
   const [filterText, changeFilterText] = useState('');
-  const matchedClusters = [];
-  let i;
-  for (i = 0; i < clusters.length; i++) {
-    if (selected === 'Name') {
-      if (clusters[i].name.toLowerCase().indexOf(filterText.toLowerCase()) !== -1) {
-        matchedClusters[matchedClusters.length] = clusters[i];
-      }
-    }
+  const lcFilter = filterText.toLowerCase();
+  function matches(c) {
+    return selected === 'Name' && c.name.toLowerCase().includes(lcFilter);
   }
-  function handleFilterTextChange(txt) {
-    changeFilterText(txt);
-  }
-
-  function handleSelect(newSelection) {
-    changeSelected(newSelection);
-  }
-
-  const rows = chunk(sortByName(matchedClusters), cardsPerRow).map(c => (
+  const matchedData = clusters.filter(matches);
+  const rows = chunk(sortByName(matchedData), cardsPerRow).map(c => (
     <Row key={c[0].path}>
       {c.map(s => (
         <Col xs={cardWidth} key={s.path}>
@@ -61,15 +49,13 @@ function Clusters({ clusters }) {
   ));
 
   return (
-    <div>
-      <SearchBar
-        filterText={filterText}
-        handleFilterTextChange={handleFilterTextChange}
-        handleSelect={handleSelect}
-        selected={selected}
-      />
-      <CardGrid matchHeight>{rows}</CardGrid>
-    </div>
+    <GridSearch
+      data={rows}
+      filterText={filterText}
+      changeFilterText={changeFilterText}
+      changeSelected={changeSelected}
+      selected={selected}
+    />
   );
 }
 
