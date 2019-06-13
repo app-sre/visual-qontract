@@ -1,10 +1,21 @@
 import React from 'react';
 import Definition from '../../components/Definition';
+import Roles from './Roles';
 
 // import Users from './Users';
 
-function Permission({ permission }) {
-  console.log(permission);
+function Permission({ permission, roles }) {
+  function matches(r) {
+    const p = r.permissions;
+    for (let i = 0; i < p.length; i++) {
+      if (p[i].name === permission.name) {
+        return true;
+      }
+    }
+    return false;
+  }
+  const matchedData = roles.filter(matches);
+
   return (
     <React.Fragment>
       <h4>Info</h4>
@@ -18,12 +29,12 @@ function Permission({ permission }) {
       <h4>Description</h4>
       {permission.description || '-'}
 
-      {/* {permission.users.length > 0 && (
+      {matchedData.length > 0 && (
         <React.Fragment>
-          <h4>Users</h4>
-          <Users users={permission.users} />
+          <h4> Roles </h4>
+          <Roles roles={matchedData} />
         </React.Fragment>
-      )} */}
+      )}
     </React.Fragment>
   );
 }
