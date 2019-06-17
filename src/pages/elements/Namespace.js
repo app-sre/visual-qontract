@@ -2,8 +2,22 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import GrafanaUrl from './GrafanaUrl';
 import Definition from '../../components/Definition';
+import Users from './Users';
 
-function Namespace({ namespace }) {
+function Namespace({ namespace, users }) {
+  function matches(u) {
+    const r = u.roles;
+    for (let i = 0; i < r.length; i++) {
+      let p = r[i].permissions;
+      for (let j = 0; j < p.length; p++) {
+        if (p[j].namespace !== undefined && p[j].namespace === namespace.name) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  const matchedData = users.filter(matches);
   const grafana = (
     <GrafanaUrl
       jumpHost={namespace.cluster.jumpHost}
@@ -41,6 +55,13 @@ function Namespace({ namespace }) {
 
       <h4>Description</h4>
       {namespace.description}
+
+      {matchedData.length > 0 && (
+        <React.Fragment>
+          <h4> Users </h4>
+          <Users users={matchedData} />
+        </React.Fragment>
+      )}
     </React.Fragment>
   );
 }
