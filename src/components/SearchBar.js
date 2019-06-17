@@ -17,10 +17,6 @@ function SearchBar({ filterText, handleFilterTextChange, handleSelect, options, 
     onToggle();
   }
 
-  function toggleTemplate({ toggleTemplateProps }) {
-    const { text } = toggleTemplateProps;
-    return <React.Fragment>{text}</React.Fragment>;
-  }
   if (options !== undefined) {
     const menuItems = options.map(i => (
       <OptionsMenuItem onSelect={onSelect} isSelected={selected === i} id={i} key={i} className="optionsMenuItem">
@@ -28,7 +24,11 @@ function SearchBar({ filterText, handleFilterTextChange, handleSelect, options, 
       </OptionsMenuItem>
     ));
     const menuToggle = (
-      <OptionsMenuToggle onToggle={onToggle} toggleTemplate={toggleTemplate} toggleTemplateProps={{ text: selected }} />
+      <OptionsMenuToggle
+        onToggle={onToggle}
+        toggleTemplate={<React.Fragment>{selected}</React.Fragment>}
+        toggleTemplateProps={{ text: selected }}
+      />
     );
     optionsMenu = (
       <OptionsMenu

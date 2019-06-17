@@ -5,13 +5,15 @@ import SearchBar from './SearchBar';
 function GridSearch({ data, filterText, changeFilterText, changeSelected, selected }) {
   return (
     <React.Fragment>
-      <SearchBar
-        filterText={filterText}
-        handleFilterTextChange={changeFilterText}
-        handleSelect={changeSelected}
-        selected={selected}
-      />
-      <CardGrid matchHeight>{data}</CardGrid>
+      <CardGrid matchHeight>
+        <SearchBar
+          filterText={filterText}
+          handleFilterTextChange={changeFilterText}
+          handleSelect={changeSelected}
+          selected={selected}
+        />
+        {data}
+      </CardGrid>
     </React.Fragment>
   );
 }
