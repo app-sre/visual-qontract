@@ -22,8 +22,11 @@ const GET_NAMESPACE = gql`
       }
     }
     users_v1 {
-      name
       path
+      name
+      redhat_username
+      github_username
+      quay_username
       roles {
         name
         permissions {
