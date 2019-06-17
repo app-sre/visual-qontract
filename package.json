@@ -54,7 +54,8 @@
     "lint": "yarn lint:js",
     "lint:js": "eslint --max-warnings 0 src",
     "preinstall": "node -v; npm -v;",
-    "postbuild": "[ \"$BUILD_ENV\" != OCP ] && exit 0; yarn install --production --ignore-scripts --prefer-offline;"
+    "postbuild": "[ \"$BUILD_ENV\" != OCP ] && exit 0; yarn install --production --ignore-scripts --prefer-offline;",
+    "build-fragment" : "src/schemaQuery.js"
   },
   "browserslist": [
     ">0.2%",
