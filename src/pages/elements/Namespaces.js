@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Table } from 'patternfly-react';
 import GrafanaUrl from './GrafanaUrl';
 import { sortByName } from '../../components/Utils';
+import TableSearch from '../../components/TableSearch';
 
 function Namespaces({ namespaces }) {
+  const options = ['Name', 'Cluster', 'Description'];
+  const [selected, changeSelected] = useState(options[0]);
+  const [filterText, changeFilterText] = useState('');
   if (namespaces.length === 0) {
     return <p style={{ 'font-style': 'italic' }}>No namespaces.</p>;
   }
-
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
   const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
-
   const processedNamespaces = sortByName(namespaces.slice()).map(ns => {
     ns.name_path = [ns.name, ns.path];
     if (typeof ns.cluster !== 'undefined') {
@@ -20,6 +22,15 @@ function Namespaces({ namespaces }) {
     }
     return ns;
   });
+  const lcFilter = filterText.toLowerCase();
+  function matches(ns) {
+    return (
+      (selected === 'Name' && ns.name.toLowerCase().includes(lcFilter)) ||
+      (selected === 'Cluster' && ns.cluster.name.toLowerCase().includes(lcFilter)) ||
+      (selected === 'Description' && ns.description !== null && ns.description.toLowerCase().includes(lcFilter))
+    );
+  }
+  const matchedNamespaces = processedNamespaces.filter(matches);
   const colName = {
     header: {
       label: 'Name',
@@ -120,10 +131,15 @@ function Namespaces({ namespaces }) {
       : [colName, colPath, colCluster, colGrafana, colDescription];
 
   return (
-    <Table.PfProvider striped bordered columns={tableCols}>
-      <Table.Header />
-      <Table.Body rows={processedNamespaces} rowKey="path" />
-    </Table.PfProvider>
+    <TableSearch
+      filterText={filterText}
+      changeFilterText={changeFilterText}
+      changeSelected={changeSelected}
+      options={options}
+      selected={selected}
+      columns={tableCols}
+      rows={matchedNamespaces}
+    />
   );
 }
 

@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { Table } from 'patternfly-react';
 import { sortByName } from './Utils';
 

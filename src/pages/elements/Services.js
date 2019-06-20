@@ -1,15 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { chunk } from 'lodash';
-import { CardGrid, Row, Col, Card, CardHeading, CardBody, CardFooter, CardTitle, Label } from 'patternfly-react';
+import { Row, Col, Card, CardHeading, CardBody, CardFooter, CardTitle, Label } from 'patternfly-react';
 import { sortByName } from '../../components/Utils';
+import GridSearch from '../../components/GridSearch';
 
 function Services({ services }) {
   // cardsWidth * cardsPerRow must be <= 12 (bootstrap grid)
   const cardWidth = 4;
   const cardsPerRow = 3;
-
-  const rows = chunk(sortByName(services), cardsPerRow).map(c => (
+  const [selected, changeSelected] = useState('Name');
+  const [filterText, changeFilterText] = useState('');
+  const lcFilter = filterText.toLowerCase();
+  function matches(s) {
+    return selected === 'Name' && s.name.toLowerCase().includes(lcFilter);
+  }
+  const matchedServices = services.filter(matches);
+  const rows = chunk(sortByName(matchedServices), cardsPerRow).map(c => (
     <Row key={c[0].path}>
       {c.map(s => (
         <Col xs={cardWidth} key={s.path}>
@@ -42,7 +49,15 @@ function Services({ services }) {
     </Row>
   ));
 
-  return <CardGrid matchHeight>{rows}</CardGrid>;
+  return (
+    <GridSearch
+      data={rows}
+      filterText={filterText}
+      changeFilterText={changeFilterText}
+      changeSelected={changeSelected}
+      selected={selected}
+    />
+  );
 }
 
 export default Services;

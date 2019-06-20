@@ -1,15 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Row, Col, Card, CardHeading, CardBody, CardFooter, CardTitle } from 'patternfly-react';
 import { Link } from 'react-router-dom';
 import { chunk } from 'lodash';
-import { CardGrid, Row, Col, Card, CardHeading, CardBody, CardFooter, CardTitle } from 'patternfly-react';
+import GridSearch from '../../components/GridSearch';
 import { sortByName } from '../../components/Utils';
 
 function Clusters({ clusters }) {
   // cardsWidth * cardsPerRow must be <= 12 (bootstrap grid)
   const cardWidth = 4;
   const cardsPerRow = 3;
-
-  const rows = chunk(sortByName(clusters), cardsPerRow).map(c => (
+  const [selected, changeSelected] = useState('Name');
+  const [filterText, changeFilterText] = useState('');
+  const lcFilter = filterText.toLowerCase();
+  function matches(c) {
+    return selected === 'Name' && c.name.toLowerCase().includes(lcFilter);
+  }
+  const matchedData = clusters.filter(matches);
+  const rows = chunk(sortByName(matchedData), cardsPerRow).map(c => (
     <Row key={c[0].path}>
       {c.map(s => (
         <Col xs={cardWidth} key={s.path}>
@@ -41,7 +48,15 @@ function Clusters({ clusters }) {
     </Row>
   ));
 
-  return <CardGrid matchHeight>{rows}</CardGrid>;
+  return (
+    <GridSearch
+      data={rows}
+      filterText={filterText}
+      changeFilterText={changeFilterText}
+      changeSelected={changeSelected}
+      selected={selected}
+    />
+  );
 }
 
 export default Clusters;
