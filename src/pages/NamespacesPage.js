@@ -21,21 +21,16 @@ const GET_NAMESPACE = gql`
         }
       }
     }
-    users_v1 {
+    roles_v1 {
       path
       name
-      redhat_username
-      github_username
-      quay_username
-      roles {
-        name
-        permissions {
-          ... on PermissionOpenshiftRolebinding_v1 {
-            service
-            cluster
-            name
-            namespace
-          }
+      description
+      permissions {
+        ... on PermissionOpenshiftRolebinding_v1 {
+          service
+          cluster
+          name
+          namespace
         }
       }
     }
@@ -68,8 +63,8 @@ const NamespacesPage = ({ location }) => {
           if (loading) return 'Loading...';
           if (error) return `Error! ${error.message}`;
           const namespace = data.namespaces_v1[0];
-          const users = data.users_v1;
-          const body = <Namespace namespace={namespace} users={users} />;
+          const roles = data.roles_v1;
+          const body = <Namespace namespace={namespace} roles={roles} />;
           return <Page title={namespace.name} body={body} path={namespace.path} />;
         }}
       </Query>
