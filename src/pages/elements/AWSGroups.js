@@ -18,13 +18,14 @@ function AWSGroups({ awsgroups }) {
             </CardHeading>
             <CardBody>
               <p>{s.description}</p>
+              <p> Account: {s.account.name} </p>
             </CardBody>
             <CardFooter>
               <p>
                 <Link
                   to={{
                     pathname: '/awsgroups',
-                    hash: s.name
+                    hash: s.path
                   }}
                 >
                   Details
