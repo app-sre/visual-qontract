@@ -9,6 +9,7 @@ import { VerticalNav, VerticalNavItem, VerticalNavSecondaryItem, VerticalNavMast
 import { routes } from './routes';
 import './App.css';
 import introspectionQueryResultData from './fragmentTypes.json';
+import NotFoundPage from './pages/NotFoundPage';
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData
@@ -48,6 +49,7 @@ class App extends React.Component {
     return (
       <Switch>
         {allRoutes}
+        <Route component={NotFoundPage} />
         <Redirect from="*" to="/" key="default-route" />
       </Switch>
     );
