@@ -9,10 +9,13 @@ import AWSGroup from './elements/AWSGroup';
 const GET_AWSGROUP = gql`
   query AWSGroup($path: String) {
     awsgroups_v1(path: $path) {
+      path
       name
       description
       account {
         name
+        description
+        consoleUrl
       }
       policies
     }
@@ -22,6 +25,7 @@ const GET_AWSGROUP = gql`
 const GET_AWSGROUPS = gql`
   query AWSGroups {
     awsgroups_v1 {
+      path
       name
       description
       account {
@@ -42,7 +46,7 @@ const AWSGroupsPage = ({ location }) => {
           if (error) return `Error! ${error.message}`;
           const awsgroup = data.awsgroups_v1[0];
           const body = <AWSGroup awsgroup={awsgroup} />;
-          return <Page title={awsgroup.name} body={body} path={awsgroup.name} />;
+          return <Page title={awsgroup.name} body={body} path={awsgroup.path} />;
         }}
       </Query>
     );
