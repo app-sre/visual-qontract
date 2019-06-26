@@ -5,7 +5,7 @@ function GrafanaUrl({ jumpHost, cluster, namespace, url }) {
     return 'Not available';
   }
   let grafanaUrl;
-  if (url !== null) {
+  if (url !== null && url !== undefined) {
     grafanaUrl = url;
   } else {
     const dataSource = `${cluster}-cluster-prometheus`;
