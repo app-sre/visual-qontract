@@ -8,6 +8,7 @@ import { IntrospectionFragmentMatcher, InMemoryCache } from 'apollo-cache-inmemo
 import { VerticalNav, VerticalNavItem, VerticalNavSecondaryItem, VerticalNavMasthead } from 'patternfly-react';
 import { routes } from './routes';
 import './App.css';
+
 import introspectionQueryResultData from './fragmentTypes.json';
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
@@ -21,6 +22,7 @@ const client = new ApolloClient({
   uri: window.GRAPHQL_URI || '/graphql'
 });
 
+// App
 class App extends React.Component {
   constructor() {
     super();

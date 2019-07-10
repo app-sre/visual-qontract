@@ -20,6 +20,7 @@ $ docker run --rm -p 8080:8080 \
 ```sh
 $ cp public/env/env.js.example public/env/env.js
 $ yarn
+$ GRAPHQL_URI=http://localhost:4000/graphql yarn build-fragment
 $ yarn build
 $ yarn start:dev
 ```

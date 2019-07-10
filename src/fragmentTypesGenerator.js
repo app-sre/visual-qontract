@@ -1,11 +1,19 @@
 const fetch = require('node-fetch');
 const fs = require('fs');
 
-fetch('http://localhost:4000/graphql', {
+const url = process.env.GRAPHQL_URI || '/graphql';
+
+let headers = { 'Content-Type': 'application/json' };
+if (typeof(process.env.AUTHORIZATION) != 'undefined') {
+  headers['Authorization'] = process.env.AUTORIZATION;
+}
+
+fetch(url, {
   method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
+  headers: headers,
   body: JSON.stringify({
     variables: {},
+    headers: headers,
     query: `
       {
         __schema {

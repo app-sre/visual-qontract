@@ -42,3 +42,7 @@ src/sass/*
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# fragments
+src/fragmentTypes.json
+

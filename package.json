@@ -55,7 +55,7 @@
     "lint:js": "eslint --max-warnings 0 src",
     "preinstall": "node -v; npm -v;",
     "postbuild": "[ \"$BUILD_ENV\" != OCP ] && exit 0; yarn install --production --ignore-scripts --prefer-offline;",
-    "build-fragment": "node src/test.js"
+    "build-fragment": "node src/fragmentTypesGenerator.js"
   },
   "browserslist": [
     ">0.2%",
