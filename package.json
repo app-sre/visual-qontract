@@ -44,7 +44,7 @@
     "build-css": "node-sass-chokidar src/ --output-style compressed $npm_package_sassIncludes_src $npm_package_sassIncludes_patternfly $npm_package_sassIncludes_patternflyReact $npm_package_sassIncludes_bootstrap $npm_package_sassIncludes_fontAwesome -o src/",
     "watch-css": "yarn build-css && node-sass-chokidar src/ --output-style compressed $npm_package_sassIncludes_src $npm_package_sassIncludes_patternfly $npm_package_sassIncludes_patternflyReact $npm_package_sassIncludes_bootstrap $npm_package_sassIncludes_fontAwesome -o src/ --watch --recursive",
     "build-js": "react-scripts build",
-    "start:dev": "npm-run-all -p watch-css start:local",
+    "start:dev": "npm-run-all -p watch-css start:local build-fragment",
     "start:local": "react-scripts start",
     "build": "yarn copy-fonts && yarn copy-img && yarn build-css && yarn build-js && yarn postbuild",
     "test": "yarn lint && react-scripts test --env=jsdom --watch",
@@ -55,7 +55,7 @@
     "lint:js": "eslint --max-warnings 0 src",
     "preinstall": "node -v; npm -v;",
     "postbuild": "[ \"$BUILD_ENV\" != OCP ] && exit 0; yarn install --production --ignore-scripts --prefer-offline;",
-    "build-fragment": "node src/test.js"
+    "build-fragment": "node src/fragmentTypesGenerator.js"
   },
   "browserslist": [
     ">0.2%",
