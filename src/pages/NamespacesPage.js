@@ -21,6 +21,19 @@ const GET_NAMESPACE = gql`
         }
       }
     }
+    roles_v1 {
+      path
+      name
+      description
+      permissions {
+        ... on PermissionOpenshiftRolebinding_v1 {
+          service
+          cluster
+          name
+          namespace
+        }
+      }
+    }
   }
 `;
 
@@ -41,7 +54,6 @@ const GET_NAMESPACES = gql`
     }
   }
 `;
-
 const NamespacesPage = ({ location }) => {
   const path = location.hash.substring(1);
   if (path) {
@@ -50,9 +62,9 @@ const NamespacesPage = ({ location }) => {
         {({ loading, error, data }) => {
           if (loading) return 'Loading...';
           if (error) return `Error! ${error.message}`;
-
           const namespace = data.namespaces_v1[0];
-          const body = <Namespace namespace={namespace} />;
+          const roles = data.roles_v1;
+          const body = <Namespace namespace={namespace} roles={roles} />;
           return <Page title={namespace.name} body={body} path={namespace.path} />;
         }}
       </Query>
@@ -64,7 +76,6 @@ const NamespacesPage = ({ location }) => {
       {({ loading, error, data }) => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
-
         const body = <Namespaces namespaces={data.namespaces_v1} />;
         return <Page title="Namespaces" body={body} />;
       }}

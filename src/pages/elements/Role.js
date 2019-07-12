@@ -1,71 +1,10 @@
 import React from 'react';
-import { Table } from 'patternfly-react';
 import Definition from '../../components/Definition';
-import { sortByName } from '../../components/Utils';
 
 import Users from './Users';
+import Permissions from './Permissions';
 
 function Role({ role }) {
-  const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
-  const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
-  const linkFormat = url => value => (
-    <a href={`${url || ''}${value}`} target="_blank" rel="noopener noreferrer">
-      {value}
-    </a>
-  );
-
-  const permissionsTable = (
-    <Table.PfProvider
-      striped
-      bordered
-      columns={[
-        {
-          header: {
-            label: 'Name',
-            formatters: [headerFormat]
-          },
-          cell: {
-            formatters: [cellFormat]
-          },
-          property: 'name'
-        },
-        {
-          header: {
-            label: 'Path',
-            formatters: [headerFormat]
-          },
-          cell: {
-            formatters: [linkFormat(window.DATA_DIR_URL), cellFormat]
-          },
-          property: 'path'
-        },
-        {
-          header: {
-            label: 'Provider',
-            formatters: [headerFormat]
-          },
-          cell: {
-            formatters: [cellFormat]
-          },
-          property: 'service'
-        },
-        {
-          header: {
-            label: 'Description',
-            formatters: [headerFormat]
-          },
-          cell: {
-            formatters: [cellFormat]
-          },
-          property: 'description'
-        }
-      ]}
-    >
-      <Table.Header />
-      <Table.Body rows={sortByName(role.permissions)} rowKey="path" />
-    </Table.PfProvider>
-  );
-
   return (
     <React.Fragment>
       <h4>Info</h4>
@@ -77,7 +16,7 @@ function Role({ role }) {
       {role.description || '-'}
 
       <h4>Permissions</h4>
-      {permissionsTable}
+      <Permissions permissions={role.permissions} />
 
       {role.users.length > 0 && (
         <React.Fragment>

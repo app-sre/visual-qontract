@@ -7,3 +7,4 @@ coverage
 Dockerfile
 node_modules
 public/env/env.js
+src/fragmentTypes.json
