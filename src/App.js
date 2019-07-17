@@ -4,12 +4,20 @@ import { withRouter } from 'react-router';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import { ApolloProvider } from 'react-apollo';
 import ApolloClient from 'apollo-boost';
-
+import { IntrospectionFragmentMatcher, InMemoryCache } from 'apollo-cache-inmemory';
 import { VerticalNav, VerticalNavItem, VerticalNavSecondaryItem, VerticalNavMasthead } from 'patternfly-react';
 import { routes } from './routes';
 import './App.css';
+import introspectionQueryResultData from './fragmentTypes.json';
+
+const fragmentMatcher = new IntrospectionFragmentMatcher({
+  introspectionQueryResultData
+});
+
+const cache = new InMemoryCache({ fragmentMatcher });
 
 const client = new ApolloClient({
+  cache,
   uri: window.GRAPHQL_URI || '/graphql'
 });
 
