@@ -4,6 +4,7 @@ import UsersPage from './pages/UsersPage';
 import RolesPage from './pages/RolesPage';
 import ClustersPage from './pages/ClustersPage';
 import NamespacesPage from './pages/NamespacesPage';
+import AWSGroupsPage from './pages/AWSGroupsPage';
 import PermissionsPage from './pages/PermissionsPage';
 
 const baseName = '/';
@@ -52,6 +53,12 @@ const routes = () => [
     title: 'Permissions',
     to: '/permissions',
     component: PermissionsPage
+  },
+  {
+    iconClass: 'fa fa-amazon',
+    title: 'AWS Groups',
+    to: '/awsgroups',
+    component: AWSGroupsPage
   }
 ];
 
