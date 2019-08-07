@@ -6,6 +6,7 @@ import ClustersPage from './pages/ClustersPage';
 import NamespacesPage from './pages/NamespacesPage';
 import AWSGroupsPage from './pages/AWSGroupsPage';
 import PermissionsPage from './pages/PermissionsPage';
+import IntegrationsPage from './pages/IntegrationsPage';
 
 const baseName = '/';
 
@@ -59,6 +60,12 @@ const routes = () => [
     title: 'AWS Groups',
     to: '/awsgroups',
     component: AWSGroupsPage
+  },
+  {
+    iconClass: 'fa  fa-refresh',
+    title: 'Integrations',
+    to: '/integrations',
+    component: IntegrationsPage
   }
 ];
 
