@@ -6,8 +6,8 @@ import Roles from './Roles';
 
 function Namespace({ namespace, roles }) {
   function matches(r) {
-    let p = r.permissions;
-    for (let i = 0; i < p.length; p++) {
+    const p = r.permissions;
+    for (let i = 0; i < p.length; i++) {
       if (p[i].namespace !== undefined && p[i].namespace === namespace.name) {
         return true;
       }
