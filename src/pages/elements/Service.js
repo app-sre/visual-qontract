@@ -16,126 +16,133 @@ function Service({ service }) {
   const emptyFormat = value => value || '-';
   const booleanFormat = (t, f) => value => (value ? t : f);
 
-  const quayRepos = service.quayRepos
-    .map(orgGroup =>
-      orgGroup.items.map(repo => {
-        repo.id = `${orgGroup.org.name}-${repo.name}`;
-        repo.repo_name = `${orgGroup.org.name}/${repo.name}`;
-        repo.org_name = orgGroup.org.name;
-        return repo;
-      })
-    )
-    .reduce((flat, next) => flat.concat(next), [])
-    .sort((a, b) => {
-      if (a.id > b.id) return 1;
-      if (a.id < b.id) return -1;
-      return 0;
-    });
-
-  const dependenciesTable = (
-    <Table.PfProvider
-      striped
-      bordered
-      columns={[
-        {
-          header: {
-            label: 'Name',
-            formatters: [headerFormat]
+  let quayReposTable;
+  if (service.quayRepos == null) {
+    quayReposTable = <p style={{ 'font-style': 'italic' }}>No quay repos.</p>;
+  } else {
+    const quayRepos = service.quayRepos
+      .map(orgGroup =>
+        orgGroup.items.map(repo => {
+          repo.id = `${orgGroup.org.name}-${repo.name}`;
+          repo.repo_name = `${orgGroup.org.name}/${repo.name}`;
+          repo.org_name = orgGroup.org.name;
+          return repo;
+        })
+      )
+      .reduce((flat, next) => flat.concat(next), [])
+      .sort((a, b) => {
+        if (a.id > b.id) return 1;
+        if (a.id < b.id) return -1;
+        return 0;
+      });
+    quayReposTable = (
+      <Table.PfProvider
+        striped
+        bordered
+        columns={[
+          {
+            header: {
+              label: 'Name',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [
+                v => (
+                  <a href={`https://quay.io/repository/${v}`} target="_blank" rel="noopener noreferrer">
+                    {v.split('/')[1]}
+                  </a>
+                ),
+                cellFormat
+              ]
+            },
+            property: 'repo_name'
           },
-          cell: {
-            formatters: [cellFormat]
+          {
+            header: {
+              label: 'Quay Org',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [linkFormat('https://quay.io/organization/'), cellFormat]
+            },
+            property: 'org_name'
           },
-          property: 'name'
-        },
-        {
-          header: {
-            label: 'Status Page',
-            formatters: [headerFormat]
+          {
+            header: {
+              label: 'Description',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [emptyFormat, cellFormat]
+            },
+            property: 'description'
           },
-          cell: {
-            formatters: [linkFormat(), cellFormat]
+          {
+            header: {
+              label: 'Public',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [
+                booleanFormat(<Label bsStyle="success">Public</Label>, <Label bsStyle="danger">Private</Label>),
+                cellFormat
+              ]
+            },
+            property: 'public'
+          }
+        ]}
+      >
+        <Table.Header />
+        <Table.Body rows={quayRepos} rowKey="id" />
+      </Table.PfProvider>
+    );
+  }
+  let dependenciesTable;
+  if (service.dependencies == null) {
+    dependenciesTable = <p style={{ 'font-style': 'italic' }}>No dependencies.</p>;
+  } else {
+    dependenciesTable = (
+      <Table.PfProvider
+        striped
+        bordered
+        columns={[
+          {
+            header: {
+              label: 'Name',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [cellFormat]
+            },
+            property: 'name'
           },
-          property: 'statusPage'
-        },
-        {
-          header: {
-            label: 'SLA',
-            formatters: [headerFormat]
+          {
+            header: {
+              label: 'Status Page',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [linkFormat(), cellFormat]
+            },
+            property: 'statusPage'
           },
-          cell: {
-            formatters: [cellFormat]
-          },
-          property: 'SLA'
-        }
-      ]}
-    >
-      <Table.Header />
-      <Table.Body rows={service.dependencies} rowKey="path" />
-    </Table.PfProvider>
-  );
-
-  const quayReposTable = (
-    <Table.PfProvider
-      striped
-      bordered
-      columns={[
-        {
-          header: {
-            label: 'Name',
-            formatters: [headerFormat]
-          },
-          cell: {
-            formatters: [
-              v => (
-                <a href={`https://quay.io/repository/${v}`} target="_blank" rel="noopener noreferrer">
-                  {v.split('/')[1]}
-                </a>
-              ),
-              cellFormat
-            ]
-          },
-          property: 'repo_name'
-        },
-        {
-          header: {
-            label: 'Quay Org',
-            formatters: [headerFormat]
-          },
-          cell: {
-            formatters: [linkFormat('https://quay.io/organization/'), cellFormat]
-          },
-          property: 'org_name'
-        },
-        {
-          header: {
-            label: 'Description',
-            formatters: [headerFormat]
-          },
-          cell: {
-            formatters: [emptyFormat, cellFormat]
-          },
-          property: 'description'
-        },
-        {
-          header: {
-            label: 'Public',
-            formatters: [headerFormat]
-          },
-          cell: {
-            formatters: [
-              booleanFormat(<Label bsStyle="success">Public</Label>, <Label bsStyle="danger">Private</Label>),
-              cellFormat
-            ]
-          },
-          property: 'public'
-        }
-      ]}
-    >
-      <Table.Header />
-      <Table.Body rows={quayRepos} rowKey="id" />
-    </Table.PfProvider>
-  );
-
+          {
+            header: {
+              label: 'SLA',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [cellFormat]
+            },
+            property: 'SLA'
+          }
+        ]}
+      >
+        <Table.Header />
+        <Table.Body rows={service.dependencies} rowKey="path" />
+      </Table.PfProvider>
+    );
+  }
   const serviceOwner = [
     service.serviceOwner.name,
     ' <',
