@@ -151,7 +151,6 @@ function Service({ service }) {
     </a>,
     '>'
   ];
-
   return (
     <React.Fragment>
       <h4>Description</h4>
