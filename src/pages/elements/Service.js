@@ -143,21 +143,25 @@ function Service({ service }) {
       </Table.PfProvider>
     );
   }
-  const serviceOwner = [
-    service.serviceOwner.name,
-    ' <',
-    <a key={service.serviceOwner.email} href={`mailto:${service.serviceOwner.email}`}>
-      {service.serviceOwner.email}
-    </a>,
-    '>'
-  ];
+  const serviceOwners = service.serviceOwners.map(s => [
+    [
+      s.name,
+      ' <',
+      <a key={s.email} href={`mailto:${s.email}`}>
+        {s.email}
+      </a>,
+      '>'
+    ]
+  ]);
   return (
     <React.Fragment>
       <h4>Description</h4>
       <p>{service.description}</p>
 
       <h4>Info</h4>
-      <Definition items={[['SLO', service.performanceParameters.SLO], ['Service Owner', serviceOwner]]} />
+      <Definition items={[['SLO', service.performanceParameters.SLO]]} />
+      <h4> Service Owners </h4>
+      <Definition items={serviceOwners} />
 
       {service.serviceDocs && (
         <React.Fragment>
