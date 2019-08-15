@@ -1,9 +1,8 @@
 import React from 'react';
-import Markdown from 'react-markdown';
 import Definition from '../../components/Definition';
 
 function Integration({ integration }) {
-  console.log(integration.usage);
+  const usage = integration.usage.split('\n').map((i, key) => <div key={key}>{i}</div>);
   return (
     <React.Fragment>
       <h4>Info</h4>
@@ -28,7 +27,7 @@ function Integration({ integration }) {
       <h4>Description</h4>
       {integration.description}
       <h4> Usage </h4>
-      <Markdown source={integration.usage} />
+      {usage}
     </React.Fragment>
   );
 }
