@@ -25,7 +25,7 @@ function Integrations({ integrations }) {
               <CardTitle>{s.name}</CardTitle>
             </CardHeading>
             <CardBody>
-              <p>{s.description}</p>
+              <p>{s.shortDescription}</p>
             </CardBody>
             <CardFooter>
               <p>
