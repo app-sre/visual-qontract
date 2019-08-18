@@ -13,7 +13,7 @@ const GET_SERVICE = gql`
       name
       description
       serviceDocs
-      serviceOwner {
+      serviceOwners {
         name
         email
       }
