@@ -20,7 +20,7 @@ function Integrations({ integrations }) {
     <Row key={c[0].path}>
       {c.map(s => (
         <Col xs={cardWidth} key={s.path}>
-          <Card matchHeight accented>
+          <Card accented>
             <CardHeading>
               <CardTitle>{s.name}</CardTitle>
             </CardHeading>
