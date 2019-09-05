@@ -24,10 +24,8 @@ function Integration({ integration }) {
           ['Short Description', integration.shortDescription]
         ]}
       />
-      <h4>Description</h4>
-      {integration.description}
       <h4> Usage </h4>
-      {usage}
+      <pre>{usage}</pre>
     </React.Fragment>
   );
 }
