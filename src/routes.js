@@ -4,6 +4,7 @@ import UsersPage from './pages/UsersPage';
 import RolesPage from './pages/RolesPage';
 import ClustersPage from './pages/ClustersPage';
 import NamespacesPage from './pages/NamespacesPage';
+import AWSAccountsPage from './pages/AWSAccountsPage';
 import AWSGroupsPage from './pages/AWSGroupsPage';
 import PermissionsPage from './pages/PermissionsPage';
 import IntegrationsPage from './pages/IntegrationsPage';
@@ -55,6 +56,12 @@ const routes = () => [
     title: 'Permissions',
     to: '/permissions',
     component: PermissionsPage
+  },
+  {
+    iconClass: 'fa fa-amazon',
+    title: 'AWS Accounts',
+    to: '/awsaccounts',
+    component: AWSAccountsPage
   },
   {
     iconClass: 'fa fa-amazon',
