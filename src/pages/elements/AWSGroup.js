@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { List, ListItem } from '@patternfly/react-core';
 import Definition from '../../components/Definition';
 
@@ -12,7 +13,17 @@ function AWSGroup({ awsgroup }) {
       <h4> Account </h4>
       <Definition
         items={[
-          ['Name', ac.name],
+          [
+            'Name',
+            <Link
+              to={{
+                pathname: '/awsaccounts',
+                hash: ac.path
+              }}
+            >
+              {ac.name}
+            </Link>
+          ],
           ['Description', ac.description],
           [
             'consoleUrl',

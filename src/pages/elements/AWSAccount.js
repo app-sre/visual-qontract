@@ -8,7 +8,7 @@ function AWSAccount({ awsaccount }) {
       <h4>Info</h4>
       <Definition
         items={[
-          ['Account', ac.name],
+          ['Name', ac.name],
           [
             'Path',
             <a href={`${window.DATA_DIR_URL}${ac.path}`} target="_blank" rel="noopener noreferrer">

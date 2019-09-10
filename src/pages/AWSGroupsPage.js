@@ -13,6 +13,7 @@ const GET_AWSGROUP = gql`
       name
       description
       account {
+        path
         name
         description
         consoleUrl
