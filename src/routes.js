@@ -9,6 +9,7 @@ import AWSGroupsPage from './pages/AWSGroupsPage';
 import PermissionsPage from './pages/PermissionsPage';
 import IntegrationsPage from './pages/IntegrationsPage';
 import JenkinsInstancesPage from './pages/JenkinsInstancesPage';
+import DependenciesPage from './pages/DependenciesPage';
 
 const baseName = '/';
 
@@ -76,10 +77,16 @@ const routes = () => [
     component: IntegrationsPage
   },
   {
-    iconClass: 'fa  fa-refresh',
+    iconClass: 'fa  fa-cogs',
     title: 'Jenkins instances',
     to: '/jenkinsinstances',
     component: JenkinsInstancesPage
+  },
+  {
+    iconClass: 'fa  fa-random',
+    title: 'Dependencies',
+    to: '/dependencies',
+    component: DependenciesPage
   }
 ];
 
