@@ -8,6 +8,7 @@ import AWSAccountsPage from './pages/AWSAccountsPage';
 import AWSGroupsPage from './pages/AWSGroupsPage';
 import PermissionsPage from './pages/PermissionsPage';
 import IntegrationsPage from './pages/IntegrationsPage';
+import GitHubOrgsPage from './pages/GitHubOrgsPage';
 import JenkinsInstancesPage from './pages/JenkinsInstancesPage';
 import DependenciesPage from './pages/DependenciesPage';
 
@@ -75,6 +76,12 @@ const routes = () => [
     title: 'Integrations',
     to: '/integrations',
     component: IntegrationsPage
+  },
+  {
+    iconClass: 'fa  fa-github',
+    title: 'GitHub orgs',
+    to: '/githuborgs',
+    component: GitHubOrgsPage
   },
   {
     iconClass: 'fa  fa-cogs',
