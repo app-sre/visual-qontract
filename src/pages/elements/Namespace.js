@@ -28,7 +28,7 @@ function Namespace({ namespace, roles }) {
     if (r.output_resource_name) {
       return r.output_resource_name;
     }
-    return r.identifier + r.provider;
+    return `${r.identifier}-${r.provider}`;
   }
   const listItems =
     namespace.managedTerraformResources &&
