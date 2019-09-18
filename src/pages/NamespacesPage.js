@@ -20,6 +20,13 @@ const GET_NAMESPACE = gql`
           hostname
         }
       }
+      managedTerraformResources
+      terraformResources {
+        provider
+        account
+        identifier
+        output_resource_name
+      }
     }
     roles_v1 {
       path

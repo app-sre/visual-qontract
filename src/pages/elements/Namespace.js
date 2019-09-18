@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { List, ListItem } from '@patternfly/react-core';
 import GrafanaUrl from './GrafanaUrl';
 import Definition from '../../components/Definition';
 import Roles from './Roles';
@@ -23,6 +24,25 @@ function Namespace({ namespace, roles }) {
       url={namespace.grafanaUrl}
     />
   );
+  function resourceName(r) {
+    if (r.output_resource_name) {
+      return r.output_resource_name;
+    }
+    return r.identifier + r.provider;
+  }
+  const listItems =
+    namespace.managedTerraformResources &&
+    namespace.terraformResources.map(a => (
+      <ListItem>
+        <a
+          href={`https://console.${namespace.cluster.name}.openshift.com/console/project/${namespace.name}/browse/secrets/${a.output_resource_name}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {a.provider} - {resourceName(a)}
+        </a>
+      </ListItem>
+    ));
   return (
     <React.Fragment>
       <h4>Info</h4>
@@ -57,6 +77,12 @@ function Namespace({ namespace, roles }) {
         <React.Fragment>
           <h4> Roles </h4>
           <Roles roles={matchedData} />
+        </React.Fragment>
+      )}
+      {listItems && (
+        <React.Fragment>
+          <h4> Terraform resources </h4>
+          <List className="policyList">{listItems}</List>
         </React.Fragment>
       )}
     </React.Fragment>
