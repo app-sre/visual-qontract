@@ -35,11 +35,11 @@ function Namespace({ namespace, roles }) {
     namespace.terraformResources.map(a => (
       <ListItem>
         <a
-          href={`https://console.${namespace.cluster.name}.openshift.com/console/project/${namespace.name}/browse/secrets/${a.output_resource_name}`}
+          href={`https://console.${namespace.cluster.name}.openshift.com/console/project/${namespace.name}/browse/secrets/${resourceName(a)}`}
           target="_blank"
           rel="noopener noreferrer"
         >
-          {a.provider} - {resourceName(a)}
+          {a.provider} - {a.identifier}
         </a>
       </ListItem>
     ));
