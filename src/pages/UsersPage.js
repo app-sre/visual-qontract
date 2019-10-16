@@ -11,7 +11,7 @@ const GET_USER = gql`
     users_v1(path: $path) {
       path
       name
-      redhat_username
+      org_username
       github_username
       quay_username
       public_gpg_key
@@ -28,7 +28,7 @@ const GET_USERS = gql`
     users_v1 {
       path
       name
-      redhat_username
+      org_username
       github_username
       quay_username
       public_gpg_key
