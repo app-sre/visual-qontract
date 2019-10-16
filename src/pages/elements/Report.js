@@ -11,7 +11,7 @@ function Report({ report }) {
           ['Report name', report.name],
           [
             'Path',
-            <a href={`${window.DATA_DIR_URL}${report.path}`} target="_blank" rel="noopener noreferrer">
+            <a href={`${window.DATA_DIR_URL}/${report.path}`} target="_blank" rel="noopener noreferrer">
               {report.path}
             </a>
           ],
