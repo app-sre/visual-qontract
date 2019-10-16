@@ -19,7 +19,7 @@ function Users({ users }) {
   function matches(u) {
     return (
       (selected === 'Name' && u.name.toLowerCase().includes(lcFilter)) ||
-      (selected === 'Red Hat Username' && u.redhat_username.toLowerCase().includes(lcFilter)) ||
+      (selected === 'Red Hat Username' && u.org_username.toLowerCase().includes(lcFilter)) ||
       (selected === 'GitHub Username' && u.github_username.toLowerCase().includes(lcFilter)) ||
       (selected === 'Quay Username' && u.quay_username !== null && u.quay_username.toLowerCase().includes(lcFilter))
     );
@@ -78,7 +78,7 @@ function Users({ users }) {
       cell: {
         formatters: [linkFormat('https://mojo.redhat.com/people/'), cellFormat]
       },
-      property: 'redhat_username'
+      property: 'org_username'
     },
     {
       header: {

@@ -47,7 +47,7 @@ function User({ user }) {
       const element = document.createElement('a');
       const file = new Blob([user.public_gpg_key], { type: 'text/plain' });
       element.href = URL.createObjectURL(file);
-      element.download = `${user.redhat_username}_public_gpg_key.gpg`;
+      element.download = `${user.org_username}_public_gpg_key.gpg`;
       document.body.appendChild(element);
       element.click();
     }
@@ -68,11 +68,11 @@ function User({ user }) {
           [
             'Red Hat Username',
             <a
-              href={`https://mojo.redhat.com/people/${user.redhat_username}`}
+              href={`https://mojo.redhat.com/people/${user.org_username}`}
               target="_blank"
               rel="noopener noreferrer"
             >
-              {user.redhat_username}
+              {user.org_username}
             </a>
           ],
           [

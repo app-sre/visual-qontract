@@ -21,7 +21,7 @@ const GET_ROLE = gql`
       users {
         path
         name
-        redhat_username
+        org_username
         github_username
         quay_username
       }
