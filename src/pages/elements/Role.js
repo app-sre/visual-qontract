@@ -15,8 +15,28 @@ function Role({ role }) {
       <h4>Description</h4>
       {role.description || '-'}
 
-      <h4>Permissions</h4>
-      <Permissions permissions={role.permissions} />
+      {role.access && (
+        <React.Fragment>
+          <h4>Namespace Access</h4>
+          <ul>
+            {role.access.map(a => (
+              <li>
+                <a href={`${window.DATA_DIR_URL}/${a.namespace.path}`}>
+                  {a.namespace.cluster.name}/{a.namespace.name}
+                </a>{' '}
+                ({a.role})
+              </li>
+            ))}
+          </ul>
+        </React.Fragment>
+      )}
+
+      {role.permissions.length > 0 && (
+        <React.Fragment>
+          <h4>Permissions</h4>
+          <Permissions permissions={role.permissions} />
+        </React.Fragment>
+      )}
 
       {role.users.length > 0 && (
         <React.Fragment>

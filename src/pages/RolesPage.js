@@ -18,6 +18,16 @@ const GET_ROLE = gql`
         description
         service
       }
+      access {
+        namespace {
+          path
+          name
+          cluster {
+            name
+          }
+        }
+        role
+      }
       users {
         path
         name
