@@ -170,6 +170,6 @@ parameters:
 - name: IMAGE_OAUTH2_PROXY
   value: quay.io/pusher/oauth2_proxy
 - name: IMAGE_OAUTH2_PROXY_TAG
-  value: v3.1.0-amd64
+  value: v4.0.0-amd64
 - name: OAUTH2_PROXY_MEMORY_LIMIT
   value: 256Mi
