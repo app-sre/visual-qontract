@@ -32,13 +32,14 @@ const GET_NAMESPACE = gql`
       path
       name
       description
-      permissions {
-        ... on PermissionOpenshiftRolebinding_v1 {
-          service
-          cluster
+      access {
+        namespace {
           name
-          namespace
+          cluster {
+            name
+          }
         }
+        role
       }
     }
   }

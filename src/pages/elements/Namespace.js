@@ -7,9 +7,16 @@ import Roles from './Roles';
 
 function Namespace({ namespace, roles }) {
   function matches(r) {
-    const p = r.permissions;
-    for (let i = 0; i < p.length; i++) {
-      if (p[i].namespace !== undefined && p[i].namespace === namespace.name) {
+    const a = r.access;
+    if (a === null) {
+      return false;
+    }
+    for (let i = 0; i < a.length; i++) {
+      if (
+        a[i] !== undefined &&
+        a[i].namespace.name === namespace.name &&
+        a[i].namespace.cluster.name === namespace.cluster.name
+      ) {
         return true;
       }
     }
