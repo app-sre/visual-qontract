@@ -4,6 +4,7 @@ import Definition from '../../components/Definition';
 import CodeComponents from '../../components/ServiceCodeComponents';
 import EndPoints from '../../components/ServiceEndPoints';
 import Namespaces from './Namespaces';
+import Reports from './Reports';
 
 function Service({ service, reports }) {
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
@@ -17,18 +18,12 @@ function Service({ service, reports }) {
   const booleanFormat = (t, f) => value => (value ? t : f);
 
   function matches(r) {
-    if (r.app.name !== undefined && r.app.name === service.name) {
+    if (r.app.name === service.name) {
       return true;
     }
     return false;
   }
-  const serviceReports = reports.filter(matches).map(r => [
-    [
-      <a href={`${window.DATA_DIR_URL}/${r.path}`}>
-        {r.name}, {r.date}
-      </a>
-    ]
-  ]);
+  const matchedReports = reports.filter(matches);
 
   let quayReposTable;
   if (service.quayRepos == null) {
@@ -213,8 +208,12 @@ function Service({ service, reports }) {
       <h4>Quay Repos</h4>
       {quayReposTable}
 
-      <h4>Reports</h4>
-      <Definition items={serviceReports} />
+      {matchedReports.length > 0 && (
+        <React.Fragment>
+          <h4>Reports</h4>
+          <Reports reports={matchedReports} />
+        </React.Fragment>
+      )}
     </React.Fragment>
   );
 }
