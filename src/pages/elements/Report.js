@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Definition from '../../components/Definition';
 
 function Report({ report }) {
@@ -15,7 +16,17 @@ function Report({ report }) {
               {report.path}
             </a>
           ],
-          ['App', <a href={`${window.DATA_DIR_URL}/${report.app.path}`}>{report.app.name}</a>],
+          [
+            'App',
+            <Link
+              to={{
+                pathname: '/services',
+                hash: report.app.path
+              }}
+            >
+              {report.app.name}
+            </Link>
+          ],
           ['Date', report.date]
         ]}
       />

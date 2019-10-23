@@ -1,58 +1,110 @@
 import React, { useState } from 'react';
-import { Row, Col, Card, CardHeading, CardBody, CardFooter, CardTitle } from 'patternfly-react';
 import { Link } from 'react-router-dom';
-import { chunk } from 'lodash';
-import GridSearch from '../../components/GridSearch';
+import { Table } from 'patternfly-react';
 import { sortByName } from '../../components/Utils';
+import TableSearch from '../../components/TableSearch';
 
 function Reports({ reports }) {
-  // cardsWidth * cardsPerRow must be <= 12 (bootstrap grid)
-  const cardWidth = 4;
-  const cardsPerRow = 3;
-  const [selected, changeSelected] = useState('Name');
+  const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
+  const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
+  const options = ['Name', 'App'];
+  const [selected, changeSelected] = useState(options[0]);
   const [filterText, changeFilterText] = useState('');
+  const linkFormat = url => value => (
+    <a href={`${url || ''}${value}`} target="_blank" rel="noopener noreferrer">
+      {value}
+    </a>
+  );
+
+  const processedReports = sortByName(reports).map(r => {
+    r.name_path = [r.name, r.path];
+    return r;
+  });
   const lcFilter = filterText.toLowerCase();
-  function matches(c) {
-    return selected === 'Name' && c.name.toLowerCase().includes(lcFilter);
+  function matches(report) {
+    return (
+      (selected === 'Name' && report.name && report.name.toLowerCase().includes(lcFilter)) ||
+      (selected === 'App' && report.app.name && report.app.name.toLowerCase().includes(lcFilter))
+    );
   }
-  const matchedData = reports.filter(matches);
-  const rows = chunk(sortByName(matchedData), cardsPerRow).map(c => (
-    <Row key={c[0].path}>
-      {c.map(s => (
-        <Col xs={cardWidth} key={s.path}>
-          <Card accented>
-            <CardHeading>
-              <CardTitle>{s.name}</CardTitle>
-            </CardHeading>
-            <CardBody>
-              <p>App: {s.app.name}</p>
-              <p>date: {s.date}</p>
-            </CardBody>
-            <CardFooter>
-              <p>
-                <Link
-                  to={{
-                    pathname: '/reports',
-                    hash: s.path
-                  }}
-                >
-                  Details
-                </Link>
-              </p>
-            </CardFooter>
-          </Card>
-        </Col>
-      ))}
-    </Row>
-  ));
+  const matchedReports = processedReports.filter(matches);
+
+  const columns = [
+    {
+      header: {
+        label: 'Name',
+        formatters: [headerFormat]
+      },
+      cell: {
+        formatters: [
+          value => (
+            <Link
+              to={{
+                pathname: '/reports',
+                hash: value[1]
+              }}
+            >
+              {value[0]}
+            </Link>
+          ),
+          cellFormat
+        ]
+      },
+      property: 'name_path'
+    },
+    {
+      header: {
+        label: 'Path',
+        formatters: [headerFormat]
+      },
+      cell: {
+        formatters: [linkFormat(window.DATA_DIR_URL), cellFormat]
+      },
+      property: 'path'
+    },
+    {
+      header: {
+        label: 'App',
+        formatters: [headerFormat]
+      },
+      cell: {
+        formatters: [
+          value => (
+            <Link
+              to={{
+                pathname: '/services',
+                hash: value.path
+              }}
+            >
+              {value.name}
+            </Link>
+          ),
+          cellFormat
+        ]
+      },
+      property: 'app'
+    },
+    {
+      header: {
+        label: 'Date',
+        formatters: [headerFormat]
+      },
+      cell: {
+        formatters: [cellFormat]
+      },
+      property: 'date'
+    }
+  ];
 
   return (
-    <GridSearch
-      data={rows}
+    <TableSearch
       filterText={filterText}
       changeFilterText={changeFilterText}
       changeSelected={changeSelected}
+      options={options}
       selected={selected}
+      columns={columns}
+      rows={matchedReports}
     />
   );
 }
