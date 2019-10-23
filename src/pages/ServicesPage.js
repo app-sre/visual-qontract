@@ -60,6 +60,14 @@ const GET_SERVICE = gql`
         }
       }
     }
+    reports_v1 {
+      path
+      app {
+        name
+      }
+      name
+      date
+    }
   }
 `;
 
@@ -103,7 +111,8 @@ const ServicesPage = ({ location }) => {
           if (error) return `Error! ${error.message}`;
 
           const service = data.apps_v1[0];
-          const body = <Service service={service} />;
+          const reports = data.reports_v1;
+          const body = <Service service={service} reports={reports} />;
           return <Page title={service.name} body={body} path={service.path} />;
         }}
       </Query>

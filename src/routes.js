@@ -11,6 +11,7 @@ import IntegrationsPage from './pages/IntegrationsPage';
 import GitHubOrgsPage from './pages/GitHubOrgsPage';
 import JenkinsInstancesPage from './pages/JenkinsInstancesPage';
 import DependenciesPage from './pages/DependenciesPage';
+import ReportsPage from './pages/ReportsPage';
 
 const baseName = '/';
 
@@ -40,6 +41,12 @@ const routes = () => [
     title: 'Namespaces',
     to: '/namespaces',
     component: NamespacesPage
+  },
+  {
+    iconClass: 'fa  fa-file-text-o',
+    title: 'Reports',
+    to: '/reports',
+    component: ReportsPage
   },
   {
     iconClass: 'fa fa-user',
