@@ -26,6 +26,7 @@ const GET_REPORTS = gql`
     reports_v1 {
       path
       app {
+        path
         name
       }
       name
