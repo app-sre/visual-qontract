@@ -30,6 +30,18 @@ const GET_CLUSTER = gql`
         }
       }
     }
+    roles_v1 {
+      path
+      name
+      description
+      access {
+        cluster {
+          path
+          name
+        }
+        group
+      }
+    }
   }
 `;
 
@@ -69,7 +81,8 @@ const ClustersPage = ({ location }) => {
           if (error) return `Error! ${error.message}`;
 
           const cluster = data.clusters_v1[0];
-          const body = <Cluster cluster={cluster} />;
+          const roles = data.roles_v1;
+          const body = <Cluster cluster={cluster} roles={roles} />;
           return <Page title={cluster.name} body={body} path={cluster.path} />;
         }}
       </Query>

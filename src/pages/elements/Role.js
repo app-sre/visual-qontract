@@ -1,10 +1,25 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Definition from '../../components/Definition';
 
 import Users from './Users';
 import Permissions from './Permissions';
 
 function Role({ role }) {
+  function matchNamespaceAccess(r) {
+    if (r.namespace && r.namespace !== null) {
+      return true;
+    }
+    return false;
+  }
+  const matchedNamespaceAccess = role.access.filter(matchNamespaceAccess);
+  function matchClusterAccess(r) {
+    if (r.cluster && r.cluster !== null) {
+      return true;
+    }
+    return false;
+  }
+  const matchedClusterAccess = role.access.filter(matchClusterAccess);
   return (
     <React.Fragment>
       <h4>Info</h4>
@@ -15,16 +30,42 @@ function Role({ role }) {
       <h4>Description</h4>
       {role.description || '-'}
 
-      {role.access && (
+      {matchedNamespaceAccess.length > 0 && (
         <React.Fragment>
           <h4>Namespace Access</h4>
           <ul>
-            {role.access.map(a => (
+            {matchedNamespaceAccess.map(a => (
               <li>
-                <a href={`${window.DATA_DIR_URL}/${a.namespace.path}`}>
+                <Link
+                  to={{
+                    pathname: '/namespaces',
+                    hash: a.namespace.path
+                  }}
+                >
                   {a.namespace.cluster.name}/{a.namespace.name}
-                </a>{' '}
+                </Link>{' '}
                 ({a.role})
+              </li>
+            ))}
+          </ul>
+        </React.Fragment>
+      )}
+
+      {matchedClusterAccess.length > 0 && (
+        <React.Fragment>
+          <h4>Cluster Access</h4>
+          <ul>
+            {matchedClusterAccess.map(a => (
+              <li>
+                <Link
+                  to={{
+                    pathname: '/clusters',
+                    hash: a.cluster.path
+                  }}
+                >
+                  {a.cluster.name}
+                </Link>{' '}
+                ({a.group})
               </li>
             ))}
           </ul>
