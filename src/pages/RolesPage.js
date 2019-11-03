@@ -27,6 +27,11 @@ const GET_ROLE = gql`
           }
         }
         role
+        cluster {
+          path
+          name
+        }
+        group
       }
       users {
         path

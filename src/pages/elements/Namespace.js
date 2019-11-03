@@ -14,6 +14,7 @@ function Namespace({ namespace, roles }) {
     for (let i = 0; i < a.length; i++) {
       if (
         a[i] !== undefined &&
+        a[i].namespace &&
         a[i].namespace.name === namespace.name &&
         a[i].namespace.cluster.name === namespace.cluster.name
       ) {
@@ -42,7 +43,9 @@ function Namespace({ namespace, roles }) {
     namespace.terraformResources.map(a => (
       <ListItem>
         <a
-          href={`https://console.${namespace.cluster.name}.openshift.com/console/project/${namespace.name}/browse/secrets/${resourceName(a)}`}
+          href={`https://console.${namespace.cluster.name}.openshift.com/console/project/${
+            namespace.name
+          }/browse/secrets/${resourceName(a)}`}
           target="_blank"
           rel="noopener noreferrer"
         >
