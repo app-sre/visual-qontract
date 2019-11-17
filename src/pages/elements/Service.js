@@ -5,8 +5,9 @@ import CodeComponents from '../../components/ServiceCodeComponents';
 import EndPoints from '../../components/ServiceEndPoints';
 import Namespaces from './Namespaces';
 import Reports from './Reports';
+import Documents from './Documents';
 
-function Service({ service, reports }) {
+function Service({ service, reports, documents }) {
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
   const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
   const linkFormat = url => value => (
@@ -24,6 +25,7 @@ function Service({ service, reports }) {
     return false;
   }
   const matchedReports = reports.filter(matches);
+  const matchedDocuments = documents.filter(matches);
 
   let quayReposTable;
   if (service.quayRepos == null) {
@@ -212,6 +214,12 @@ function Service({ service, reports }) {
         <React.Fragment>
           <h4>Reports</h4>
           <Reports reports={matchedReports} />
+        </React.Fragment>
+      )}
+      {matchedDocuments.length > 0 && (
+        <React.Fragment>
+          <h4>Documents</h4>
+          <Documents documents={matchedDocuments} />
         </React.Fragment>
       )}
     </React.Fragment>
