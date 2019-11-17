@@ -68,6 +68,14 @@ const GET_SERVICE = gql`
       name
       date
     }
+    documents_v1 {
+      path
+      app {
+        path
+        name
+      }
+      name
+    }
   }
 `;
 
@@ -112,7 +120,8 @@ const ServicesPage = ({ location }) => {
 
           const service = data.apps_v1[0];
           const reports = data.reports_v1;
-          const body = <Service service={service} reports={reports} />;
+          const documents = data.documents_v1;
+          const body = <Service service={service} reports={reports} documents={documents} />;
           return <Page title={service.name} body={body} path={service.path} />;
         }}
       </Query>
