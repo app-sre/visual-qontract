@@ -61,8 +61,12 @@ objects:
             periodSeconds: 10
             timeoutSeconds: 3
           resources:
+            requests:
+              memory: ${MEMORY_REQUESTS}
+              cpu: ${CPU_REQUESTS}
             limits:
               memory: ${MEMORY_LIMIT}
+              cpu: ${CPU_LIMIT}
           volumeMounts:
             - name: visual-qontract-env
               mountPath: /opt/visual-qontract/build/env/
@@ -112,8 +116,12 @@ objects:
           - -github-org=$(OAUTH2_PROXY_GITHUB_ORG)
           - -redirect-url=$(OAUTH2_PROXY_REDIRECT_URL)
           resources:
+            requests:
+              memory: ${OAUTH_MEMORY_REQUESTS}
+              cpu: ${OAUTH_CPU_REQUESTS}
             limits:
-              memory: ${OAUTH2_PROXY_MEMORY_LIMIT}
+              memory: ${OAUTH_MEMORY_LIMIT}
+              cpu: ${OAUTH_CPU_LIMIT}
           ports:
           - containerPort: 4180
           livenessProbe:
@@ -163,13 +171,23 @@ parameters:
   value: latest
   displayName: visual qontract version
   description: visual qontract version which defaults to latest
+- name: MEMORY_REQUESTS
+  value: 16Mi
 - name: MEMORY_LIMIT
-  value: 256Mi
-  displayName: Memory Limit
-  description: Maximum amount of memory the container can use. Defaults 256Mi
+  value: 32Mi
+- name: CPU_REQUESTS
+  value: 10m
+- name: CPU_LIMIT
+  value: 20m
+- name: OAUTH_MEMORY_REQUESTS
+  value: 30Mi
+- name: OAUTH_MEMORY_LIMIT
+  value: 60Mi
+- name: OAUTH_CPU_REQUESTS
+  value: 10m
+- name: OAUTH_CPU_LIMIT
+  value: 20m
 - name: IMAGE_OAUTH2_PROXY
   value: quay.io/pusher/oauth2_proxy
 - name: IMAGE_OAUTH2_PROXY_TAG
   value: v4.0.0-amd64
-- name: OAUTH2_PROXY_MEMORY_LIMIT
-  value: 256Mi
