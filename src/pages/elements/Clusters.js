@@ -27,7 +27,7 @@ function Clusters({ clusters }) {
             <CardBody>
               <p>{s.description}</p>
               <p>
-                <a href={s.serverUrl}>{s.serverUrl}</a>
+                <a href={s.consoleUrl}>{s.consoleUrl}</a>
               </p>
             </CardBody>
             <CardFooter>
