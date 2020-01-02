@@ -12,7 +12,8 @@ const GET_CLUSTER = gql`
       path
       name
       description
-      serverUrl
+      consoleUrl
+      kibanaUrl
       grafanaUrl
       jumpHost {
         hostname
@@ -51,7 +52,8 @@ const GET_CLUSTERS = gql`
       path
       name
       description
-      serverUrl
+      consoleUrl
+      kibanaUrl
       grafanaUrl
       jumpHost {
         hostname

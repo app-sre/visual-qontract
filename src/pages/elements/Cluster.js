@@ -31,6 +31,18 @@ function Cluster({ cluster, roles }) {
               {cluster.path}
             </a>
           ],
+          [
+            'Console',
+            <a href={`${cluster.consoleUrl}`} target="_blank" rel="noopener noreferrer">
+              {cluster.consoleUrl}
+            </a>
+          ],
+          [
+            'Kibana',
+            <a href={`${cluster.kibanaUrl}`} target="_blank" rel="noopener noreferrer">
+              {cluster.kibanaUrl}
+            </a>
+          ],
           ['Grafana', grafana]
         ]}
       />
