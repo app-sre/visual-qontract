@@ -12,14 +12,18 @@ function Role({ role }) {
     }
     return false;
   }
-  const matchedNamespaceAccess = role.access.filter(matchNamespaceAccess);
   function matchClusterAccess(r) {
     if (r.cluster && r.cluster !== null) {
       return true;
     }
     return false;
   }
-  const matchedClusterAccess = role.access.filter(matchClusterAccess);
+  let matchedNamespaceAccess = [];
+  let matchedClusterAccess = [];
+  if (role.access && role.access !== null) {
+    matchedNamespaceAccess = role.access.filter(matchNamespaceAccess);
+    matchedClusterAccess = role.access.filter(matchClusterAccess);
+  }
   return (
     <React.Fragment>
       <h4>Info</h4>
