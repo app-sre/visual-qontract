@@ -14,6 +14,7 @@ const GET_CLUSTER = gql`
       description
       consoleUrl
       kibanaUrl
+      prometheusUrl
       grafanaUrl
       jumpHost {
         hostname
@@ -54,6 +55,7 @@ const GET_CLUSTERS = gql`
       description
       consoleUrl
       kibanaUrl
+      prometheusUrl
       grafanaUrl
       jumpHost {
         hostname

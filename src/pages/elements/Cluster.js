@@ -43,6 +43,12 @@ function Cluster({ cluster, roles }) {
               {cluster.kibanaUrl}
             </a>
           ],
+          [
+            'Prometheus',
+            <a href={`${cluster.prometheusUrl}`} target="_blank" rel="noopener noreferrer">
+              {cluster.prometheusUrl}
+            </a>
+          ],
           ['Grafana', grafana]
         ]}
       />
