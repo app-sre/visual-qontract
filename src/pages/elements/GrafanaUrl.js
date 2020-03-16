@@ -8,7 +8,7 @@ function GrafanaUrl({ jumpHost, cluster, namespace, url }) {
   if (url !== null && url !== undefined) {
     grafanaUrl = url;
   } else {
-    const dataSource = `${cluster}-cluster-prometheus`;
+    const dataSource = `${cluster}-prometheus`;
     let dashboardName = 'k8s-compute-resources-cluster';
     let additionalVars = '';
     if (typeof namespace !== 'undefined') {
