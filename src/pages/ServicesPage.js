@@ -12,6 +12,7 @@ const GET_SERVICE = gql`
       path
       name
       description
+      grafanaUrl
       serviceDocs
       serviceOwners {
         name

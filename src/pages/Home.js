@@ -40,8 +40,8 @@ function HomePage() {
               ],
               [
                 'Grafana',
-                <a href={window.GF_ROOT_URL} target="_blank" rel="noopener noreferrer">
-                  Grafana
+                <a href={window.GF_ROOT_URL + "/dashboards"} target="_blank" rel="noopener noreferrer">
+                  {window.GF_ROOT_URL + "/dashboards"}
                 </a>
               ],
               [

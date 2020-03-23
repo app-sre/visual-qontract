@@ -6,6 +6,7 @@ import EndPoints from '../../components/ServiceEndPoints';
 import Namespaces from './Namespaces';
 import Reports from './Reports';
 import Documents from './Documents';
+import GrafanaUrl from './GrafanaUrl';
 
 function Service({ service, reports, documents }) {
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
@@ -168,6 +169,11 @@ function Service({ service, reports, documents }) {
     <React.Fragment>
       <h4>Description</h4>
       <p>{service.description}</p>
+
+      {service.grafanaUrl &&
+        <div><h4>Grafana</h4>
+          <p><GrafanaUrl jumpHost={null} url={service.grafanaUrl} hide={false} /></p>
+        </div>}
 
       <h4>Info</h4>
       <Definition items={[['SLO', service.performanceParameters.SLO]]} />

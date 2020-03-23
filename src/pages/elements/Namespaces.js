@@ -107,7 +107,7 @@ function Namespaces({ namespaces, users }) {
     },
     cell: {
       formatters: [
-        value => <GrafanaUrl jumpHost={value[0]} cluster={value[1]} namespace={value[2]} url={value[3]} />,
+        value => <GrafanaUrl jumpHost={value[0]} cluster={value[1]} namespace={value[2]} url={value[3]} hide={true} />,
         cellFormat
       ]
     },

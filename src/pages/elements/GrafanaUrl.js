@@ -1,6 +1,6 @@
 import React from 'react';
 
-function GrafanaUrl({ jumpHost, cluster, namespace, url }) {
+function GrafanaUrl({ jumpHost, cluster, namespace, url, hide }) {
   if (jumpHost !== null) {
     return 'Not available';
   }
@@ -20,7 +20,7 @@ function GrafanaUrl({ jumpHost, cluster, namespace, url }) {
 
   return (
     <a href={grafanaUrl} target="_blank" rel="noopener noreferrer">
-      Link
+      {hide ? 'Link' : grafanaUrl}
     </a>
   );
 }

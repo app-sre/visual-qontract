@@ -30,6 +30,7 @@ function Namespace({ namespace, roles }) {
       cluster={namespace.cluster.name}
       namespace={namespace.name}
       url={namespace.grafanaUrl}
+      hide={false}
     />
   );
   function resourceName(r) {
