@@ -9,6 +9,7 @@ import AWSGroupsPage from './pages/AWSGroupsPage';
 import PermissionsPage from './pages/PermissionsPage';
 import IntegrationsPage from './pages/IntegrationsPage';
 import GitHubOrgsPage from './pages/GitHubOrgsPage';
+import QuayOrgsPage from './pages/QuayOrgsPage';
 import JenkinsInstancesPage from './pages/JenkinsInstancesPage';
 import DependenciesPage from './pages/DependenciesPage';
 import DocumentsPage from './pages/DocumentsPage';
@@ -96,6 +97,12 @@ const routes = () => [
     title: 'GitHub orgs',
     to: '/githuborgs',
     component: GitHubOrgsPage
+  },
+  {
+    iconClass: 'fa fa-cloud-upload',
+    title: 'Quay orgs',
+    to: '/quayorgs',
+    component: QuayOrgsPage
   },
   {
     iconClass: 'fa  fa-cogs',
