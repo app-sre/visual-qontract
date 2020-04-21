@@ -9,10 +9,10 @@ function GrafanaUrl({ jumpHost, cluster, namespace, url, hide }) {
     grafanaUrl = url;
   } else {
     const dataSource = `${cluster}-prometheus`;
-    let dashboardName = 'k8s-compute-resources-cluster';
+    let dashboardName = 'k8s-compute-resources-cluster/kubernetes-compute-resources-cluster';
     let additionalVars = '';
     if (typeof namespace !== 'undefined') {
-      dashboardName = 'k8s-compute-resources-namespace';
+      dashboardName = 'k8s-compute-resources-namespace-pods/kubernetes-compute-resources-namespace-pods';
       additionalVars = `&var-namespace=${namespace}`;
     }
     grafanaUrl = `${window.GF_ROOT_URL}/d/${dashboardName}?var-datasource=${dataSource}${additionalVars}`;
