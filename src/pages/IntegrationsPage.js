@@ -12,8 +12,6 @@ const GET_INTEGRATION = gql`
       path
       name
       description
-      shortDescription
-      usage
       upstream
     }
   }
@@ -25,8 +23,6 @@ const GET_INTEGRATIONS = gql`
       path
       name
       description
-      shortDescription
-      usage
       upstream
     }
   }
