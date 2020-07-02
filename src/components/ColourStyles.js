@@ -1,27 +1,15 @@
 import chroma from 'chroma-js';
 
-const sortByName = items =>
-  items.slice().sort((a, b) => {
-    if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
-    if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
-    return 0;
-  });
-
-const sortByValue = items =>
-  items.slice().sort((a, b) => {
-    if (a.value.toLowerCase() > b.value.toLowerCase()) return 1;
-    if (a.value.toLowerCase() < b.value.toLowerCase()) return -1;
-    return 0;
-});
-
 const ColourStyles = {
   control: styles => ({ ...styles, backgroundColor: "white" }),
   option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+    
     if (data.color) {
       var color = chroma(data.color);
     } else {
       var color = chroma('#363636');
-    } 
+    }
+    
     return {
       ...styles,
       color: 
@@ -59,4 +47,4 @@ const ColourStyles = {
   })
 };
 
-export { sortByName, sortByValue, ColourStyles};
+export default ColourStyles;
