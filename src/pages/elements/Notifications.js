@@ -76,7 +76,6 @@ function Notifications({ notifications }) {
         formatters: [headerFormat]
       },
       cell: {
-        // formatters: [linkFormat('https://gitlab.cee.redhat.com/service/app-interface/-/blob/master/data/'), cellFormat]
         formatters: [
           value => (
             <Link
@@ -92,17 +91,7 @@ function Notifications({ notifications }) {
         ]
       },
       property: 'subject_name_path'
-    },
-    // {
-    //   header: {
-    //     label: 'Body',
-    //     formatters: [headerFormat]
-    //   },
-    //   cell: {
-    //     formatters: [cellFormat]
-    //   },
-    //   property: 'body'
-    // }
+    }
   ];
   return (
     <TableSearch

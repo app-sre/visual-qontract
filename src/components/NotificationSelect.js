@@ -4,7 +4,7 @@ import CreatableSelect from 'react-select/creatable';
 import {components} from "react-select";
 import {RED, GREY} from "./ColourStyles.js";
 
-const Select = props => {
+const NotificationSelect = props => {
   if (props.allowSelectAll) {
     return (
       <CreatableSelect
@@ -37,7 +37,7 @@ const Select = props => {
   return <CreatableSelect {...props} />;
 };
 
-Select.propTypes = {
+NotificationSelect.propTypes = {
   options: PropTypes.array,
   value: PropTypes.any,
   onChange: PropTypes.func,
@@ -49,7 +49,7 @@ Select.propTypes = {
   })
 };
 
-Select.defaultProps = {
+NotificationSelect.defaultProps = {
   allOption: {
     label: "Select all affected",
     value: "*",
@@ -79,7 +79,7 @@ const MultiValue = props => (
 
 const SelectService = props => {
   return (
-    <CreatableSelect
+    <NotificationSelect
       {...props}
       options={[props.allServiceOption, ...props.options]}
       onChange={(selected, event) => {
@@ -115,7 +115,7 @@ SelectService.defaultProps = {
 
 const SelectRecepient = props => {
   return (
-    <CreatableSelect
+    <NotificationSelect
       {...props}
       options={[props.allOption, props.allEmailOption, props.allSlackOption, ...props.options]}
       onChange={(selected, event) => {
@@ -176,4 +176,4 @@ SelectRecepient.defaultProps = {
   }
 };
 
-export {Select, SelectService, SelectRecepient, Option, MultiValue};
+export {NotificationSelect, SelectService, SelectRecepient, Option, MultiValue};

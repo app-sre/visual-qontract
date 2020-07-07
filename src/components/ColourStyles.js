@@ -47,4 +47,7 @@ const ColourStyles = {
   })
 };
 
-export default ColourStyles;
+const RED = chroma('#DE350B');
+const GREY = chroma('#363636');
+
+export {ColourStyles, RED, GREY};

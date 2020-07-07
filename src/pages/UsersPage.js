@@ -38,7 +38,6 @@ const GET_USERS = gql`
 
 const UsersPage = ({ location }) => {
   const path = location.hash.substring(1);
-  console.log(path);
 
   if (path) {
     return (
