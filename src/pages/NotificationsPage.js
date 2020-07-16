@@ -55,7 +55,7 @@ const GET_NOTIFICATIONS = gql`
 const NotificationsPage = ({ location }) => {
   const path = location.hash.substring(1);
   // console.log(path);
-  if (path === "create-new-notification") {
+  if (path === "create") {
     return (
       <NewNotification />
     )
@@ -83,7 +83,7 @@ const NotificationsPage = ({ location }) => {
         if (error) return `Error! ${error.message}`;
 
         const body = <Notifications notifications={data.app_interface_emails_v1} />;
-        return <Page title="Notifications" body={body} create_button="true"/>;
+        return <Page title="Notifications" body={body} create={{"hash": "create", "path":"/notifications", "label": "Create a new notification"}}/>;
       }}
     </Query>
 

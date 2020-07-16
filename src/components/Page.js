@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, Button } from 'patternfly-react';
 import { Link } from 'react-router-dom';
 
-function Page({ title, body, path, create_button}) {
+function Page({ title, body, path, create}) {
   return (
     <Grid fluid className="container-pf-nav-pf-vertical">
       <Grid.Row>
@@ -17,16 +17,16 @@ function Page({ title, body, path, create_button}) {
                   </Button>
                 </span>
               )}
-              {create_button && (
+              {create && (
                 <span className="edit-button">
                   <Link
                     to={{
-                      pathname: '/notifications',
-                      hash: "create-new-notification"
+                      pathname: create["path"],
+                      hash: create["hash"]
                     }}
                   >
                     <Button>
-                      Create a new notification
+                      {create["label"]}
                     </Button>
                   </Link>
                 </span>
