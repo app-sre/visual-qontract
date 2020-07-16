@@ -81,35 +81,14 @@ const SelectService = props => {
   return (
     <NotificationSelect
       {...props}
-      options={[props.allServiceOption, ...props.options]}
-      onChange={(selected, event) => {
-        if (selected !== null && selected.length > 0) {
-          if (selected[selected.length - 1].value === props.allServiceOption.value) {
-            return props.onChange([props.allServiceOption, ...props.options.filter(option => option.color !== GREY)]);
-          }
-          let result = [];
-          if (selected.length === props.options.filter(option => option.color !== GREY).length) {
-            if (selected.includes(props.allServiceOption)) {
-              result = selected.filter(
-                option => option.value !== props.allServiceOption.value
-              );
-            } else if (event.action === "select-option") {
-              result = [props.allServiceOption, ...props.options];
-            }
-            return props.onChange(result);
-          }
-        }
-
-        return props.onChange(selected);
-      }}
     />
   );
 };
 
 SelectService.defaultProps = {
-  allServiceOption: {
+  allOption: {
     label: "Select all affected services",
-    value: "**"
+    value: "*"
   }
 };
 

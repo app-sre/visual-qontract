@@ -284,11 +284,13 @@ class NewNotification extends React.Component {
                 dic["value"] = service.name;
                 dic["label"] = service.name;
                 dic["color"] = GREY;
+                // dic["color"] = "#363636";
                 if (selectedDependencies) {
                   for (var d of selectedDependencies) {
                     if (dependency_dic.hasOwnProperty(d.value)) {
                       if (dependency_dic[d.value].includes(service.name)) {
                         dic["color"] = RED;
+                        // dic["color"] = '#DE350B';
                       }
                     }
                   }
