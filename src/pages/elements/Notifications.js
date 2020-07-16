@@ -7,9 +7,8 @@ import { Link } from 'react-router-dom';
 function Notifications({ notifications }) {
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
   const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
-  const linkFormat = url => value => <a href={`${url || ''}${value}`}>{value}</a>;
   const [filterText, changeFilterText] = useState('');
-  const options = ['Name', 'Path', 'Subject', 'Related Users', 'Body'];
+  const options = ['Subject', 'Name', 'Path'];
   const [selected, changeSelected] = useState(options[0]);
   const processedNotifications = sortByName(notifications.slice()).map(n => {
     n.subject_name_path = [n.subject, n.name, n.path];
@@ -20,8 +19,7 @@ function Notifications({ notifications }) {
     return (
       (selected === 'Name' && u.name.toLowerCase().includes(lcFilter)) ||
       (selected === 'Path' && u.path.toLowerCase().includes(lcFilter)) ||
-      (selected === 'Subject' && u.subject.toLowerCase().includes(lcFilter)) ||
-      (selected === 'Body' && u.body !== null && u.body.toLowerCase().includes(lcFilter))
+      (selected === 'Subject' && u.subject.toLowerCase().includes(lcFilter)) 
     );
   }
   const matchedNotifications = processedNotifications.filter(matches);
