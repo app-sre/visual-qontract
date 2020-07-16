@@ -24,10 +24,8 @@ import {
 } from '@patternfly/react-core';
 
 const client = new ApolloClient({
-  uri: window.GRAPHQL_URI + '/notifications',
+  uri: window.GRAPHQL_URI,
 });
-
-const axios = require('axios');
 
 const GET_SERVICE_NAMES = gql`
   query ServiceNames{
@@ -204,13 +202,21 @@ class NewNotification extends React.Component {
                             'jira': this.state.jira,
                             'short_description': this.state.short_description,
                             'description': this.state.long_description};
-      axios({method: "post", url: window.QONTRACT_API_URL, data: notification}).then(function (response) {
-        console.log(response);
-        alert(`Status code: ${response.status}. New notification successfully created.`);
+      fetch( window.QONTRACT_API_URL + "/notifications", {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(notification),
       })
-      .catch(function (error) {
-        console.log(error);
-        alert(`Unsuccessful submission. Please review the fields and resubmit.`);
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+        alert(`New notification successfully created.`);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        alert(`Unsuccessful submission: ` + {error} + ` Please review the fields and resubmit.`);
       });
     };
     event.preventDefault();
