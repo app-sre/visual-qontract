@@ -48,6 +48,7 @@ function getDocumentContent(resources, path) {
 
 const DocumentsPage = ({ location }) => {
   const path = location.hash.substring(1);
+
   if (path) {
     return (
       <Query query={GET_DOCUMENT} variables={{ path }}>
@@ -69,7 +70,7 @@ const DocumentsPage = ({ location }) => {
       {({ loading, error, data }) => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
-  
+
         const body = <Documents documents={data.documents_v1} />;
         return <Page title="Reports" body={body} />;
       }}
