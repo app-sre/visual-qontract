@@ -2,6 +2,7 @@ import chroma from 'chroma-js';
 
 const RED = chroma('#DE350B');
 const GREY = chroma('#363636');
+const BLUE = chroma('#06c');
 
 const ColourStyles = {
   control: styles => ({ ...styles, backgroundColor: "white" }),
@@ -67,4 +68,4 @@ const ColourStyles = {
   },
 };
 
-export {ColourStyles, RED, GREY};
+export {ColourStyles, RED, GREY, BLUE};

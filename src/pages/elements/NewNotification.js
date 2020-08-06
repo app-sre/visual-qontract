@@ -2,16 +2,10 @@ import React, { Fragment } from 'react';
 import { Query } from 'react-apollo';
 import ApolloClient from 'apollo-boost';
 import gql from 'graphql-tag';
-
-import "@patternfly/react-core/dist/styles/base.css";
-
 import { Link } from 'react-router-dom';
 import makeAnimated from 'react-select/animated';
 import CreatableSelect from 'react-select/creatable';
-import Page from '../../components/Page';
-import { SelectAll, SelectService, Option, MultiValue } from "../../components/NotificationSelect";
-import { sortByValue} from '../../components/Utils';
-import { RED, GREY, ColourStyles} from '../../components/ColourStyles';
+import "@patternfly/react-core/dist/styles/base.css";
 import {
   Form,
   FormGroup,
@@ -22,6 +16,12 @@ import {
   Button,
   Checkbox
 } from '@patternfly/react-core';
+
+import Page from '../../components/Page';
+import { SelectAffected, Option, MultiValue } from "../../components/NotificationSelect";
+import { sortByValue} from '../../components/Utils';
+import { GREY, BLUE, ColourStyles} from '../../components/ColourStyles';
+
 
 const client = new ApolloClient({
   uri: window.GRAPHQL_URI,
@@ -67,7 +67,8 @@ const GET_DEPENDENCIES_LIST = gql`
 `;
 
 var user_dic = {};
-var dependency_dic = {};
+var dependency_dic = [];
+var service_dic = [];
 
 client
   .query({
@@ -77,6 +78,8 @@ client
     for (var user of result.data.users_v1) {
       var dic = {};
       dic['path'] = user.path;
+      dic['name'] = user.name;
+      dic["org_username"] = user.org_username;
       user_dic[user.name] = dic;
     }
   });
@@ -88,6 +91,20 @@ client
   })
   .then(result => {
     for (var service of result.data.apps_v1) {
+      var service_owners = service.serviceOwners;
+      var service_notificators = service.serviceNotifications;
+      var recipients = new Set();
+      if (service_owners) {
+        for (var user of service_owners) {
+          recipients.add(user.name);
+        }
+      }
+      if (service_notificators) {
+        for (var user of service_notificators) {
+          recipients.add(user.name);
+        }
+      }
+      service_dic[service.name] = recipients;
       for (var dependency of service.dependencies){
         if (dependency_dic.hasOwnProperty(dependency.name)){
           dependency_dic[dependency.name].push(service.name);
@@ -103,61 +120,82 @@ class NewNotification extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      notification_type: 'Incident',
+      notification_type: {value: 'Outage', label: 'Outage'},
       selectedDependencies: [{"value": "None", "label": "None"}],
       selectedServices: [],
-      selectedUsers: [],
-      jira: '',
-      short_description: '',
-      long_description: ''
+      selectedEmailUsers: [],
+      create_channel: [],
+      selectedSlackUsers: [],
+      subject: '',
+      description: "Hello, \n \
+      The AppSRE team is current investigating an outage of [SERVICE NAME]. The AppSRE team will send regular updates as we work on resolving this issue. \n \
+      App-SRE tracking JIRA: [JIRA]  \n \
+      Live RCA: [RCA DOCUMENT URL] \n \
+      Bridge link: [BRIDGE LINK URL] \n \
+The AppSRE team"
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.options = [
-      { value: 'Incident', label: 'Incident', disabled: false },
-      { value: 'Maintenance', label: 'Maintenance', disabled: false },
-      { value: 'Info', label: 'Info', disabled: false }
+      {value: 'Outage', label: 'Outage'}, 
+      {value: 'Degraded Performance', label: 'Degraded Performance'}, 
+      {value: 'Other Incident', label: 'Other Incident'},
+      {value: 'Maintenance', label: 'Maintenance'},
+      {value: 'Info', label: 'Info'}
     ];
-    this.selected_service_names = [];
   }
 
   handleSubmit(event) {
     var dependency_names = [];
     var service_names = [];
-    var users = [];
-    var users_str = '';
+    var email_users = [];
+    var email_users_str = '';
+    var slack_users = [];
+    var slack_users_str = '';
     for (var s of this.state.selectedDependencies) {
       dependency_names.push(s.value);
     }
     for (var s of this.state.selectedServices) {
       service_names.push(s.value);
     }
-    for (var u of this.state.selectedUsers) {
-      if (user_dic.hasOwnProperty(u.value)){
-        users.push(user_dic[u.value]['path']);
-      } else {
-        users.push(u.value);
+    if (this.state.selectedEmailUsers) {
+      for (var u of this.state.selectedEmailUsers) {
+        if (user_dic.hasOwnProperty(u.value)){
+          email_users.push(user_dic[u.value]['path']);
+          email_users_str += u.value + " | ";
+        } 
       }
-      users_str += u.value + " | ";
     }
+    if (this.state.selectedSlackUsers) {
+      for (var u of this.state.selectedSlackUsers) {
+        if (user_dic.hasOwnProperty(u.value)){
+          slack_users.push(user_dic[u.value]['org_username']);
+        } else {
+          slack_users.push(u.value);
+        }
+        slack_users_str += u.value + " | ";
+      }
+    }
+    
     // eslint-disable-next-line no-restricted-globals
     var r = confirm( "Preview" +  "\n"
-    + "• Notification Type: " + this.state.notification_type + "\n"
-    + "• Recipients (Email): " + users_str + "\n"
-    + "• #Jira: " + this.state.jira + "\n"
-    + "• Short Description: " + this.state.short_description + "\n"
-    + "• Description: " + this.state.long_description + "\n"
+    + "• Notification Type: " + this.state.notification_type.label + "\n"
+    + "• Recipients (Email): " + email_users_str + "\n"
+    + "• Recipients (Slack): " + slack_users_str + "\n"
+    + "• Subject: " + this.state.subject + "\n"
+    + "• Description: " + this.state.description + "\n"
     + "========================= " + "\n"
     + "Are you sure to send the notification? " + "\n"
     + "========================= " + "\n");
     if (r) {
-      const notification = {'notification_type': this.state.notification_type,
+      const notification = {'notification_type': this.state.notification_type.label,
                             'labels': '{}',
                             'affected_dependencies': dependency_names,
                             'affected_services': service_names,
-                            'recipients': users,
-                            'jira': this.state.jira,
-                            'short_description': this.state.short_description,
-                            'description': this.state.long_description};
+                            'recipients': email_users,
+                            'slack_recipients': slack_users,
+                            'create_channel': true,
+                            'short_description': this.state.subject,
+                            'description': this.state.description};
       fetch( window.QONTRACT_API_URL + "/notifications", {
         method: 'POST', 
         headers: {
@@ -179,9 +217,8 @@ class NewNotification extends React.Component {
   }
 
   render() {
-    var { notification_type, selectedDependencies, selectedServices, selectedUsers, jira, short_description, long_description} = this.state;
+    var { notification_type, selectedDependencies, selectedServices, selectedEmailUsers, create_channel, selectedSlackUsers, subject, description} = this.state;
     const animatedComponents = makeAnimated();
-    var impacted_users = [];
    
     return (
       <Page title="Create a new notification" body = {
@@ -213,6 +250,7 @@ class NewNotification extends React.Component {
                 dic["label"] = dependency.name;
                 all_dependencies.push(dic);
               }
+
               return <Fragment>{
                 <CreatableSelect
                   defaultValue={{value:"None", label:"None"}}
@@ -234,7 +272,7 @@ class NewNotification extends React.Component {
           label="Affected Service" 
           isRequired 
           fieldId="horizontal-form-title" 
-          helperText="Services highlighted in RED are affected by the selected dependency."
+          helperText="Services highlighted in BLUE are affected by selected dependency."
         >
           <Query query={GET_SERVICE_INFO}>
             {({ loading, error, data }) => {
@@ -250,15 +288,16 @@ class NewNotification extends React.Component {
                   for (var d of selectedDependencies) {
                     if (dependency_dic.hasOwnProperty(d.value)) {
                       if (dependency_dic[d.value].includes(service.name)) {
-                        dic["color"] = RED;
+                        dic["color"] = BLUE;
                       }
                     }
                   }
                 }
                 all_services.push(dic);
               }
+
               return <Fragment>{
-                <SelectService
+                <SelectAffected
                   options={sortByValue(all_services.slice())}
                   isMulti
                   closeMenuOnSelect={false}
@@ -277,56 +316,71 @@ class NewNotification extends React.Component {
              }}
           </Query>
         </FormGroup>
-        <FormGroup label="Recipients" isRequired fieldId="horizontal-form-title">
+        <FormGroup 
+          label="Email Recipients" 
+          fieldId="horizontal-form-title" 
+          helperText="Receipients highlighted in BLUE are affected by selected services."
+        >
           <Query query={GET_SERVICE_INFO}>
             {({ loading, error, data }) => {
               if (loading) return 'Loading...';
               if (error) return `Error! ${error.message}`;
               var recipients = new Set();
+              var selected_service_names = [];
               if (selectedServices) {
                 for (var key of selectedServices) {
-                  this.selected_service_names.push(key.value);
+                  selected_service_names.push(key.value);
                 }
               }
-              for(var key in data.apps_v1) {
-                var service_name = data.apps_v1[key].name;
-                if (this.selected_service_names.includes(service_name)) {
-                  var service_owners = data.apps_v1[key].serviceOwners;
-                  var service_notificators = data.apps_v1[key].serviceNotifications;
+
+              for (var service of data.apps_v1) {
+                var service_name = service.name;
+                if (selected_service_names.includes(service_name)) {
+                  var service_owners = service.serviceOwners;
+                  var service_notificators = service.serviceNotifications;
                   if (service_owners) {
-                    for (var k of service_owners) {
-                      recipients.add(k.name);
+                    for (var user of service_owners) {
+                      recipients.add(user.name);
                     }
                   }
                   if (service_notificators) {
-                    for (var k of service_notificators) {
-                      recipients.add(k.name);
+                    for (var user of service_notificators) {
+                      recipients.add(user.name);
                     }
                   }
                 }
               }
-              for (var key of recipients) {
-                var email_dic = {};
-                email_dic["value"] = key;
-                email_dic["label"] = key;
-                email_dic["color"] = RED;
-                impacted_users.push(email_dic);
+              var all_users = [];
+              for (var user_name in user_dic) {
+                var dic = {};
+                dic["org_username"] = user_dic[user_name]["org_username"];
+                dic["name"] = user_name;
+                dic["value"] = user_name;
+                dic["label"] = user_name;
+                if (recipients) {
+                  if (recipients.has(dic["name"])) {
+                    dic["color"] = BLUE;
+                  } else {
+                    dic["color"] = GREY;
+                  }    
+                }
+                all_users.push(dic);
               }
-              
+       
               return <Fragment>{
-                <SelectAll
-                  options={sortByValue(impacted_users)}
+                <SelectAffected
+                  options={sortByValue(all_users)}
                   isMulti
                   closeMenuOnSelect={false}
                   hideSelectedOptions={false}
                   components={{ Option, MultiValue, animatedComponents }}
                   onChange={e => {
                         this.setState({
-                          selectedUsers: e 
+                          selectedEmailUsers: e 
                         });
                       }}
                   allowSelectAll={true}
-                  value={selectedUsers}           
+                  value={selectedEmailUsers}           
                   styles={ColourStyles}
                 />
              }</Fragment>;
@@ -334,18 +388,79 @@ class NewNotification extends React.Component {
           </Query>
         </FormGroup>
         <FormGroup 
-          label="Would you like to create a new jira ticket and/ or link to an existing one?" 
-          isRequired 
-          fieldId="horizontal-form-name" 
-          helperText="Format of #Jira should be [Team]-XXXX, e.g. APPSRE-2024.">
-          <p>
-          <Checkbox label="Create a new Jira ticket" id="alt-form-checkbox-1" name="alt-form-checkbox-1"/>
-          </p>
-          <p>
-          <Checkbox label="Link to an existing ticket: " id="alt-form-checkbox-2" name="alt-form-checkbox-2"/>
-          </p>
+          label="Slack Recipients" 
+          fieldId="horizontal-form-title" 
+          helperText="Receipients highlighted in BLUE are affected by selected services; manually created recipients should be in org_username format."
+        >
+          <Query query={GET_SERVICE_INFO}>
+            {({ loading, error, data }) => {
+              if (loading) return 'Loading...';
+              if (error) return `Error! ${error.message}`;
+              var recipients = new Set();
+              var selected_service_names = [];
+              if (selectedServices) {
+                for (var key of selectedServices) {
+                  selected_service_names.push(key.value);
+                }
+              }
+
+              for (var service of data.apps_v1) {
+                var service_name = service.name;
+                if (selected_service_names.includes(service_name)) {
+                  var service_owners = service.serviceOwners;
+                  var service_notificators = service.serviceNotifications;
+                  if (service_owners) {
+                    for (var user of service_owners) {
+                      recipients.add(user.name);
+                    }
+                  }
+                  if (service_notificators) {
+                    for (var user of service_notificators) {
+                      recipients.add(user.name);
+                    }
+                  }
+                }
+              }
+              var all_users = [];
+              for (var user_name in user_dic) {
+                var dic = {};
+                dic["org_username"] = user_dic[user_name]["org_username"];
+                dic["name"] = user_name;
+                dic["value"] = user_name;
+                dic["label"] = user_name;
+                if (recipients) {
+                  if (recipients.has(dic["name"])) {
+                    dic["color"] = BLUE;
+                  } else {
+                    dic["color"] = GREY;
+                  }    
+                }
+                all_users.push(dic);
+              }
+       
+              return <Fragment>{
+                <SelectAffected
+                  options={sortByValue(all_users)}
+                  isMulti
+                  closeMenuOnSelect={false}
+                  hideSelectedOptions={false}
+                  components={{ Option, MultiValue, animatedComponents }}
+                  onChange={e => {
+                        this.setState({
+                          selectedSlackUsers: e 
+                        });
+                      }}
+                  allowSelectAll={true}
+                  value={selectedSlackUsers}           
+                  styles={ColourStyles}
+                />
+             }</Fragment>;
+            }}
+          </Query>
+        </FormGroup>
+        <FormGroup label="Subject" isRequired fieldId="horizontal-form-name">
           <TextInput
-            value={jira}
+            value={subject}
             isRequired
             type="text"
             id="horizontal-form-name"
@@ -353,36 +468,22 @@ class NewNotification extends React.Component {
             name="horizontal-form-name"
             onChange={e => {
               this.setState({
-                jira: e
+                subject: e
               });
             }}
           />
         </FormGroup>
-        <FormGroup label="Short Description" isRequired fieldId="horizontal-form-name">
-          <TextInput
-            value={short_description}
-            isRequired
-            type="text"
-            id="horizontal-form-name"
-            aria-describedby="horizontal-form-name-helper"
-            name="horizontal-form-name"
-            onChange={e => {
-              this.setState({
-                short_description: e
-              });
-            }}
-          />
-        </FormGroup>
-        <FormGroup label="Description" fieldId="horizontal-form-exp">
+        <FormGroup label="Description" isRequired fieldId="horizontal-form-exp">
           <TextArea
-            value={long_description}
+            value={description}
             name="horizontal-form-exp"
             id="horizontal-form-exp"
             onChange={e => {
               this.setState({
-                long_description: e
+                description: e
               });
             }}
+            rows="6" cols="80" 
           />
         </FormGroup>
         <FormGroup>
