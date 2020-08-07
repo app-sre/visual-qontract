@@ -19,7 +19,7 @@ const SelectAffected = props => {
             if (selected.length === props.options.filter(option => option.color !== GREY).length) {
               if (selected.includes(props.allOption)) {
                 result = selected.filter(
-                  option => option.value !== props.allOption.value
+                  option => option.value === props.allOption.value
                 );
               } else if (event.action === "select-option") {
                 result = [props.allOption, ...props.options];
