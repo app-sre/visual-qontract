@@ -193,7 +193,7 @@ The AppSRE team"
                             'affected_services': service_names,
                             'recipients': email_users,
                             'slack_recipients': slack_users,
-                            'create_channel': true,
+                            'channel': this.state.subject,
                             'short_description': this.state.subject,
                             'description': this.state.description};
       fetch( window.QONTRACT_API_URL + "/notifications", {
@@ -202,15 +202,13 @@ The AppSRE team"
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(notification),
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Success:', data);
-        alert(`New notification successfully created.`);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-        alert(`Unsuccessful submission: ` + {error} + ` Please review the fields and resubmit.`);
+      }).then(function(response) {
+        console.log(response.status); 
+        if (response.status === 201) {
+          alert(`New notification successfully created.`);
+        } else {
+          alert(`Unsuccessful submission. Please review the fields and resubmit.`);
+        }
       });
     };
     event.preventDefault();
