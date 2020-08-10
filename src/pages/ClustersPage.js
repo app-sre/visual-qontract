@@ -15,6 +15,7 @@ const GET_CLUSTER = gql`
       consoleUrl
       kibanaUrl
       prometheusUrl
+      alertmanagerUrl
       grafanaUrl
       jumpHost {
         hostname
