@@ -14,10 +14,7 @@ import {
   FormSelect,
   FormSelectOption,
   Button,
-  Label,
-  Flex,
-  FlexItem,
-  Divider
+  Label
 } from '@patternfly/react-core';
 
 import Page from '../../components/Page';
@@ -123,7 +120,7 @@ class NewNotification extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      notification_type: {value: 'Outage', label: 'Outage'},
+      notification_type: 'Outage',
       selectedDependencies: [{"value": "None", "label": "None"}],
       selectedServices: [],
       selectedEmailUsers: [],
@@ -181,7 +178,7 @@ The AppSRE team"
     
     // eslint-disable-next-line no-restricted-globals
     var r = confirm( "Preview" +  "\n"
-    + "• Notification Type: " + this.state.notification_type.label + "\n"
+    + "• Notification Type: " + this.state.notification_type + "\n"
     + "• Recipients (Email): " + email_users_str + "\n"
     + "• Recipients (Slack): " + slack_users_str + "\n"
     + "• Subject: " + this.state.subject + "\n"
@@ -190,7 +187,7 @@ The AppSRE team"
     + "Are you sure to send the notification? " + "\n"
     + "========================= " + "\n");
     if (r) {
-      const notification = {'notification_type': this.state.notification_type.label,
+      const notification = {'notification_type': this.state.notification_type,
                             'labels': '{}',
                             'affected_dependencies': dependency_names,
                             'affected_services': service_names,
