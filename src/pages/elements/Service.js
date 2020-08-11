@@ -7,6 +7,7 @@ import Namespaces from './Namespaces';
 import Reports from './Reports';
 import Documents from './Documents';
 import GrafanaUrl from './GrafanaUrl';
+import Services from './Services';
 
 function Service({ service, reports, documents }) {
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
@@ -177,8 +178,16 @@ function Service({ service, reports, documents }) {
 
       <h4>Info</h4>
       <Definition items={[['SLO', service.performanceParameters.SLO]]} />
-      <h4> Service Owners </h4>
+
+      <h4>Service Owners</h4>
       <Definition items={serviceOwners} />
+
+      {service.childrenApps.length > 0 &&
+        <React.Fragment>
+          <h4>Children Services</h4>
+          <Services services={service.childrenApps} table={true} />
+        </React.Fragment>
+      }
 
       {service.serviceDocs && (
         <React.Fragment>

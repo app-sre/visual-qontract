@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom';
 import { chunk } from 'lodash';
 import { Row, Col, Card, CardHeading, CardBody, CardFooter, CardTitle, Label } from 'patternfly-react';
 import { sortByName } from '../../components/Utils';
+import ServicesTable from '../../components/ServicesTable';
 import GridSearch from '../../components/GridSearch';
 
-function Services({ services }) {
+function Services({ services, table }) {
   // cardsWidth * cardsPerRow must be <= 12 (bootstrap grid)
   const cardWidth = 4;
   const cardsPerRow = 3;
@@ -16,6 +17,12 @@ function Services({ services }) {
     return selected === 'Name' && s.name.toLowerCase().includes(lcFilter);
   }
   const matchedServices = services.filter(matches);
+
+
+  if (typeof(table) !== 'undefined' && table) {
+    return <ServicesTable services={matchedServices}/>;
+  }
+
   const rows = chunk(sortByName(matchedServices), cardsPerRow).map(c => (
     <Row key={c[0].path}>
       {c.map(s => (
@@ -24,10 +31,6 @@ function Services({ services }) {
             <CardHeading>
               <CardTitle>
                 {s.name}
-                <span style={{ float: 'right' }}>
-                  <Label bsStyle="primary">SLO</Label>
-                  <Label bsStyle="info">{s.performanceParameters.SLO}</Label>
-                </span>
               </CardTitle>
             </CardHeading>
             <CardBody>{s.description}</CardBody>

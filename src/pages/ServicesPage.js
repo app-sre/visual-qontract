@@ -60,6 +60,11 @@ const GET_SERVICE = gql`
           }
         }
       }
+      childrenApps {
+        path
+        name
+        description
+      }
     }
     reports_v1 {
       path
@@ -86,24 +91,8 @@ const GET_SERVICES = gql`
       path
       name
       description
-      performanceParameters {
-        SLO
-      }
-      namespaces {
-        path
+      parentApp {
         name
-        description
-        cluster {
-          name
-          path
-          jumpHost {
-            hostname
-          }
-        }
-        app {
-          name
-          path
-        }
       }
     }
   }
@@ -135,7 +124,9 @@ const ServicesPage = ({ location }) => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
 
-        const body = <Services services={data.apps_v1} />;
+        const services = data.apps_v1.filter(s => s.parentApp === null);
+
+        const body = <Services services={services} />;
         return <Page title="Services" body={body} />;
       }}
     </Query>
