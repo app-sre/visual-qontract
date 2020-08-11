@@ -14,7 +14,10 @@ import {
   FormSelect,
   FormSelectOption,
   Button,
-  Checkbox
+  Label,
+  Flex,
+  FlexItem,
+  Divider
 } from '@patternfly/react-core';
 
 import Page from '../../components/Page';
@@ -124,7 +127,7 @@ class NewNotification extends React.Component {
       selectedDependencies: [{"value": "None", "label": "None"}],
       selectedServices: [],
       selectedEmailUsers: [],
-      create_channel: [],
+      channel: '',
       selectedSlackUsers: [],
       subject: '',
       description: "Hello, \n \
@@ -168,7 +171,7 @@ The AppSRE team"
     if (this.state.selectedSlackUsers) {
       for (var u of this.state.selectedSlackUsers) {
         if (user_dic.hasOwnProperty(u.value)){
-          slack_users.push(user_dic[u.value]['org_username']);
+          slack_users.push(user_dic[u.value]['path']);
         } else {
           slack_users.push(u.value);
         }
@@ -192,8 +195,8 @@ The AppSRE team"
                             'affected_dependencies': dependency_names,
                             'affected_services': service_names,
                             'recipients': email_users,
+                            'channel': this.state.channel,
                             'slack_recipients': slack_users,
-                            'channel': this.state.subject,
                             'short_description': this.state.subject,
                             'description': this.state.description};
       fetch( window.QONTRACT_API_URL + "/notifications", {
@@ -215,9 +218,9 @@ The AppSRE team"
   }
 
   render() {
-    var { notification_type, selectedDependencies, selectedServices, selectedEmailUsers, create_channel, selectedSlackUsers, subject, description} = this.state;
+    var { notification_type, selectedDependencies, selectedServices, selectedEmailUsers, channel, selectedSlackUsers, subject, description} = this.state;
     const animatedComponents = makeAnimated();
-   
+
     return (
       <Page title="Create a new notification" body = {
       <Form isHorizontal>
@@ -388,7 +391,7 @@ The AppSRE team"
         <FormGroup 
           label="Slack Recipients" 
           fieldId="horizontal-form-title" 
-          helperText="Receipients highlighted in BLUE are affected by selected services; manually created recipients should be in org_username format."
+          helperText="Receipients highlighted in BLUE are affected by selected services."
         >
           <Query query={GET_SERVICE_INFO}>
             {({ loading, error, data }) => {
@@ -435,24 +438,41 @@ The AppSRE team"
                 }
                 all_users.push(dic);
               }
-       
-              return <Fragment>{
-                <SelectAffected
-                  options={sortByValue(all_users)}
-                  isMulti
-                  closeMenuOnSelect={false}
-                  hideSelectedOptions={false}
-                  components={{ Option, MultiValue, animatedComponents }}
-                  onChange={e => {
+              
+              return (
+                <React.Fragment>    
+                  <Label>
+                    Channel name:  
+                    <TextInput
+                      type="text"
+                      id="horizontal-form-name"
+                      aria-describedby="horizontal-form-name-helper"
+                      name="horizontal-form-name"
+                      resizeOrientation='horizontal'
+                      onChange={e => {
                         this.setState({
-                          selectedSlackUsers: e 
+                          channel: e
                         });
                       }}
-                  allowSelectAll={true}
-                  value={selectedSlackUsers}           
-                  styles={ColourStyles}
-                />
-             }</Fragment>;
+                     />
+                  </Label>
+                  <SelectAffected
+                    options={sortByValue(all_users)}
+                    isMulti
+                    closeMenuOnSelect={false}
+                    hideSelectedOptions={false}
+                    components={{ Option, MultiValue, animatedComponents }}
+                    onChange={e => {
+                          this.setState({
+                            selectedSlackUsers: e 
+                          });
+                        }}
+                    allowSelectAll={true}
+                    value={selectedSlackUsers}           
+                    styles={ColourStyles}
+                  />
+                </React.Fragment>
+              );
             }}
           </Query>
         </FormGroup>
