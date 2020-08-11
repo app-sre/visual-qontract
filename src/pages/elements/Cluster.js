@@ -49,6 +49,12 @@ function Cluster({ cluster, roles }) {
               {cluster.prometheusUrl}
             </a>
           ],
+          [
+            'Alertmanager',
+            <a href={`${cluster.alertmanagerUrl}`} target="_blank" rel="noopener noreferrer">
+              {cluster.alertmanagerUrl}
+            </a>
+          ],
           ['Grafana', grafana]
         ]}
       />
