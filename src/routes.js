@@ -3,6 +3,7 @@ import ServicesPage from './pages/ServicesPage';
 import UsersPage from './pages/UsersPage';
 import RolesPage from './pages/RolesPage';
 import ClustersPage from './pages/ClustersPage';
+import ClusterUpgradesPage from './pages/ClusterUpgradesPage';
 import NamespacesPage from './pages/NamespacesPage';
 import AWSAccountsPage from './pages/AWSAccountsPage';
 import AWSGroupsPage from './pages/AWSGroupsPage';
@@ -37,6 +38,12 @@ const routes = () => [
     title: 'Clusters',
     to: '/clusters',
     component: ClustersPage
+  },
+  {
+    iconClass: 'fa fa-upload',
+    title: 'Cluster Upgrades',
+    to: '/clusterUpgrades',
+    component: ClusterUpgradesPage
   },
   {
     iconClass: 'fa fa-desktop',
