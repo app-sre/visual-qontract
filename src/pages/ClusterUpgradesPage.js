@@ -10,6 +10,7 @@ const GET_CLUSTERS = gql`
     clusters_v1 {
       path
       name
+      description
       spec {
         upgrade
         id

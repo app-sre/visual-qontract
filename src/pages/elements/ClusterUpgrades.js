@@ -17,26 +17,6 @@ function UpgradeBucketTable({clusters}) {
             formatters: [headerFormat]
           },
           cell: {
-            formatters: [cellFormat]
-          },
-          property: 'name'
-        },
-        {
-          header: {
-            label: 'External ID',
-            formatters: [headerFormat]
-          },
-          cell: {
-            formatters: [cellFormat]
-          },
-          property: 'external_id'
-        },
-        {
-          header: {
-            label: 'URL',
-            formatters: [headerFormat]
-          },
-          cell: {
             formatters: [
               value => (
                 <Link
@@ -51,6 +31,26 @@ function UpgradeBucketTable({clusters}) {
               cellFormat]
           },
           property: 'name_path'
+        },
+        {
+          header: {
+            label: 'External ID',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'external_id'
+        },
+        {
+          header: {
+            label: 'Description',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'description'
         }
       ]}
     >
