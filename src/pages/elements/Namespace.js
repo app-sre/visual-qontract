@@ -77,7 +77,12 @@ function Namespace({ namespace, roles }) {
               {namespace.cluster.name}
             </Link>
           ],
-          ['Grafana', grafana]
+          ['Grafana', grafana],
+          ['Container Vulnerabilities',
+          <a href={`https://grafana.app-sre.devshift.net/d/dashdotdb/dash-db?var-cluster=${namespace.cluster.name}&var-namespace=${namespace.name}`}
+           target="_blank" rel="noopener noreferrer">
+           {`https://grafana.app-sre.devshift.net/d/dashdotdb/dash-db?var-cluster=${namespace.cluster.name}&var-namespace=${namespace.name}`}
+          </a>]
         ]}
       />
 
