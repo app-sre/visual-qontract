@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { chunk } from 'lodash';
-import { Row, Col, Card, CardHeading, CardBody, CardFooter, CardTitle, Label } from 'patternfly-react';
+import { Row, Col, Card, CardHeading, CardBody, CardFooter, CardTitle } from 'patternfly-react';
 import { sortByName } from '../../components/Utils';
 import ServicesTable from '../../components/ServicesTable';
 import GridSearch from '../../components/GridSearch';
