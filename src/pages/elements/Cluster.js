@@ -25,7 +25,7 @@ function Cluster({ cluster, roles }) {
       <Definition
         items={[
           ['Cluster', cluster.name],
-          ['Version', cluster.spec.version],
+          cluster.spec !== null && cluster.spec.version !== null && ['Version', cluster.spec.version],
           [
             'Path',
             <a href={`${window.DATA_DIR_URL}${cluster.path}`} target="_blank" rel="noopener noreferrer">
