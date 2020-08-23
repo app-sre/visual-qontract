@@ -11,6 +11,9 @@ const GET_CLUSTER = gql`
     clusters_v1(path: $path) {
       path
       name
+      spec {
+        version
+      }
       description
       consoleUrl
       kibanaUrl
