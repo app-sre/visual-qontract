@@ -57,9 +57,9 @@ function Cluster({ cluster, roles }) {
             </a>
           ],
           ['Grafana', grafana],
-          ['VPC CIDR', cluster.network.vpc],
-          ['Service CIDR', cluster.network.service],
-          ['Pod CIDR', cluster.network.pod]
+          cluster.network !== null && cluster.network.vpc !== null && ['VPC CIDR', cluster.network.vpc],
+          cluster.network !== null && cluster.network.service !== null && ['Service CIDR', cluster.network.service],
+          cluster.network !== null && cluster.network.pod !== null && ['Pod CIDR', cluster.network.pod]
         ]}
       />
 
