@@ -56,7 +56,10 @@ function Cluster({ cluster, roles }) {
               {cluster.alertmanagerUrl}
             </a>
           ],
-          ['Grafana', grafana]
+          ['Grafana', grafana],
+          ['VPC CIDR', cluster.network.vpc],
+          ['Service CIDR', cluster.network.service],
+          ['Pod CIDR', cluster.network.pod]
         ]}
       />
 

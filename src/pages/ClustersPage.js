@@ -23,6 +23,11 @@ const GET_CLUSTER = gql`
       jumpHost {
         hostname
       }
+      network {
+        vpc
+        service
+        pod
+      }
       namespaces {
         path
         name
