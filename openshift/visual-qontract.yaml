@@ -44,6 +44,16 @@ objects:
               secretKeyRef:
                   key: authorization
                   name: visual-qontract
+          - name: API_URI
+            valueFrom:
+              configMapKeyRef:
+                key: api.uri
+                name: visual-qontract
+          - name: API_AUTH
+            valueFrom:
+              secretKeyRef:
+                  key: api.auth
+                  name: visual-qontract
           ports:
           - containerPort: 8080
           livenessProbe:
