@@ -125,6 +125,7 @@ objects:
           - -provider=$(OAUTH2_PROXY_PROVIDER)
           - -github-org=$(OAUTH2_PROXY_GITHUB_ORG)
           - -redirect-url=$(OAUTH2_PROXY_REDIRECT_URL)
+          - -pass-user-headers
           resources:
             requests:
               memory: ${OAUTH_MEMORY_REQUESTS}
