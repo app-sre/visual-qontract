@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { List, ListItem } from '@patternfly/react-core';
 import GrafanaUrl from './GrafanaUrl';
 import Definition from '../../components/Definition';
+import GrafanaContainerVulnerabilities from '../../components/GrafanaContainerVulnerabilities';
 import Roles from './Roles';
 
 function Namespace({ namespace, roles }) {
@@ -46,7 +47,7 @@ function Namespace({ namespace, roles }) {
         <a
           href={`https://console.${namespace.cluster.name}.openshift.com/console/project/${
             namespace.name
-          }/browse/secrets/${resourceName(a)}`}
+            }/browse/secrets/${resourceName(a)}`}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -79,10 +80,8 @@ function Namespace({ namespace, roles }) {
           ],
           ['Grafana', grafana],
           ['Container Vulnerabilities',
-          <a href={`https://grafana.app-sre.devshift.net/d/dashdotdb/dash-db?var-cluster=${namespace.cluster.name}&var-namespace=${namespace.name}`}
-           target="_blank" rel="noopener noreferrer">
-           {`https://grafana.app-sre.devshift.net/d/dashdotdb/dash-db?var-cluster=${namespace.cluster.name}&var-namespace=${namespace.name}`}
-          </a>]
+            <GrafanaContainerVulnerabilities namespace={namespace} />
+          ]
         ]}
       />
 
