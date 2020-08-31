@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Definition from '../../components/Definition';
+function Report({ report, namespaces }) {
 
-function Report({ report }) {
   const content = report.content.split('\n').map((i, key) => <div key={key}>{i}</div>);
   return (
     <React.Fragment>
