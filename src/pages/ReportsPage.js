@@ -18,6 +18,14 @@ const GET_REPORT = gql`
       date
       content
     }
+    namespaces_v1 {
+      name
+      path
+      cluster {
+        name
+        path
+      }
+    }
   }
 `;
 
@@ -35,6 +43,7 @@ const GET_REPORTS = gql`
   }
 `;
 
+
 const ReportsPage = ({ location }) => {
   const path = location.hash.substring(1);
 
@@ -44,9 +53,8 @@ const ReportsPage = ({ location }) => {
         {({ loading, error, data }) => {
           if (loading) return 'Loading...';
           if (error) return `Error! ${error.message}`;
-
           const report = data.reports_v1[0];
-          const body = <Report report={report} />;
+          const body = <Report report={report} namespaces={data.namespaces_v1} />;
           return <Page title={report.name} body={body} path={report.path} />;
         }}
       </Query>
