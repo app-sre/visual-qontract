@@ -81,6 +81,10 @@ objects:
             - name: visual-qontract-env
               mountPath: /opt/visual-qontract/build/env/
               readOnly: true
+            - name: visual-qontract-oauth-authz-map
+              mountPath: /etc/nginx/oauth-authz-map.conf
+              subPath: oauth-authz-map.conf
+              readOnly: true
         - image: ${IMAGE_OAUTH2_PROXY}:${IMAGE_OAUTH2_PROXY_TAG}
           imagePullPolicy: Always
           name: visual-qontract-oauth2-proxy
@@ -156,6 +160,9 @@ objects:
             items:
             - key: env
               path: env.js
+        - name: visual-qontract-oauth-authz-map
+          configMap:
+            name: visual-qontract-oauth-authz-map
     triggers:
     - type: ConfigChange
 - apiVersion: v1
