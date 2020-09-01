@@ -12,6 +12,8 @@ http {
     include mime.types;
     default_type application/octet-stream;
 
+    include oauth-authz-map.conf;
+
     server {
         listen 8080 default;
         client_max_body_size 1m;
@@ -29,6 +31,14 @@ http {
                 add_header Set-Cookie "github-oauth-user=$http_x_forwarded_user";
                 add_header Set-Cookie "github-oauth-email=$http_x_forwarded_email";
             }
+        }
+
+        location /notifications {
+            if ($authz_notifications !~ 1) {
+                return 401 "You do not have access this function";
+            }
+            try_files $uri $uri/ /index.html =404;
+            add_header Cache-Control "no-cache, no-store, must-revalidate";
         }
 
         location /graphql {

@@ -1,0 +1,15 @@
+# This map defines mapping of usernames (github usernames) to variables based on the value of X-Forwarded-User header passed from the Oauth proxy
+# By default the value is 0 which prevents access to functionnality.
+# A list of github usernames can be added with a value of '1' to grant access
+# Each list allows us to define URIs that can or cannot be accessed based on map membership and the Oauth authenticated user's username
+map $http_x_forwarded_user $authz_notifications {
+    default 1;
+
+    #userA 1;
+    #userB 1;
+    #...   1;
+}
+
+#map $http_x_forwarded_user $authz_other {
+#    default 0;
+#}
