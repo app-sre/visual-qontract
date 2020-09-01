@@ -24,14 +24,16 @@ http {
         root   /opt/visual-qontract/build;
         index  index.html;
 
+        error_page 403 /403.html;
+
         location /notifications {
-            if ($authz_notifications !~ 1) {
-                return 403 "You do not have access this function";
+            if ($authz_notifications = 0) {
+                return 403;
             }
             try_files $uri $uri/ /index.html =404;
             add_header Cache-Control "no-cache, no-store, must-revalidate";
         }
-        
+
         location / {
             try_files $uri $uri/ /index.html =404;
             add_header Cache-Control "no-cache, no-store, must-revalidate";

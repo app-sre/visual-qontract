@@ -3,7 +3,7 @@
 # A list of github usernames can be added with a value of '1' to grant access
 # Each list allows us to define URIs that can or cannot be accessed based on map membership and the Oauth authenticated user's username
 map $http_x_forwarded_user $authz_notifications {
-    default 1;
+    default 0;
 
     #userA 1;
     #userB 1;
