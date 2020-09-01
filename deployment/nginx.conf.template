@@ -27,10 +27,6 @@ http {
         location / {
             try_files $uri $uri/ /index.html =404;
             add_header Cache-Control "no-cache, no-store, must-revalidate";
-            if ($request_uri ~ "^/$") {
-                add_header Set-Cookie "github-oauth-user=$http_x_forwarded_user";
-                add_header Set-Cookie "github-oauth-email=$http_x_forwarded_email";
-            }
         }
 
         location /notifications {
