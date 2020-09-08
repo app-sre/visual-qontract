@@ -34,6 +34,16 @@ function UpgradeBucketTable({clusters}) {
         },
         {
           header: {
+            label: 'Version',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'version'
+        },
+        {
+          header: {
             label: 'External ID',
             formatters: [headerFormat]
           },
@@ -83,6 +93,7 @@ function ClusterUpgrades({ clusters }) {
     c.name_path = [c.name, c.path];
 
     if (c['spec'] !== null) {
+      c['version'] = c['spec']['version'];
       c['id'] = c['spec']['id'];
       c['external_id'] = c['spec']['external_id'];
     }

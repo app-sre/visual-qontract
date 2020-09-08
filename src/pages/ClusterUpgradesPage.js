@@ -12,6 +12,7 @@ const GET_CLUSTERS = gql`
       name
       description
       spec {
+        version
         upgrade
         id
         external_id
