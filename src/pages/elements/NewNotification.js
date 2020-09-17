@@ -7,6 +7,7 @@ import makeAnimated from 'react-select/animated';
 import CreatableSelect from 'react-select/creatable';
 import "@patternfly/react-core/dist/styles/base.css";
 import {
+  Alert,
   Form,
   FormGroup,
   TextInput,
@@ -220,7 +221,15 @@ The AppSRE team"
 
     return (
       <Page title="Create a new notification" body = {
-      <Form isHorizontal>
+        <Fragment>
+        <Alert
+          variant="danger"
+          title="Warning"
+        >
+          For use by AppSRE team members only.
+        </Alert>
+        <br /><br />
+        <Form isHorizontal>
         <FormGroup label="Notification Type" isRequired fieldId="horizontal-form-title">
           <FormSelect 
             value={notification_type} 
@@ -437,22 +446,7 @@ The AppSRE team"
               }
               
               return (
-                <React.Fragment>    
-                  <Label>
-                    Channel name:  
-                    <TextInput
-                      type="text"
-                      id="horizontal-form-name"
-                      aria-describedby="horizontal-form-name-helper"
-                      name="horizontal-form-name"
-                      resizeOrientation='horizontal'
-                      onChange={e => {
-                        this.setState({
-                          channel: e
-                        });
-                      }}
-                     />
-                  </Label>
+                <Fragment>
                   <SelectAffected
                     options={sortByValue(all_users)}
                     isMulti
@@ -468,10 +462,24 @@ The AppSRE team"
                     value={selectedSlackUsers}           
                     styles={ColourStyles}
                   />
-                </React.Fragment>
+                </Fragment>
               );
             }}
           </Query>
+        </FormGroup>
+        <FormGroup label="Slack Channel Name" fieldId="horizontal-form-name">
+        <TextInput
+          type="text"
+          id="horizontal-form-name"
+          aria-describedby="horizontal-form-name-helper"
+          name="horizontal-form-name"
+          resizeOrientation='horizontal'
+          onChange={e => {
+            this.setState({
+              channel: e
+            });
+          }}
+          />
         </FormGroup>
         <FormGroup label="Subject" isRequired fieldId="horizontal-form-name">
           <TextInput
@@ -490,7 +498,7 @@ The AppSRE team"
         </FormGroup>
         <FormGroup label="Description" isRequired fieldId="horizontal-form-exp">
           <TextArea
-            value={description}
+            placeholder={description}
             name="horizontal-form-exp"
             id="horizontal-form-exp"
             onChange={e => {
@@ -511,6 +519,7 @@ The AppSRE team"
           </Link>
         </FormGroup>
       </Form>
+      </Fragment>
       } />
     );
   }
