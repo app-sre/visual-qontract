@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import CreatableSelect from 'react-select/creatable';
 import {components} from "react-select";
-import {GREY} from "./ColourStyles.js";
+import {GREY, BLUE} from "./ColourStyles.js";
 
 const SelectAffected = props => {
   if (props.allowSelectAll) {
@@ -12,22 +12,17 @@ const SelectAffected = props => {
         options={[props.allOption, ...props.options]}
         onChange={(selected, event) => {
           if (selected !== null && selected.length > 0) {
-            if (selected[selected.length - 1].value === props.allOption.value) {
-              return props.onChange([props.allOption, ...props.options.filter(option => option.color !== GREY)]);
-            }
-            let result = [];
-            if (selected.length === props.options.filter(option => option.color !== GREY).length) {
-              if (selected.includes(props.allOption)) {
-                result = selected.filter(
-                  option => option.value === props.allOption.value
-                );
-              } else if (event.action === "select-option") {
-                result = [props.allOption, ...props.options];
+            if (event.action == "select-option") {
+              if (selected[selected.length - 1].value === props.allOption.value) {
+                let otherSelected = selected.filter(option => option.value !== props.allOption.value && option.color !== BLUE)
+                return props.onChange([props.allOption, ...props.options.filter(option => option.color !== GREY), ...otherSelected]);
               }
-              return props.onChange(result);
+            }
+            if (event.action === 'deselect-option' && event.option.value === props.allOption.value) {
+              let otherSelected = selected.filter(option => option.value !== props.allOption.value & option.color !== BLUE)
+              return props.onChange([...otherSelected]);
             }
           }
-
           return props.onChange(selected);
         }}
       />
