@@ -106,7 +106,11 @@ function ClusterUpgrades({ clusters }) {
   return <React.Fragment>
     <h2>Batch 1</h2><UpgradeBucketTable clusters={clustersByUpgrade['batch1']} />
     <h2>Batch 2</h2><UpgradeBucketTable clusters={clustersByUpgrade['batch2']} />
-    <h2>Skip</h2><UpgradeBucketTable clusters={clustersByUpgrade['skip']} />
+    {clustersByUpgrade['skip'] && 
+        <React.Fragment>
+            <h2>Skip</h2><UpgradeBucketTable clusters={clustersByUpgrade['skip']} />
+        </React.Fragment>
+    }
     </React.Fragment>;
 }
 
