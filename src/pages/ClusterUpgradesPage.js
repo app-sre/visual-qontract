@@ -13,6 +13,7 @@ const GET_CLUSTERS = gql`
       description
       spec {
         version
+        channel
         upgrade
         id
         external_id

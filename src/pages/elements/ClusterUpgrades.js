@@ -44,6 +44,16 @@ function UpgradeBucketTable({clusters}) {
         },
         {
           header: {
+            label: 'Channel',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'channel'
+        },
+        {
+          header: {
             label: 'External ID',
             formatters: [headerFormat]
           },
@@ -94,6 +104,7 @@ function ClusterUpgrades({ clusters }) {
 
     if (c['spec'] !== null) {
       c['version'] = c['spec']['version'];
+      c['channel'] = c['spec']['channel'];
       c['id'] = c['spec']['id'];
       c['external_id'] = c['spec']['external_id'];
     }
