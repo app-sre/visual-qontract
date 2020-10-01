@@ -44,16 +44,6 @@ function UpgradeBucketTable({clusters}) {
         },
         {
           header: {
-            label: 'Channel',
-            formatters: [headerFormat]
-          },
-          cell: {
-            formatters: [cellFormat]
-          },
-          property: 'channel'
-        },
-        {
-          header: {
             label: 'External ID',
             formatters: [headerFormat]
           },
@@ -104,7 +94,6 @@ function ClusterUpgrades({ clusters }) {
 
     if (c['spec'] !== null) {
       c['version'] = c['spec']['version'];
-      c['channel'] = c['spec']['channel'];
       c['id'] = c['spec']['id'];
       c['external_id'] = c['spec']['external_id'];
     }
@@ -115,6 +104,11 @@ function ClusterUpgrades({ clusters }) {
   const clustersByUpgrade = groupByUpgrade(clustersData);
 
   return <React.Fragment>
+    {clustersByUpgrade['batch0'] && (
+      <React.Fragment>
+          <h2>Batch 0</h2><UpgradeBucketTable clusters={clustersByUpgrade['batch0']} />
+      </React.Fragment>
+    }
     <h2>Batch 1</h2><UpgradeBucketTable clusters={clustersByUpgrade['batch1']} />
     <h2>Batch 2</h2><UpgradeBucketTable clusters={clustersByUpgrade['batch2']} />
     {clustersByUpgrade['skip'] && 
