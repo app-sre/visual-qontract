@@ -114,20 +114,26 @@ function ClusterUpgrades({ clusters }) {
 
   const clustersByUpgrade = groupByUpgrade(clustersData);
 
-  return <React.Fragment>
-    {clustersByUpgrade['batch0'] && (
-      <React.Fragment>
-          <h2>Batch 0</h2><UpgradeBucketTable clusters={clustersByUpgrade['batch0']} />
-      </React.Fragment>
-    }
-    <h2>Batch 1</h2><UpgradeBucketTable clusters={clustersByUpgrade['batch1']} />
-    <h2>Batch 2</h2><UpgradeBucketTable clusters={clustersByUpgrade['batch2']} />
-    {clustersByUpgrade['skip'] && 
+  return (
+    <React.Fragment>
+      {clustersByUpgrade['batch0'] && (
         <React.Fragment>
-            <h2>Skip</h2><UpgradeBucketTable clusters={clustersByUpgrade['skip']} />
+          <h2>Batch 0</h2>
+          <UpgradeBucketTable clusters={clustersByUpgrade['batch0']} />
         </React.Fragment>
-    }
-    </React.Fragment>;
+      )}
+      <h2>Batch 1</h2>
+      <UpgradeBucketTable clusters={clustersByUpgrade['batch1']} />
+      <h2>Batch 2</h2>
+      <UpgradeBucketTable clusters={clustersByUpgrade['batch2']} />
+      {clustersByUpgrade['skip'] && (
+        <React.Fragment>
+          <h2>Skip</h2>
+          <UpgradeBucketTable clusters={clustersByUpgrade['skip']} />
+        </React.Fragment>
+      )}
+    </React.Fragment>
+  );
 }
 
 export default ClusterUpgrades;
