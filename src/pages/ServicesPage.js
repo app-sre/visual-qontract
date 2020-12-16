@@ -93,6 +93,7 @@ const GET_SERVICES = gql`
       description
       parentApp {
         name
+        path
       }
     }
   }
@@ -124,7 +125,7 @@ const ServicesPage = ({ location }) => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
 
-        const services = data.apps_v1.filter(s => s.parentApp === null);
+        const services = data.apps_v1;
 
         const body = <Services services={services} />;
         return <Page title="Services" body={body} />;

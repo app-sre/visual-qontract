@@ -150,3 +150,19 @@ a:focus {
 .policyList{
   padding: 0px 20px;
 }
+
+.label {
+   margin-left: 20px;
+   padding: 0px 10px 0px 10px;
+
+   border: 2px solid #42a5f5;
+   border-radius: 50px;
+
+   color: white;
+   background-color: #42a5f5;
+
+   font-size: 12px;
+   font-weight: bold;
+
+   float: right;
+ }
