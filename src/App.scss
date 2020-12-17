@@ -166,3 +166,44 @@ a:focus {
 
    float: right;
  }
+
+
+.badge {
+  padding: 5px 10px 5px 10px;
+
+  // border: 2px solid #42a5f5;
+  border-radius: 50px;
+
+  font-size: 12px;
+  font-weight: bold;
+
+  color: white;
+  margin: 0;
+  margin-bottom: 20px;
+}
+
+.onboarding-proposed {
+  color: white;
+  background-color: #4d4d4d;
+}
+
+.onboarding-inprogress {
+  color: white;
+  background-color: #e2ab2c;
+}
+
+.onboarding-transitionperiod {
+  color: white;
+  background-color: #f54242;
+}
+
+.onboarding-onboarded {
+  color: white;
+  background-color: #1d7a00;
+}
+
+.onboarding-besteffort {
+  color: white;
+  background-color: #8bacd8;
+}
+
