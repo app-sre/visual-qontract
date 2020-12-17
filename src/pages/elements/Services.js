@@ -6,6 +6,7 @@ import { sortByName } from '../../components/Utils';
 import ServicesTable from '../../components/ServicesTable';
 import GridSearch from '../../components/GridSearch';
 import Label from '../../components/Label';
+import OnboardingStatus from '../../components/OnboardingStatus';
 
 function Services({ services, table }) {
   // cardsWidth * cardsPerRow must be <= 12 (bootstrap grid)
@@ -46,7 +47,10 @@ function Services({ services, table }) {
                 )}
               </CardTitle>
             </CardHeading>
-            <CardBody>{s.description}</CardBody>
+            <CardBody>
+              <OnboardingStatus state={s.onboardingStatus} />
+              {s.description}
+              </CardBody>
             <CardFooter>
               <p>
                 <Link

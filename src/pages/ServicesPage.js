@@ -91,6 +91,7 @@ const GET_SERVICES = gql`
       path
       name
       description
+      onboardingStatus
       parentApp {
         name
         path
