@@ -22,6 +22,14 @@ const GET_NAMESPACES = gql`
           name
         }
       }
+      openshiftServiceAccountTokens {
+        namespace {
+          name
+          cluster {
+            name
+          }
+        }
+      }
     }
   }
 `;
@@ -47,16 +55,27 @@ function NetworkTopologyPage() {
                        'cluster: ' + cluster_name + "\n" +
                        'namespace: ' + namespace_name);
           var id = cluster_name + namespace_name
-          var node = { id: label, label: label };
+          var node = { id: id, label: label };
           nodes.push(node);
           var network_policies = namespace_info['networkPoliciesAllow'];
-          if (network_policies != null) {
+          if (network_policies !== null) {
             for (var np_namespace_info of network_policies) {
               var np_namespace_name = np_namespace_info['name'];
               var np_cluster_name = np_namespace_info['cluster']['name'];
               var np_id = np_cluster_name + np_namespace_name;
-              var edge = { from: np_id, to: id };
-              edges.push(edge);
+              var np_edge = { from: np_id, to: id };
+              edges.push(np_edge);
+            }
+          }
+          var openshift_service_account_tokens = namespace_info['openshiftServiceAccountTokens'];
+          if (openshift_service_account_tokens !== null) {
+            for (var sa_token of openshift_service_account_tokens) {
+              var sa_namespace_info = sa_token['namespace']
+              var sa_namespace_name = sa_namespace_info['name'];
+              var sa_cluster_name = sa_namespace_info['cluster']['name'];
+              var sa_id = sa_cluster_name + sa_namespace_name;
+              var sa_edge = { from: id, to: sa_id };
+              edges.push(sa_edge);
             }
           }
         }
