@@ -80,14 +80,16 @@ function NetworkTopologyPage() {
           var all_openshift_service_account_tokens = [];
           var shared_resources = namespace_info['sharedResources'];
           if (shared_resources !== null) {
-            var openshift_service_account_tokens = shared_resources['openshiftServiceAccountTokens'];
-            if (openshift_service_account_tokens !== null) {
-              all_openshift_service_account_tokens.push.apply(all_openshift_service_account_tokens, openshift_service_account_tokens)
+            for (var shared_resource of shared_resources){
+              var openshift_service_account_tokens = shared_resource['openshiftServiceAccountTokens'];
+              if (openshift_service_account_tokens !== null) {
+                all_openshift_service_account_tokens.push.apply(all_openshift_service_account_tokens, openshift_service_account_tokens);
+              }
             }
           }
           var openshift_service_account_tokens = namespace_info['openshiftServiceAccountTokens'];
           if (openshift_service_account_tokens !== null) {
-            all_openshift_service_account_tokens.push.apply(all_openshift_service_account_tokens, openshift_service_account_tokens)
+            all_openshift_service_account_tokens.push.apply(all_openshift_service_account_tokens, openshift_service_account_tokens);
           }
           for (var sa_token of all_openshift_service_account_tokens) {
             var sa_namespace_info = sa_token['namespace'];
