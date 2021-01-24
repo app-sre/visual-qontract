@@ -10,6 +10,12 @@ const GET_NAMESPACES = gql`
       cluster {
         name
       }
+      environment {
+        name
+        product {
+          name
+        }
+      }
       networkPoliciesAllow {
         name
         cluster {
@@ -32,9 +38,15 @@ function NetworkTopologyPage() {
         var nodes = [];
         var edges = [];
         for (var namespace_info of namespaces) {
+          var environment = namespace_info['environment'];
+          var product_name = environment['product']['name']
           var namespace_name = namespace_info['name'];
           var cluster_name = namespace_info['cluster']['name'];
-          var label = cluster_name + "/" + namespace_name;
+          var environment_name = environment['name']
+          var label = ('environment: ' + environment_name + '\n' +
+                       'cluster: ' + cluster_name + "\n" +
+                       'namespace: ' + namespace_name);
+          var id = cluster_name + namespace_name
           var node = { id: label, label: label };
           nodes.push(node);
           var network_policies = namespace_info['networkPoliciesAllow'];
@@ -42,8 +54,8 @@ function NetworkTopologyPage() {
             for (var np_namespace_info of network_policies) {
               var np_namespace_name = np_namespace_info['name'];
               var np_cluster_name = np_namespace_info['cluster']['name'];
-              var np_label = np_cluster_name + "/" + np_namespace_name;
-              var edge = { from: np_label, to: label };
+              var np_id = np_cluster_name + np_namespace_name;
+              var edge = { from: np_id, to: id };
               edges.push(edge);
             }
           }
