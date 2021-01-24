@@ -16,6 +16,7 @@ import DependenciesPage from './pages/DependenciesPage';
 import DocumentsPage from './pages/DocumentsPage';
 import ReportsPage from './pages/ReportsPage';
 import NotificationsPage from './pages/NotificationsPage';
+import NetworkTopologyPage from './pages/NetworkTopologyPage';
 
 const baseName = '/';
 
@@ -129,6 +130,12 @@ const routes = () => [
     title: 'Notifications',
     to: '/notifications',
     component: NotificationsPage
+  },
+  {
+    iconClass: 'fa  fa-bell',
+    title: 'Network Topology',
+    to: '/networktopology',
+    component: NetworkTopologyPage
   },
 ];
 

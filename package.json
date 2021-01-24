@@ -26,7 +26,8 @@
     "react-scripts": ">=2.0.0",
     "recompose": "^0.30.0",
     "sortabular": "^1.6.0",
-    "table-resolver": "^4.1.1"
+    "table-resolver": "^4.1.1",
+    "vis-react": "^0.5.1"
   },
   "devDependencies": {
     "eslint-config-airbnb": "^17.1.0",
