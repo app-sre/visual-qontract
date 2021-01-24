@@ -1,7 +1,7 @@
 import * as React from 'react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
-import Graph from 'vis-react';
+import Graph from "react-graph-vis";
 
 const GET_NAMESPACES = gql`
   query Namespaces {
@@ -50,7 +50,7 @@ function NetworkTopologyPage() {
           var product_name = environment['product']['name']
           var namespace_name = namespace_info['name'];
           var cluster_name = namespace_info['cluster']['name'];
-          var environment_name = environment['name']
+          var environment_name = environment['name'];
           var label = ('environment: ' + environment_name + '\n' +
                        'cluster: ' + cluster_name + "\n" +
                        'namespace: ' + namespace_name);
@@ -85,14 +85,14 @@ function NetworkTopologyPage() {
           edges: edges
         };
 
-        var options = {
+        const options = {
           layout: {
             hierarchical: true
           },
           edges: {
-            color: '#000000'
+            color: "#000000"
           },
-          interaction: { hoverEdges: true }
+          height: "1000px"
         };
 
         return <Graph graph={graph} options={options} />;
