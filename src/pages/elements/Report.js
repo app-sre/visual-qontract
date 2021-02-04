@@ -1,4 +1,5 @@
 import React from 'react';
+import { Label, Table } from 'patternfly-react';
 import { Link } from 'react-router-dom';
 
 import Definition from '../../components/Definition';
@@ -49,7 +50,248 @@ const ReportVulnerabilities = ({ namespaces, vulnerabilities }) => {
 }
 
 function Report({ report, namespaces }) {
+  const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
+  const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
+  const linkFormat = url => value => (
+    <a href={`${url || ''}${value}`} target="_blank" rel="noopener noreferrer">
+      {value}
+    </a>
+  );
+  const emptyFormat = value => value || '-';
+  const booleanFormat = (t, f) => value => (value ? t : f);
+
   const content = yaml.safeLoad(report.content);
+  console.log(content.merges_to_master);
+  //console.log(content.deployment_validations[0].validations.deployment_validation_operator_replica_validation.Failed);
+
+  function flatten(obj, suffix, ans) {
+    for (var x in obj) {
+        var key;
+        if (suffix != '')
+          key = suffix + '.' + x;
+        else
+          key = x;
+      if (typeof obj[x] === 'object') {
+        flatten(obj[x], key, ans);
+      } else {
+        ans[key] = obj[x];
+      }
+    }
+  }
+
+  if (content.deployment_validation) {
+    var deployment_validations_flattened = [];
+    var i = 0;
+    for (var validation of content.deployment_validations) {
+      var validation_flattened = {};
+      flatten(validation, "", validation_flattened);
+      deployment_validations_flattened[i] = validation_flattened;
+      i += 1
+    }
+  }
+
+  let valetTable;
+  if (content.valet == null) {
+    valetTable = <p style={{ 'font-style': 'italic' }}>No valet.</p>;
+  }
+
+  let productionPromotionsTable;
+  if (content.production_promotions == null) {
+    productionPromotionsTable = <p style={{ 'font-style': 'italic' }}>No production_promotions.</p>;
+  } else {
+    productionPromotionsTable = (
+      <Table.PfProvider
+        striped
+        bordered
+        columns={[
+          {
+            header: {
+              label: 'Repo',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [linkFormat(), cellFormat]
+            },
+            property: 'repo'
+          },
+          {
+            header: {
+              label: 'Total',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [cellFormat]
+            },
+            property: 'total'
+          },
+          {
+            header: {
+              label: 'Success',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [cellFormat]
+            },
+            property: 'success'
+          }
+        ]}
+      >
+        <Table.Header />
+        <Table.Body rows={content.production_promotions} rowKey="repo" />
+      </Table.PfProvider>
+    );
+  }
+
+  let mergesToMasterTable;
+  if (content.merges_to_master == null) {
+    mergesToMasterTable = <p style={{ 'font-style': 'italic' }}>No merges_to_master.</p>;
+  } else {
+    mergesToMasterTable = (
+      <Table.PfProvider
+        striped
+        bordered
+        columns={[
+          {
+            header: {
+              label: 'Repo',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [linkFormat(), cellFormat]
+            },
+            property: 'repo'
+          },
+          {
+            header: {
+              label: 'Total',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [cellFormat]
+            },
+            property: 'total'
+          },
+          {
+            header: {
+              label: 'Success',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [cellFormat]
+            },
+            property: 'success'
+          }
+        ]}
+      >
+        <Table.Header />
+        <Table.Body rows={content.merges_to_master} rowKey="repo" />
+      </Table.PfProvider>
+    );
+  }
+
+  let postDeployJobsTable;
+  if (content.post_deploy_jobs == null) {
+    postDeployJobsTable = <p style={{ 'font-style': 'italic' }}>No post_deploy_jobs.</p>;
+  } else {
+    postDeployJobsTable = (
+      <Table.PfProvider
+        striped
+        bordered
+        columns={[
+          {
+            header: {
+              label: 'Cluster',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [linkFormat(), cellFormat]
+            },
+            property: 'cluster'
+          },
+          {
+            header: {
+              label: 'Namespace',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [linkFormat(), cellFormat]
+            },
+            property: 'namespace'
+          },
+          {
+            header: {
+              label: 'Post Deploy Job',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [booleanFormat(<Label bsStyle="success">Success</Label>, <Label bsStyle="danger">Failure</Label>), cellFormat]
+            },
+            property: 'post_deploy_job'
+          }
+        ]}
+      >
+        <Table.Header />
+        <Table.Body rows={content.post_deploy_jobs} rowKey="cluster" />
+      </Table.PfProvider>
+    );
+  }
+
+  let deploymentValidationTable;
+  if (content.deployment_validations == null) {
+    deploymentValidationTable = <p style={{ 'font-style': 'italic' }}>No deployment_validations.</p>;
+  } else {
+    deploymentValidationTable = (
+      <Table.PfProvider
+        striped
+        bordered
+        columns={[
+          {
+            header: {
+              label: 'Cluster',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [linkFormat(), cellFormat]
+            },
+            property: 'cluster'
+          },
+          {
+            header: {
+              label: 'Namespace',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [linkFormat(), cellFormat]
+            },
+            property: 'namespace'
+          },
+          {
+            header: {
+              label: 'Request Limit Validation',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [cellFormat]
+            },
+            property: 'validations.deployment_validation_operator_request_limit_validation.Passed'
+          },
+          {
+            header: {
+              label: 'Replica Validation',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [cellFormat]
+            },
+            property: 'validations.deployment_validation_operator_replica_validation.Failed'
+          }
+        ]}
+      >
+        <Table.Header />
+        <Table.Body rows={deployment_validations_flattened} rowKey="cluster" />
+      </Table.PfProvider>
+    );
+  }
 
   const vulns = content['container_vulnerabilities'];
   delete content.container_vulnerabilities;
@@ -83,7 +325,16 @@ function Report({ report, namespaces }) {
         ]}
       />
       {vulns && <ReportVulnerabilities namespaces={namespaces} vulnerabilities={vulns} />}
-      <h4>Content</h4>
+      <h4>Valet</h4>
+      {valetTable}
+      <h4>Production Promotions</h4>
+      {productionPromotionsTable}
+      <h4>Merges To Master</h4>
+      {mergesToMasterTable}
+      <h4>Post-deploy Jobs</h4>
+      {postDeployJobsTable}
+      <h4>Deployment Validation</h4>
+      {deploymentValidationTable}
       <pre>{report_content_dump}</pre>
     </React.Fragment>
   );
