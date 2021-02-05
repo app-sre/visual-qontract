@@ -55,6 +55,7 @@ const ReportVulnerabilities = ({ get_ns, vulnerabilities }) => {
   </React.Fragment>
 }
 
+// displays the productionPromotions Table
 const ProductionPromotions = ({content}) => {
   let productionPromotionsTable;
   if (content.production_promotions == null) {
@@ -109,6 +110,7 @@ const ProductionPromotions = ({content}) => {
   </React.Fragment>
 }
 
+// displays the MergesToMaster Table
 const MergesToMaster = ({content}) => {
   let mergesToMasterTable;
   if (content.merges_to_master == null) {
@@ -163,6 +165,7 @@ const MergesToMaster = ({content}) => {
   </React.Fragment>
 }
 
+// displays the PostDeployJobs Table
 const PostDeployJobs = ({ get_ns, content}) => {
   let postDeployJobsTable;
   if (content.post_deploy_jobs == null) {
@@ -236,6 +239,7 @@ const PostDeployJobs = ({ get_ns, content}) => {
   </React.Fragment>
 }
 
+// displays the DeploymentValidations Table
 const DeploymentValidations = ({ get_ns, content}) => {
   if (content.deployment_validations) {
     var deployment_validations_flattened = [];
