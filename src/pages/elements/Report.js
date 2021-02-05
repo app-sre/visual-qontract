@@ -370,8 +370,6 @@ function Report({ report, namespaces }) {
       {<ProductionPromotions content={content}/>}
       {<MergesToMaster content={content}/>}
       {<PostDeployJobs content={content} get_ns={get_ns} />}
-      {/* <h4>Deployment Validation</h4>
-      {deploymentValidationTable} */}
       {<DeploymentValidations content={content} get_ns={get_ns}/>}
       <pre>{report_content_dump}</pre>
     </React.Fragment>
