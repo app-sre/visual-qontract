@@ -203,6 +203,16 @@ const PostDeployJobs = ({ get_ns, content}) => {
           },
           {
             header: {
+              label: 'Grafana',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [ns=>(<GrafanaContainerVulnerabilities namespace={ns} label="Grafana Dashboard" />) , cellFormat]
+            },
+            property: 'ns'
+          },
+          {
+            header: {
               label: 'Post Deploy Job',
               formatters: [headerFormat]
             },
@@ -264,6 +274,16 @@ const DeploymentValidations = ({ get_ns, content}) => {
             },
             cell: {
               formatters: [ns=>(<LinkNS path={ns.path} name={ns.name}/>), cellFormat]
+            },
+            property: 'ns'
+          },
+          {
+            header: {
+              label: 'Grafana',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [ns=>(<GrafanaContainerVulnerabilities namespace={ns} label="Grafana Dashboard" />) , cellFormat]
             },
             property: 'ns'
           },
