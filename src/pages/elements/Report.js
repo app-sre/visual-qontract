@@ -34,9 +34,66 @@ const Vulnerabilities = ({vs}) => {
 // displays the vulnerabilities section
 const ReportVulnerabilities = ({ get_ns, vulnerabilities }) => {
 
+  let reportVulnerabilitiesTable;
+  if (vulnerabilities == null) {
+    reportVulnerabilitiesTable = <p style={{ 'font-style': 'italic' }}>No vulnerabilities.</p>;
+  } else {
+    var new_vulnerabilities = [];
+    var new_job;
+    for (const [i, vulnerability] of vulnerabilities.entries()) {
+      new_job = {};
+      new_job['ns'] = get_ns(vulnerability['cluster'], vulnerability['namespace']);
+      new_job['vulnerabilities'] = vulnerability['vulnerabilities'];
+      new_vulnerabilities[i] = new_job;
+    }
+    reportVulnerabilitiesTable = (
+      <Table.PfProvider
+        striped
+        bordered
+        columns={[
+          {
+            header: {
+              label: 'Cluster/ Namespace',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [ns=>(<p>
+              <LinkCluster path={ns.cluster.path} name={ns.cluster.name} /> / <LinkNS path={ns.path} name={ns.name} /></p>) , cellFormat]
+            },
+            property: 'ns'
+          },
+          {
+            header: {
+              label: 'Grafana',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [ns=>(<GrafanaContainerVulnerabilities namespace={ns} label="Grafana Dashboard" />) , cellFormat]
+            },
+            property: 'ns'
+          },
+          {
+            header: {
+              label: 'Vulnerabilities',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [vulnerabilities=><Vulnerabilities vs={vulnerabilities} />, cellFormat]
+            },
+            property: 'vulnerabilities'
+          }
+        ]}
+      >
+        <Table.Header />
+        <Table.Body rows={new_vulnerabilities} rowKey="cluster" />
+      </Table.PfProvider>
+    );
+  }
+
   return <React.Fragment>
     <h4>Vulnerabilities</h4>
-    <ul>
+    {reportVulnerabilitiesTable}
+    {/* <ul>
       {vulnerabilities.map(e => {
         const ns = get_ns(e["cluster"], e["namespace"])
         if (typeof (ns) === 'undefined') {
@@ -51,7 +108,7 @@ const ReportVulnerabilities = ({ get_ns, vulnerabilities }) => {
           </li>
         }
       })}
-    </ul>
+    </ul> */}
   </React.Fragment>
 }
 
