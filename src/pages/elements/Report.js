@@ -7,6 +7,15 @@ import GrafanaContainerVulnerabilities from '../../components/GrafanaContainerVu
 
 const yaml = require('js-yaml');
 
+const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
+const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
+const linkFormat = url => value => (
+  <a href={`${url || ''}${value}`} target="_blank" rel="noopener noreferrer">
+    {value}
+  </a>
+);
+const booleanFormat = (t, f) => value => (value ? t : f);
+
 // link to cluster
 const LinkCluster = ({ path, name }) =>
   <Link to={{ 'pathname': '/clusters', 'hash': path }}>{name}</Link>;
@@ -23,10 +32,7 @@ const Vulnerabilities = ({vs}) => {
 };
 
 // displays the vulnerabilities section
-const ReportVulnerabilities = ({ namespaces, vulnerabilities }) => {
-
-  // fetch the namespace. Returns `undefined` if not found
-  const get_ns = (c, ns) => namespaces.filter(n => n['name'] === ns && n['cluster']['name'] === c)[0];
+const ReportVulnerabilities = ({ get_ns, vulnerabilities }) => {
 
   return <React.Fragment>
     <h4>Vulnerabilities</h4>
@@ -49,39 +55,7 @@ const ReportVulnerabilities = ({ namespaces, vulnerabilities }) => {
   </React.Fragment>
 }
 
-function Report({ report, namespaces }) {
-  const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
-  const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
-  const linkFormat = url => value => (
-    <a href={`${url || ''}${value}`} target="_blank" rel="noopener noreferrer">
-      {value}
-    </a>
-  );
-  const booleanFormat = (t, f) => value => (value ? t : f);
-
-  const content = yaml.safeLoad(report.content);
-
-  if (content.deployment_validations) {
-    var deployment_validations_flattened = [];
-    var i = 0;
-    var validation_flattened;
-    for (var deployment of content.deployment_validations) {
-      validation_flattened = {};
-      validation_flattened['cluster'] = deployment.cluster
-      validation_flattened['namespace'] = deployment.namespace
-      validation_flattened['validations.deployment_validation_operator_request_limit_validation.Passed'] = deployment.validations.deployment_validation_operator_request_limit_validation.Passed
-      validation_flattened['validations.deployment_validation_operator_replica_validation.Failed'] = deployment.validations.deployment_validation_operator_replica_validation.Failed
-
-      deployment_validations_flattened[i] = validation_flattened;
-      i += 1;
-    }
-  }
-
-  let valetTable;
-  if (content.valet == null) {
-    valetTable = <p style={{ 'font-style': 'italic' }}>No valet.</p>;
-  }
-
+const ProductionPromotions = ({content}) => {
   let productionPromotionsTable;
   if (content.production_promotions == null) {
     productionPromotionsTable = <p style={{ 'font-style': 'italic' }}>No production_promotions.</p>;
@@ -129,6 +103,13 @@ function Report({ report, namespaces }) {
     );
   }
 
+  return <React.Fragment>
+    <h4>Production Promotions</h4>
+    {productionPromotionsTable}
+  </React.Fragment>
+}
+
+const MergesToMaster = ({content}) => {
   let mergesToMasterTable;
   if (content.merges_to_master == null) {
     mergesToMasterTable = <p style={{ 'font-style': 'italic' }}>No merges_to_master.</p>;
@@ -176,10 +157,25 @@ function Report({ report, namespaces }) {
     );
   }
 
+  return <React.Fragment>
+    <h4>Merges to Master</h4>
+    {mergesToMasterTable}
+  </React.Fragment>
+}
+
+const PostDeployJobs = ({ get_ns, content}) => {
   let postDeployJobsTable;
   if (content.post_deploy_jobs == null) {
     postDeployJobsTable = <p style={{ 'font-style': 'italic' }}>No post_deploy_jobs.</p>;
   } else {
+    var post_deploy_jobs = [];
+    var new_job;
+    for (const [i, job] of content.post_deploy_jobs.entries()) {
+      new_job = {};
+      new_job['ns'] = get_ns(job['cluster'], job['namespace']);
+      new_job['post_deploy_job'] = job['post_deploy_job'];
+      post_deploy_jobs[i] = new_job;
+    }
     postDeployJobsTable = (
       <Table.PfProvider
         striped
@@ -191,9 +187,9 @@ function Report({ report, namespaces }) {
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [linkFormat(), cellFormat]
+              formatters: [ns=>(<LinkCluster path={ns.cluster.path} name={ns.cluster.name}/>) , cellFormat]
             },
-            property: 'cluster'
+            property: 'ns'
           },
           {
             header: {
@@ -201,9 +197,9 @@ function Report({ report, namespaces }) {
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [linkFormat(), cellFormat]
+              formatters: [ns=>(<LinkNS path={ns.path} name={ns.name}/>), cellFormat]
             },
-            property: 'namespace'
+            property: 'ns'
           },
           {
             header: {
@@ -218,9 +214,28 @@ function Report({ report, namespaces }) {
         ]}
       >
         <Table.Header />
-        <Table.Body rows={content.post_deploy_jobs} rowKey="cluster" />
+        <Table.Body rows={post_deploy_jobs} rowKey="cluster" />
       </Table.PfProvider>
     );
+  }
+
+
+  return <React.Fragment>
+    <h4>Post-deploy Jobs</h4>
+    {postDeployJobsTable}
+  </React.Fragment>
+}
+
+const DeploymentValidations = ({ get_ns, content}) => {
+  if (content.deployment_validations) {
+    var deployment_validations_flattened = [];
+    var validation;
+    for (const [i, deployment] of content.deployment_validations.entries()) {
+      validation= {};
+      validation['ns'] = get_ns(deployment.cluster, deployment.namespace);
+      validation['validations'] = deployment.validations;
+      deployment_validations_flattened[i] = validation;
+    }
   }
 
   let deploymentValidationTable;
@@ -238,9 +253,9 @@ function Report({ report, namespaces }) {
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [linkFormat(), cellFormat]
+              formatters: [ns=>(<LinkCluster path={ns.cluster.path} name={ns.cluster.name}/>), cellFormat]
             },
-            property: 'cluster'
+            property: 'ns'
           },
           {
             header: {
@@ -248,36 +263,74 @@ function Report({ report, namespaces }) {
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [linkFormat(), cellFormat]
+              formatters: [ns=>(<LinkNS path={ns.path} name={ns.name}/>), cellFormat]
             },
-            property: 'namespace'
+            property: 'ns'
           },
           {
             header: {
-              label: 'Request Limit Validation',
+              label: 'Request Limit Validation Passed',
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [cellFormat]
+              formatters: [validations=>(<p>{validations.deployment_validation_operator_request_limit_validation.Passed || "No data available"}</p>), cellFormat]
             },
-            property: 'validations.deployment_validation_operator_request_limit_validation.Passed'
+            property: 'validations'
           },
           {
             header: {
-              label: 'Replica Validation',
+              label: 'Request Limit Validation Failed',
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [cellFormat]
+              formatters: [validations=>(<p>{validations.deployment_validation_operator_request_limit_validation.Failed || "No data available"}</p>), cellFormat]
             },
-            property: 'validations.deployment_validation_operator_replica_validation.Failed'
+            property: 'validations'
+          },
+          {
+            header: {
+              label: 'Replica Validation Passed',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [validations=>(<p>{validations.deployment_validation_operator_replica_validation.Passed || "No data available"}</p>), cellFormat]
+            },
+            property: 'validations'
+          },
+          {
+            header: {
+              label: 'Replica Validation Failed',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [validations=>(<p>{validations.deployment_validation_operator_replica_validation.Failed|| "No data available"}</p>), cellFormat]
+            },
+            property: 'validations'
           }
         ]}
       >
+    
         <Table.Header />
-        <Table.Body rows={deployment_validations_flattened} rowKey="cluster" />
+        <Table.Body rows={deployment_validations_flattened} />
       </Table.PfProvider>
     );
+  }
+
+  return <React.Fragment>
+    <h4>Deployment Validations</h4>
+    {deploymentValidationTable}
+  </React.Fragment>
+}
+
+function Report({ report, namespaces }) {
+  const content = yaml.safeLoad(report.content);
+
+  // fetch the namespace. Returns `undefined` if not found
+  const get_ns = (c, ns) => namespaces.filter(n => n['name'] === ns && n['cluster']['name'] === c)[0];
+
+  let valetTable;
+  if (content.valet == null) {
+    valetTable = <p style={{ 'font-style': 'italic' }}>No valet.</p>;
   }
 
   const vulns = content['container_vulnerabilities'];
@@ -311,17 +364,15 @@ function Report({ report, namespaces }) {
           ['Date', report.date]
         ]}
       />
-      {vulns && <ReportVulnerabilities namespaces={namespaces} vulnerabilities={vulns} />}
+      {vulns && <ReportVulnerabilities vulnerabilities={vulns} get_ns={get_ns}/>}
       <h4>Valet</h4>
       {valetTable}
-      <h4>Production Promotions</h4>
-      {productionPromotionsTable}
-      <h4>Merges To Master</h4>
-      {mergesToMasterTable}
-      <h4>Post-deploy Jobs</h4>
-      {postDeployJobsTable}
-      <h4>Deployment Validation</h4>
-      {deploymentValidationTable}
+      {<ProductionPromotions content={content}/>}
+      {<MergesToMaster content={content}/>}
+      {<PostDeployJobs content={content} get_ns={get_ns} />}
+      {/* <h4>Deployment Validation</h4>
+      {deploymentValidationTable} */}
+      {<DeploymentValidations content={content} get_ns={get_ns}/>}
       <pre>{report_content_dump}</pre>
     </React.Fragment>
   );
