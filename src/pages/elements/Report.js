@@ -1,7 +1,7 @@
 import React from 'react';
-import { Label, Table } from 'patternfly-react';
+import { Table } from 'patternfly-react';
 import { Link } from 'react-router-dom';
-
+import OnboardingStatus from '../../components/OnboardingStatus';
 import Definition from '../../components/Definition';
 import GrafanaContainerVulnerabilities from '../../components/GrafanaContainerVulnerabilities';
 
@@ -211,7 +211,7 @@ function Report({ report, namespaces }) {
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [booleanFormat(<Label bsStyle="success">Success</Label>, <Label bsStyle="danger">Failure</Label>), cellFormat]
+              formatters: [booleanFormat(<OnboardingStatus state={"Success"}>Success</OnboardingStatus> , <OnboardingStatus state={"Failure"}>Failure</OnboardingStatus>), cellFormat]
             },
             property: 'post_deploy_job'
           }
