@@ -356,7 +356,7 @@ function Report({ report, namespaces }) {
   const vulns = content['container_vulnerabilities'];
   delete content.container_vulnerabilities;
 
-  const report_content_dump = yaml.safeDump(content);
+  // const report_content_dump = yaml.safeDump(content);
 
   return (
     <React.Fragment>
@@ -391,7 +391,7 @@ function Report({ report, namespaces }) {
       {<MergesToMaster content={content}/>}
       {<PostDeployJobs content={content} get_ns={get_ns} />}
       {<DeploymentValidations content={content} get_ns={get_ns}/>}
-      <pre>{report_content_dump}</pre>
+      {/* <pre>{report_content_dump}</pre> */}
     </React.Fragment>
   );
 }
