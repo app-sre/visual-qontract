@@ -38,13 +38,8 @@ const ReportVulnerabilities = ({ get_ns, vulnerabilities }) => {
   if (vulnerabilities == null) {
     reportVulnerabilitiesTable = <p style={{ 'font-style': 'italic' }}>No vulnerabilities.</p>;
   } else {
-    var new_vulnerabilities = [];
-    var new_job;
-    for (const [i, vulnerability] of vulnerabilities.entries()) {
-      new_job = {};
-      new_job['ns'] = get_ns(vulnerability['cluster'], vulnerability['namespace']);
-      new_job['vulnerabilities'] = vulnerability['vulnerabilities'];
-      new_vulnerabilities[i] = new_job;
+    for (var i = 0; i < vulnerabilities.length; i++) {
+      vulnerabilities[i]['ns'] = get_ns(vulnerabilities[i]['cluster'], vulnerabilities[i]['namespace']);
     }
     reportVulnerabilitiesTable = (
       <Table.PfProvider
@@ -85,7 +80,7 @@ const ReportVulnerabilities = ({ get_ns, vulnerabilities }) => {
         ]}
       >
         <Table.Header />
-        <Table.Body rows={new_vulnerabilities} rowKey="cluster" />
+        <Table.Body rows={vulnerabilities} rowKey="cluster" />
       </Table.PfProvider>
     );
   }
@@ -97,9 +92,9 @@ const ReportVulnerabilities = ({ get_ns, vulnerabilities }) => {
 }
 
 // displays the productionPromotions Table
-const ProductionPromotions = ({content}) => {
+const ProductionPromotions = ({production_promotions}) => {
   let productionPromotionsTable;
-  if (content.production_promotions == null) {
+  if (production_promotions == null) {
     productionPromotionsTable = <p style={{ 'font-style': 'italic' }}>No production_promotions.</p>;
   } else {
     productionPromotionsTable = (
@@ -140,7 +135,7 @@ const ProductionPromotions = ({content}) => {
         ]}
       >
         <Table.Header />
-        <Table.Body rows={content.production_promotions} rowKey="repo" />
+        <Table.Body rows={production_promotions} rowKey="repo" />
       </Table.PfProvider>
     );
   }
@@ -152,9 +147,9 @@ const ProductionPromotions = ({content}) => {
 }
 
 // displays the MergesToMaster Table
-const MergesToMaster = ({content}) => {
+const MergesToMaster = ({merges_to_master}) => {
   let mergesToMasterTable;
-  if (content.merges_to_master == null) {
+  if (merges_to_master == null) {
     mergesToMasterTable = <p style={{ 'font-style': 'italic' }}>No merges_to_master.</p>;
   } else {
     mergesToMasterTable = (
@@ -195,7 +190,7 @@ const MergesToMaster = ({content}) => {
         ]}
       >
         <Table.Header />
-        <Table.Body rows={content.merges_to_master} rowKey="repo" />
+        <Table.Body rows={merges_to_master} rowKey="repo" />
       </Table.PfProvider>
     );
   }
@@ -207,18 +202,13 @@ const MergesToMaster = ({content}) => {
 }
 
 // displays the PostDeployJobs Table
-const PostDeployJobs = ({ get_ns, content}) => {
+const PostDeployJobs = ({ get_ns, post_deploy_jobs}) => {
   let postDeployJobsTable;
-  if (content.post_deploy_jobs == null) {
+  if (post_deploy_jobs == null) {
     postDeployJobsTable = <p style={{ 'font-style': 'italic' }}>No post_deploy_jobs.</p>;
   } else {
-    var post_deploy_jobs = [];
-    var new_job;
-    for (const [i, job] of content.post_deploy_jobs.entries()) {
-      new_job = {};
-      new_job['ns'] = get_ns(job['cluster'], job['namespace']);
-      new_job['post_deploy_job'] = job['post_deploy_job'];
-      post_deploy_jobs[i] = new_job;
+    for (var i = 0; i < post_deploy_jobs.length; i++) {
+      post_deploy_jobs[i]['ns'] = get_ns(post_deploy_jobs[i]['cluster'], post_deploy_jobs[i]['namespace']);
     }
     postDeployJobsTable = (
       <Table.PfProvider
@@ -281,22 +271,16 @@ const PostDeployJobs = ({ get_ns, content}) => {
 }
 
 // displays the DeploymentValidations Table
-const DeploymentValidations = ({ get_ns, content}) => {
-  if (content.deployment_validations) {
-    var deployment_validations_flattened = [];
-    var validation;
-    for (const [i, deployment] of content.deployment_validations.entries()) {
-      validation= {};
-      validation['ns'] = get_ns(deployment.cluster, deployment.namespace);
-      validation['validations'] = deployment.validations;
-      deployment_validations_flattened[i] = validation;
-    }
-  }
+const DeploymentValidations = ({ get_ns, deployment_validations}) => {
 
   let deploymentValidationTable;
-  if (content.deployment_validations == null) {
+  if (deployment_validations == null) {
     deploymentValidationTable = <p style={{ 'font-style': 'italic' }}>No deployment_validations.</p>;
   } else {
+    for (var i = 0; i < deployment_validations.length; i++) {
+      deployment_validations[i]['ns'] = get_ns(deployment_validations[i].cluster, deployment_validations[i].namespace);
+    }
+ 
     deploymentValidationTable = (
       <Table.PfProvider
         striped
@@ -376,7 +360,7 @@ const DeploymentValidations = ({ get_ns, content}) => {
       >
     
         <Table.Header />
-        <Table.Body rows={deployment_validations_flattened} />
+        <Table.Body rows={deployment_validations} />
       </Table.PfProvider>
     );
   }
@@ -397,10 +381,7 @@ function Report({ report, namespaces }) {
   if (content.valet == null) {
     valetTable = <p style={{ 'font-style': 'italic' }}>No valet.</p>;
   }
-
-  const vulns = content['container_vulnerabilities'];
-  delete content.container_vulnerabilities;
-
+  
   // const report_content_dump = yaml.safeDump(content);
 
   return (
@@ -429,13 +410,13 @@ function Report({ report, namespaces }) {
           ['Date', report.date]
         ]}
       />
-      {vulns && <ReportVulnerabilities vulnerabilities={vulns} get_ns={get_ns}/>}
+      {<ReportVulnerabilities vulnerabilities={content.container_vulnerabilities} get_ns={get_ns}/>}
       <h4>Valet</h4>
       {valetTable}
-      {<ProductionPromotions content={content}/>}
-      {<MergesToMaster content={content}/>}
-      {<PostDeployJobs content={content} get_ns={get_ns} />}
-      {<DeploymentValidations content={content} get_ns={get_ns}/>}
+      {<ProductionPromotions production_promotions={content.production_promotions}/>}
+      {<MergesToMaster merges_to_master={content.merges_to_master}/>}
+      {<PostDeployJobs post_deploy_jobs={content.post_deploy_jobs} get_ns={get_ns} />}
+      {<DeploymentValidations deployment_validations={content.deployment_validations} get_ns={get_ns}/>}
       {/* <pre>{report_content_dump}</pre> */}
     </React.Fragment>
   );
