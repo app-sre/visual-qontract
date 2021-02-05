@@ -57,36 +57,23 @@ function Report({ report, namespaces }) {
       {value}
     </a>
   );
-  const emptyFormat = value => value || '-';
   const booleanFormat = (t, f) => value => (value ? t : f);
 
   const content = yaml.safeLoad(report.content);
-  console.log(content.merges_to_master);
-  //console.log(content.deployment_validations[0].validations.deployment_validation_operator_replica_validation.Failed);
 
-  function flatten(obj, suffix, ans) {
-    for (var x in obj) {
-        var key;
-        if (suffix != '')
-          key = suffix + '.' + x;
-        else
-          key = x;
-      if (typeof obj[x] === 'object') {
-        flatten(obj[x], key, ans);
-      } else {
-        ans[key] = obj[x];
-      }
-    }
-  }
-
-  if (content.deployment_validation) {
+  if (content.deployment_validations) {
     var deployment_validations_flattened = [];
     var i = 0;
-    for (var validation of content.deployment_validations) {
-      var validation_flattened = {};
-      flatten(validation, "", validation_flattened);
+    var validation_flattened;
+    for (var deployment of content.deployment_validations) {
+      validation_flattened = {};
+      validation_flattened['cluster'] = deployment.cluster
+      validation_flattened['namespace'] = deployment.namespace
+      validation_flattened['validations.deployment_validation_operator_request_limit_validation.Passed'] = deployment.validations.deployment_validation_operator_request_limit_validation.Passed
+      validation_flattened['validations.deployment_validation_operator_replica_validation.Failed'] = deployment.validations.deployment_validation_operator_replica_validation.Failed
+
       deployment_validations_flattened[i] = validation_flattened;
-      i += 1
+      i += 1;
     }
   }
 
