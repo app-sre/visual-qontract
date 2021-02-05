@@ -93,22 +93,6 @@ const ReportVulnerabilities = ({ get_ns, vulnerabilities }) => {
   return <React.Fragment>
     <h4>Vulnerabilities</h4>
     {reportVulnerabilitiesTable}
-    {/* <ul>
-      {vulnerabilities.map(e => {
-        const ns = get_ns(e["cluster"], e["namespace"])
-        if (typeof (ns) === 'undefined') {
-          return <li key={e["cluster"] + e["namespace"]}>
-            {e["cluster"]} / {e["namespace"]}: <Vulnerabilities vs={e['vulnerabilities']} />
-          </li>
-        } else {
-          return <li key={e["cluster"] + e["namespace"]}>
-            <LinkCluster path={ns.cluster.path} name={ns.cluster.name} /> / <LinkNS path={ns.path} name={ns.name} /> (
-              <GrafanaContainerVulnerabilities namespace={ns} label="Grafana Dashboard" />
-            ): <Vulnerabilities vs={e['vulnerabilities']} />
-          </li>
-        }
-      })}
-    </ul> */}
   </React.Fragment>
 }
 
