@@ -3,6 +3,7 @@ import { Label, Table } from 'patternfly-react';
 import Definition from '../../components/Definition';
 import CodeComponents from '../../components/ServiceCodeComponents';
 import EndPoints from '../../components/ServiceEndPoints';
+import sortByDate from '../../components/Utils';
 import Namespaces from './Namespaces';
 import Reports from './Reports';
 import Documents from './Documents';
@@ -26,7 +27,7 @@ function Service({ service, reports, documents }) {
     }
     return false;
   }
-  const matchedReports = reports.filter(matches);
+  const matchedReports = sortByDate(reports).filter(matches);
   const matchedDocuments = documents.filter(matches);
 
   let quayReposTable;
