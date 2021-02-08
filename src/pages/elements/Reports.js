@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Table } from 'patternfly-react';
-import { sortByName } from '../../components/Utils';
+import { sortByName, sortByDate } from '../../components/Utils';
 import TableSearch from '../../components/TableSearch';
 
 function Reports({ reports }) {
@@ -16,7 +16,7 @@ function Reports({ reports }) {
     </a>
   );
 
-  const processedReports = sortByName(reports).map(r => {
+  const processedReports = sortByDate(sortByName(reports)).map(r => {
     r.name_path = [r.name, r.path];
     return r;
   });

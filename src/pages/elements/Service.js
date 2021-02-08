@@ -3,7 +3,7 @@ import { Label, Table } from 'patternfly-react';
 import Definition from '../../components/Definition';
 import CodeComponents from '../../components/ServiceCodeComponents';
 import EndPoints from '../../components/ServiceEndPoints';
-import sortByDate from '../../components/Utils';
+import { sortByDate } from '../../components/Utils';
 import Namespaces from './Namespaces';
 import Reports from './Reports';
 import Documents from './Documents';
