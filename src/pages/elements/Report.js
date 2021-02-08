@@ -24,6 +24,13 @@ const LinkCluster = ({ path, name }) =>
 const LinkNS = ({ path, name }) =>
   <Link to={{ 'pathname': '/namespaces', 'hash': path }}>{name}</Link>;
 
+// link to cluster console 
+const LinkConsole = ({ consoleUrl }) => (
+  <a href={`${consoleUrl || ''}/k8s/ns/openshift-customer-monitoring/secscan.quay.redhat.com~v1alpha1~ImageManifestVuln`} target="_blank" rel="noopener noreferrer">
+  Console
+  </a>
+);
+
 // displays the list of vulnerabilities
 const Vulnerabilities = ({vs}) => {
   return <ul>
@@ -64,6 +71,16 @@ const ReportVulnerabilities = ({ get_ns, vulnerabilities }) => {
             },
             cell: {
               formatters: [ns=>(<GrafanaContainerVulnerabilities namespace={ns} label="Grafana Dashboard" />) , cellFormat]
+            },
+            property: 'ns'
+          },
+          {
+            header: {
+              label: 'Console',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [ns=>(<LinkConsole consoleUrl={ns.cluster.consoleUrl} />) , cellFormat]
             },
             property: 'ns'
           },
@@ -371,7 +388,7 @@ const DeploymentValidations = ({ get_ns, deployment_validations}) => {
   </React.Fragment>
 }
 
-function Report({ report, namespaces }) {
+function Report({ report, namespaces}) {
   const content = yaml.safeLoad(report.content);
 
   // fetch the namespace. Returns `undefined` if not found
@@ -381,7 +398,7 @@ function Report({ report, namespaces }) {
   if (content.valet == null) {
     valetTable = <p style={{ 'font-style': 'italic' }}>No valet.</p>;
   }
-  
+
   // const report_content_dump = yaml.safeDump(content);
 
   return (
