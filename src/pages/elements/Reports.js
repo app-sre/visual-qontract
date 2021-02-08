@@ -4,7 +4,7 @@ import { Table } from 'patternfly-react';
 import { sortByName, sortByDate } from '../../components/Utils';
 import TableSearch from '../../components/TableSearch';
 
-function Reports({ reports }) {
+function Reports({ reports, latest=false }) {
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
   const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
   const options = ['Name', 'App'];
@@ -96,17 +96,30 @@ function Reports({ reports }) {
     }
   ];
 
-  return (
-    <TableSearch
-      filterText={filterText}
-      changeFilterText={changeFilterText}
-      changeSelected={changeSelected}
-      options={options}
-      selected={selected}
-      columns={columns}
-      rows={matchedReports}
-    />
-  );
+  if (latest) {
+    return (
+      <Table.PfProvider
+        striped
+        bordered
+        columns={columns}
+      >
+        <Table.Header />
+        <Table.Body rows={[matchedReports[0]]}/>
+      </Table.PfProvider>
+    )
+  } else {
+    return (
+      <TableSearch
+        filterText={filterText}
+        changeFilterText={changeFilterText}
+        changeSelected={changeSelected}
+        options={options}
+        selected={selected}
+        columns={columns}
+        rows={matchedReports}
+      />
+    );
+  }
 }
 
 export default Reports;

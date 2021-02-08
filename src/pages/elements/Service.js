@@ -226,13 +226,19 @@ function Service({ service, reports, documents }) {
 
       <h4>Quay Repos</h4>
       {quayReposTable}
-
+    
       {matchedReports.length > 0 && (
         <React.Fragment>
           <h4>Reports</h4>
+          <Reports reports={matchedReports} latest={true} />
+          <details>
+          <summary>More reports</summary>
+          <br></br>
           <Reports reports={matchedReports} />
+          </details>
         </React.Fragment>
       )}
+
       {matchedDocuments.length > 0 && (
         <React.Fragment>
           <h4>Documents</h4>
