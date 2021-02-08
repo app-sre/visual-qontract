@@ -55,7 +55,7 @@ const ReportVulnerabilities = ({ get_ns, vulnerabilities }) => {
         columns={[
           {
             header: {
-              label: 'Cluster/ Namespace',
+              label: 'Cluster / Namespace',
               formatters: [headerFormat]
             },
             cell: {
@@ -234,21 +234,12 @@ const PostDeployJobs = ({ get_ns, post_deploy_jobs}) => {
         columns={[
           {
             header: {
-              label: 'Cluster',
+              label: 'Cluster / Namespace',
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [ns=>(<LinkCluster path={ns.cluster.path} name={ns.cluster.name}/>) , cellFormat]
-            },
-            property: 'ns'
-          },
-          {
-            header: {
-              label: 'Namespace',
-              formatters: [headerFormat]
-            },
-            cell: {
-              formatters: [ns=>(<LinkNS path={ns.path} name={ns.name}/>), cellFormat]
+              formatters: [ns=>(<p>
+              <LinkCluster path={ns.cluster.path} name={ns.cluster.name} /> / <LinkNS path={ns.path} name={ns.name} /></p>) , cellFormat]
             },
             property: 'ns'
           },
@@ -259,6 +250,16 @@ const PostDeployJobs = ({ get_ns, post_deploy_jobs}) => {
             },
             cell: {
               formatters: [ns=>(<GrafanaContainerVulnerabilities namespace={ns} label="Grafana Dashboard" />) , cellFormat]
+            },
+            property: 'ns'
+          },
+          {
+            header: {
+              label: 'Console',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [ns=>(<LinkConsole consoleUrl={ns.cluster.consoleUrl} />) , cellFormat]
             },
             property: 'ns'
           },
@@ -305,21 +306,12 @@ const DeploymentValidations = ({ get_ns, deployment_validations}) => {
         columns={[
           {
             header: {
-              label: 'Cluster',
+              label: 'Cluster / Namespace',
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [ns=>(<LinkCluster path={ns.cluster.path} name={ns.cluster.name}/>), cellFormat]
-            },
-            property: 'ns'
-          },
-          {
-            header: {
-              label: 'Namespace',
-              formatters: [headerFormat]
-            },
-            cell: {
-              formatters: [ns=>(<LinkNS path={ns.path} name={ns.name}/>), cellFormat]
+              formatters: [ns=>(<p>
+              <LinkCluster path={ns.cluster.path} name={ns.cluster.name} /> / <LinkNS path={ns.path} name={ns.name} /></p>) , cellFormat]
             },
             property: 'ns'
           },
@@ -330,6 +322,16 @@ const DeploymentValidations = ({ get_ns, deployment_validations}) => {
             },
             cell: {
               formatters: [ns=>(<GrafanaContainerVulnerabilities namespace={ns} label="Grafana Dashboard" />) , cellFormat]
+            },
+            property: 'ns'
+          },
+          {
+            header: {
+              label: 'Console',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [ns=>(<LinkConsole consoleUrl={ns.cluster.consoleUrl} />) , cellFormat]
             },
             property: 'ns'
           },
