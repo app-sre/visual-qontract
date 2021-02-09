@@ -327,16 +327,6 @@ const DeploymentValidations = ({ get_ns, deployment_validations}) => {
           },
           {
             header: {
-              label: 'Console',
-              formatters: [headerFormat]
-            },
-            cell: {
-              formatters: [ns=>(<LinkConsole consoleUrl={ns.cluster.consoleUrl} />) , cellFormat]
-            },
-            property: 'ns'
-          },
-          {
-            header: {
               label: 'Request Limit Validation Passed',
               formatters: [headerFormat]
             },
@@ -396,13 +386,6 @@ function Report({ report, namespaces}) {
   // fetch the namespace. Returns `undefined` if not found
   const get_ns = (c, ns) => namespaces.filter(n => n['name'] === ns && n['cluster']['name'] === c)[0];
 
-  let valetTable;
-  if (content.valet == null) {
-    valetTable = <p style={{ 'font-style': 'italic' }}>No valet.</p>;
-  }
-
-  // const report_content_dump = yaml.safeDump(content);
-
   return (
     <React.Fragment>
       <h4>Info</h4>
@@ -430,13 +413,10 @@ function Report({ report, namespaces}) {
         ]}
       />
       {<ReportVulnerabilities vulnerabilities={content.container_vulnerabilities} get_ns={get_ns}/>}
-      <h4>Valet</h4>
-      {valetTable}
       {<ProductionPromotions production_promotions={content.production_promotions}/>}
       {<MergesToMaster merges_to_master={content.merges_to_master}/>}
       {<PostDeployJobs post_deploy_jobs={content.post_deploy_jobs} get_ns={get_ns} />}
       {<DeploymentValidations deployment_validations={content.deployment_validations} get_ns={get_ns}/>}
-      {/* <pre>{report_content_dump}</pre> */}
     </React.Fragment>
   );
 }

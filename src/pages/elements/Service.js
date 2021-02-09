@@ -1,5 +1,6 @@
 import React from 'react';
 import { Label, Table } from 'patternfly-react';
+import { Link } from 'react-router-dom';
 import Definition from '../../components/Definition';
 import CodeComponents from '../../components/ServiceCodeComponents';
 import EndPoints from '../../components/ServiceEndPoints';
@@ -167,6 +168,26 @@ function Service({ service, reports, documents }) {
       '>'
     ]
   ]);
+
+  // list only lastest report
+  let latestReport;
+  if (matchedReports != null) {
+    latestReport = [matchedReports[0]].map(r => [
+      [
+        r.name, 
+        ': ',
+        <Link
+          to={{
+              pathname: '/reports',
+              hash: r.path
+              }}
+        >
+          {r.path}
+        </Link>
+      ]
+    ]);
+  }
+  
   return (
     <React.Fragment>
       <h4>Description</h4>
@@ -183,6 +204,17 @@ function Service({ service, reports, documents }) {
 
       <h4>Service Owners</h4>
       <Definition items={serviceOwners} />
+
+      {matchedReports &&
+        <div>      
+          <h4>Reports</h4>
+          <Definition items={latestReport} />
+          <details>
+              <summary>More reports</summary>
+              <br></br>
+              <Reports reports={matchedReports} />
+          </details>
+        </div>}
 
       {service.childrenApps.length > 0 &&
         <React.Fragment>
@@ -226,18 +258,6 @@ function Service({ service, reports, documents }) {
 
       <h4>Quay Repos</h4>
       {quayReposTable}
-    
-      {matchedReports.length > 0 && (
-        <React.Fragment>
-          <h4>Reports</h4>
-          <Reports reports={matchedReports} latest={true} />
-          <details>
-          <summary>More reports</summary>
-          <br></br>
-          <Reports reports={matchedReports} />
-          </details>
-        </React.Fragment>
-      )}
 
       {matchedDocuments.length > 0 && (
         <React.Fragment>
