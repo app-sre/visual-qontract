@@ -169,7 +169,7 @@ function Service({ service, reports, documents }) {
     ]
   ]);
 
-  // list only lastest report
+  // list only latest report
   let latestReport;
   if (matchedReports != null) {
     latestReport = [matchedReports[0]].map(r => [
