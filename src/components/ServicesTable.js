@@ -2,10 +2,13 @@ import React from 'react';
 import { Table } from 'patternfly-react';
 import { Link } from 'react-router-dom';
 import { sortByName } from './Utils';
+import OnboardingStatus from './OnboardingStatus';
+
 
 function ServicesTable({ services }) {
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
   const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
+  const onboardingStatusFormat = value => <OnboardingStatus state={value} />
 //   const linkFormat = url => value => <a href={`${url || ''}${value}`}>{value}</a>;
   // const pathToFormat = url => <Link to={{ pathname: '/services', hash: url }}>{url}</Link>
 //   const pathToFormat = url => url + "1"
@@ -44,6 +47,16 @@ function ServicesTable({ services }) {
         },
         {
           header: {
+            label: 'Onboarding Status',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [onboardingStatusFormat, cellFormat]
+          },
+          property: 'onboardingStatus'
+        },
+        {
+          header: {
             label: 'Description',
             formatters: [headerFormat]
           },
@@ -51,7 +64,7 @@ function ServicesTable({ services }) {
             formatters: [cellFormat]
           },
           property: 'description'
-        },
+        }
       ]}
     >
       <Table.Header />

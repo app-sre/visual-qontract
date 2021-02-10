@@ -65,6 +65,7 @@ const GET_SERVICE = gql`
         path
         name
         description
+        onboardingStatus
       }
     }
     reports_v1 {
