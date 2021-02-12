@@ -27,6 +27,26 @@ const GET_REPORT = gql`
         consoleUrl
       }
     }
+    escalation_policies_1 {
+      labels
+      name
+      description
+      channels {
+        email
+         slackUserGroup {
+          name
+          path
+        }
+        pagerduty {
+          name
+          path
+        }
+        nextEscalationPolicy {
+          name
+          path
+        }
+      }
+    }
   }
 `;
 
@@ -55,7 +75,7 @@ const ReportsPage = ({ location }) => {
           if (loading) return 'Loading...';
           if (error) return `Error! ${error.message}`;
           const report = data.reports_v1[0];
-          const body = <Report report={report} namespaces={data.namespaces_v1} />;
+          const body = <Report report={report} namespaces={data.namespaces_v1} escalation_policies={data.escalation_policies_1}/>;
           return <Page title={report.name} body={body} path={report.path} />;
         }}
       </Query>

@@ -39,14 +39,15 @@ const Vulnerabilities = ({vs}) => {
 };
 
 // displays the vulnerabilities section
-const ReportVulnerabilities = ({ get_ns, vulnerabilities }) => {
+const ReportVulnerabilities = ({ get_ns, get_escalation_policy, vulnerabilities }) => {
 
   let reportVulnerabilitiesTable;
   if (vulnerabilities == null) {
     reportVulnerabilitiesTable = <p style={{ 'font-style': 'italic' }}>No vulnerabilities.</p>;
   } else {
     for (var i = 0; i < vulnerabilities.length; i++) {
-      vulnerabilities[i]['ns'] = get_ns(vulnerabilities[i]['cluster'], vulnerabilities[i]['namespace']);
+      vulnerabilities[i]['ns'] = get_ns(vulnerabilities[i]['cluster'], vulnerabilities[i]['namespace'])
+      vulnerabilities[i]['escaltion_policy'] = get_escalation_policy(vulnerabilities[i]['ns']);
     }
     reportVulnerabilitiesTable = (
       <Table.PfProvider
@@ -83,6 +84,16 @@ const ReportVulnerabilities = ({ get_ns, vulnerabilities }) => {
               formatters: [ns=>(<LinkConsole consoleUrl={ns.cluster.consoleUrl} />) , cellFormat]
             },
             property: 'ns'
+          },
+          {
+            header: {
+              label: 'Escalation Policy',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [escalation_policy=>(<p>{escalation_policy || "No info available"}</p>), cellFormat]
+            },
+            property: 'escalation_policy'
           },
           {
             header: {
@@ -380,11 +391,14 @@ const DeploymentValidations = ({ get_ns, deployment_validations}) => {
   </React.Fragment>
 }
 
-function Report({ report, namespaces}) {
+function Report({ report, namespaces, escalation_policies}) {
   const content = yaml.safeLoad(report.content);
+  console.log(escalation_policies);
 
   // fetch the namespace. Returns `undefined` if not found
   const get_ns = (c, ns) => namespaces.filter(n => n['name'] === ns && n['cluster']['name'] === c)[0];
+
+  const get_escalation_policy = (ns) => escalation_policies.filter(n => n['name'] == ns)[0];
 
   return (
     <React.Fragment>
@@ -412,7 +426,7 @@ function Report({ report, namespaces}) {
           ['Date', report.date]
         ]}
       />
-      {<ReportVulnerabilities vulnerabilities={content.container_vulnerabilities} get_ns={get_ns}/>}
+      {<ReportVulnerabilities vulnerabilities={content.container_vulnerabilities} get_ns={get_ns} get_escalation_policy={get_escalation_policy}/>}
       {<ProductionPromotions production_promotions={content.production_promotions}/>}
       {<MergesToMaster merges_to_master={content.merges_to_master}/>}
       {<PostDeployJobs post_deploy_jobs={content.post_deploy_jobs} get_ns={get_ns} />}
