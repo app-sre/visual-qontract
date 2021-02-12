@@ -24,6 +24,7 @@ const GET_REPORT = gql`
       cluster {
         name
         path
+        consoleUrl
       }
     }
   }

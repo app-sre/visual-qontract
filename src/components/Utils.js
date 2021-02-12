@@ -19,6 +19,15 @@ const sortByLabel = items =>
     if (a.label.toLowerCase() > b.label.toLowerCase()) return 1;
     if (a.label.toLowerCase() < b.label.toLowerCase()) return -1;
     return 0;
-  });
+});
 
-export { sortByName, sortByValue, sortByLabel};
+const sortByDate = items =>
+  items.slice().sort((a, b) => {
+    var dateA = new Date(a.date);
+    var dateB = new Date(b.date);
+    if (dateA > dateB) return -1;
+    if (dateA < dateB) return 1;
+    return 0;
+});
+
+export { sortByName, sortByValue, sortByLabel, sortByDate};
