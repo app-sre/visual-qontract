@@ -31,6 +31,13 @@ const LinkConsole = ({ consoleUrl }) => (
   </a>
 );
 
+// link to cluster console 
+const LinkAlerts = ({ ns }) => (
+  <a href={`https://prometheus.${ns.cluster.name}.devshift.net/rules`} target="_blank" rel="noopener noreferrer">
+  Alerts
+  </a>
+);
+
 // displays the list of vulnerabilities
 const Vulnerabilities = ({vs}) => {
   return <ul>
@@ -94,6 +101,16 @@ const ReportVulnerabilities = ({ get_ns, get_escalation_policy, vulnerabilities 
               formatters: [escalation_policy=>(<p>{escalation_policy || "No info available"}</p>), cellFormat]
             },
             property: 'escalation_policy'
+          },
+          {
+            header: {
+              label: 'Alerts',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [ns=>(<LinkAlerts ns={ns} />), cellFormat]
+            },
+            property: 'ns'
           },
           {
             header: {
