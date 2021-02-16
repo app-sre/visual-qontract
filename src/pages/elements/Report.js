@@ -45,8 +45,37 @@ const Vulnerabilities = ({vs}) => {
   </ul>
 };
 
+// displays escalation policy 
+const EscalationPolicy = ({app}) => {
+  let escalationPolicyDefinition;
+  if (app.escalationPolicy == null) {
+    escalationPolicyDefinition = <p style={{ 'font-style': 'italic' }}>No Escalation Policy.</p>;
+  } else {
+    escalationPolicyDefinition = 
+      <Definition
+        items={[
+          ['Name', app.escalationPolicy.name],
+          [
+            'Path',
+            <a href={`${window.DATA_DIR_URL}/${app.escalationPolicy.path}`} target="_blank" rel="noopener noreferrer">
+              {app.escalationPolicy.name}
+            </a>
+          ],
+          [
+            'Description',
+            <pre>{app.escalationPolicy.description}</pre>
+          ]
+        ]}
+      />
+  }
+  return <React.Fragment>
+    <h4>Escalation Policy</h4>
+    {escalationPolicyDefinition}
+  </React.Fragment>
+}
+
 // displays the vulnerabilities section
-const ReportVulnerabilities = ({ get_ns, get_escalation_policy, vulnerabilities }) => {
+const ReportVulnerabilities = ({ get_ns, vulnerabilities }) => {
 
   let reportVulnerabilitiesTable;
   if (vulnerabilities == null) {
@@ -54,7 +83,6 @@ const ReportVulnerabilities = ({ get_ns, get_escalation_policy, vulnerabilities 
   } else {
     for (var i = 0; i < vulnerabilities.length; i++) {
       vulnerabilities[i]['ns'] = get_ns(vulnerabilities[i]['cluster'], vulnerabilities[i]['namespace'])
-      vulnerabilities[i]['escaltion_policy'] = get_escalation_policy(vulnerabilities[i]['ns']);
     }
     reportVulnerabilitiesTable = (
       <Table.PfProvider
@@ -91,16 +119,6 @@ const ReportVulnerabilities = ({ get_ns, get_escalation_policy, vulnerabilities 
               formatters: [ns=>(<LinkConsole consoleUrl={ns.cluster.consoleUrl} />) , cellFormat]
             },
             property: 'ns'
-          },
-          {
-            header: {
-              label: 'Escalation Policy',
-              formatters: [headerFormat]
-            },
-            cell: {
-              formatters: [escalation_policy=>(<p>{escalation_policy || "No info available"}</p>), cellFormat]
-            },
-            property: 'escalation_policy'
           },
           {
             header: {
@@ -408,14 +426,11 @@ const DeploymentValidations = ({ get_ns, deployment_validations}) => {
   </React.Fragment>
 }
 
-function Report({ report, namespaces, escalation_policies}) {
+function Report({ report, namespaces}) {
   const content = yaml.safeLoad(report.content);
-  console.log(escalation_policies);
 
   // fetch the namespace. Returns `undefined` if not found
   const get_ns = (c, ns) => namespaces.filter(n => n['name'] === ns && n['cluster']['name'] === c)[0];
-
-  const get_escalation_policy = (ns) => escalation_policies.filter(n => n['name'] == ns)[0];
 
   return (
     <React.Fragment>
@@ -443,7 +458,8 @@ function Report({ report, namespaces, escalation_policies}) {
           ['Date', report.date]
         ]}
       />
-      {<ReportVulnerabilities vulnerabilities={content.container_vulnerabilities} get_ns={get_ns} get_escalation_policy={get_escalation_policy}/>}
+      {<EscalationPolicy app={report.app}/>}
+      {<ReportVulnerabilities vulnerabilities={content.container_vulnerabilities} get_ns={get_ns}/>}
       {<ProductionPromotions production_promotions={content.production_promotions}/>}
       {<MergesToMaster merges_to_master={content.merges_to_master}/>}
       {<PostDeployJobs post_deploy_jobs={content.post_deploy_jobs} get_ns={get_ns} />}
