@@ -31,13 +31,6 @@ const LinkConsole = ({ consoleUrl }) => (
   </a>
 );
 
-// link to cluster console 
-const LinkAlerts = ({ ns }) => (
-  <a href={`https://prometheus.${ns.cluster.name}.devshift.net/rules`} target="_blank" rel="noopener noreferrer">
-  Alerts
-  </a>
-);
-
 // displays the list of vulnerabilities
 const Vulnerabilities = ({vs}) => {
   return <ul>
@@ -53,7 +46,7 @@ const ReportVulnerabilities = ({ get_ns, vulnerabilities }) => {
     reportVulnerabilitiesTable = <p style={{ 'font-style': 'italic' }}>No vulnerabilities.</p>;
   } else {
     for (var i = 0; i < vulnerabilities.length; i++) {
-      vulnerabilities[i]['ns'] = get_ns(vulnerabilities[i]['cluster'], vulnerabilities[i]['namespace'])
+      vulnerabilities[i]['ns'] = get_ns(vulnerabilities[i]['cluster'], vulnerabilities[i]['namespace']);
     }
     reportVulnerabilitiesTable = (
       <Table.PfProvider
@@ -88,16 +81,6 @@ const ReportVulnerabilities = ({ get_ns, vulnerabilities }) => {
             },
             cell: {
               formatters: [ns=>(<LinkConsole consoleUrl={ns.cluster.consoleUrl} />) , cellFormat]
-            },
-            property: 'ns'
-          },
-          {
-            header: {
-              label: 'Alerts',
-              formatters: [headerFormat]
-            },
-            cell: {
-              formatters: [ns=>(<LinkAlerts ns={ns} />), cellFormat]
             },
             property: 'ns'
           },
