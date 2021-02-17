@@ -13,11 +13,6 @@ const GET_REPORT = gql`
       app {
         path
         name
-        escalationPolicy {
-          name
-          path
-          description
-        }
       }
       name
       date

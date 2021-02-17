@@ -11,6 +11,35 @@ import Documents from './Documents';
 import GrafanaUrl from './GrafanaUrl';
 import Services from './Services';
 
+// displays escalation policy 
+const EscalationPolicy = ({app}) => {
+  let escalationPolicyDefinition;
+  if (app.escalationPolicy == null) {
+    escalationPolicyDefinition = <p style={{ 'font-style': 'italic' }}>No Escalation Policy.</p>;
+  } else {
+    escalationPolicyDefinition = 
+      <Definition
+        items={[
+          ['Name', app.escalationPolicy.name],
+          [
+            'Path',
+            <a href={`${window.DATA_DIR_URL}/${app.escalationPolicy.path}`} target="_blank" rel="noopener noreferrer">
+              {app.escalationPolicy.name}
+            </a>
+          ],
+          [
+            'Description',
+            <pre>{app.escalationPolicy.description}</pre>
+          ]
+        ]}
+      />
+  }
+  return <React.Fragment>
+    <h4>Escalation Policy</h4>
+    {escalationPolicyDefinition}
+  </React.Fragment>
+}
+
 function Service({ service, reports, documents }) {
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
   const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
@@ -204,6 +233,8 @@ function Service({ service, reports, documents }) {
 
       <h4>Service Owners</h4>
       <Definition items={serviceOwners} />
+
+      {<EscalationPolicy app={service}/>}
 
       {matchedReports &&
         <div>      

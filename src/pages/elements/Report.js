@@ -45,35 +45,6 @@ const Vulnerabilities = ({vs}) => {
   </ul>
 };
 
-// displays escalation policy 
-const EscalationPolicy = ({app}) => {
-  let escalationPolicyDefinition;
-  if (app.escalationPolicy == null) {
-    escalationPolicyDefinition = <p style={{ 'font-style': 'italic' }}>No Escalation Policy.</p>;
-  } else {
-    escalationPolicyDefinition = 
-      <Definition
-        items={[
-          ['Name', app.escalationPolicy.name],
-          [
-            'Path',
-            <a href={`${window.DATA_DIR_URL}/${app.escalationPolicy.path}`} target="_blank" rel="noopener noreferrer">
-              {app.escalationPolicy.name}
-            </a>
-          ],
-          [
-            'Description',
-            <pre>{app.escalationPolicy.description}</pre>
-          ]
-        ]}
-      />
-  }
-  return <React.Fragment>
-    <h4>Escalation Policy</h4>
-    {escalationPolicyDefinition}
-  </React.Fragment>
-}
-
 // displays the vulnerabilities section
 const ReportVulnerabilities = ({ get_ns, vulnerabilities }) => {
 
@@ -458,7 +429,6 @@ function Report({ report, namespaces}) {
           ['Date', report.date]
         ]}
       />
-      {<EscalationPolicy app={report.app}/>}
       {<ReportVulnerabilities vulnerabilities={content.container_vulnerabilities} get_ns={get_ns}/>}
       {<ProductionPromotions production_promotions={content.production_promotions}/>}
       {<MergesToMaster merges_to_master={content.merges_to_master}/>}

@@ -22,6 +22,11 @@ const GET_SERVICE = gql`
       performanceParameters {
         SLO
       }
+      escalationPolicy {
+        name
+        path
+        description
+      }
       dependencies {
         path
         name
