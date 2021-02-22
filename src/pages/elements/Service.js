@@ -316,16 +316,11 @@ function Service({ service, reports, documents, saas_files, settings}) {
 
       {<EscalationPolicy app={service}/>}
 
-      {matchedReports.length === 0 &&
-        <div>
-          <h4>Reports</h4>
-          <p style={{ 'font-style': 'italic' }}>No Latest Report.</p>
-        </div>
-      }
-
+      
+      <h4>Reports</h4>
+      {matchedReports.length === 0 && <p style={{ 'font-style': 'italic' }}>No Latest Report.</p>}
       {matchedReports.length > 0 &&
         <div>      
-          <h4>Reports</h4>
           <Definition items={latestReport} />
           <details>
               <summary>More reports</summary>
