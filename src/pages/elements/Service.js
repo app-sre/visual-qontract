@@ -334,7 +334,8 @@ function Service({ service, reports, documents, saas_files, settings}) {
           </details>
         </div>}
 
-      {<SaasFiles saas_files={ saas_files.filter(file => file['app']['name'] === service['name'])} settings={settings} />}
+     
+      {<SaasFiles saas_files={ saas_files.filter(matches)} settings={settings} />}
 
       {service.childrenApps.length > 0 &&
         <React.Fragment>
