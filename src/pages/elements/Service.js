@@ -54,10 +54,15 @@ const EscalationPolicy = ({app}) => {
 const SaasDeployJobs = ({f, settings}) => {
   const job_template_name = settings[0].saasDeployJobTemplate;
   var job_lst = [];
+  var job_name_lst = [];
+  var job_name;
   for (var template of f.resourceTemplates) {
     for (var target of template.targets) {
-      var job_name = job_template_name + '-' + f.name + '-' + target.namespace.environment.name;
-      job_lst.push(<li><a href={f.instance.serverUrl + "/job/" + job_name + "/api/json?tree=builds[timestamp,result]"}> {job_name} </a></li>)
+      job_name = job_template_name + '-' + f.name + '-' + target.namespace.environment.name;
+      if (!job_name_lst.includes(job_name)) {
+        job_lst.push(<li><a href={f.instance.serverUrl + "/job/" + job_name + "/api/json?tree=builds[timestamp,result]"}> {job_name} </a></li>);
+        job_name_lst.push(job_name);
+      }
     }
   }
   
