@@ -81,6 +81,13 @@ const GET_SERVICE = gql`
       name
       date
     }
+    saas_files_v1 {
+      path
+      name 
+      app {
+        name
+      }
+    }
     documents_v1 {
       path
       app {
@@ -120,7 +127,8 @@ const ServicesPage = ({ location }) => {
           const service = data.apps_v1[0];
           const reports = data.reports_v1;
           const documents = data.documents_v1;
-          const body = <Service service={service} reports={reports} documents={documents} />;
+          const saas_files = data.saas_files_v1;
+          const body = <Service service={service} reports={reports} documents={documents} saas_files={saas_files}/>
           return <Page title={service.name} body={body} path={service.path} />;
         }}
       </Query>

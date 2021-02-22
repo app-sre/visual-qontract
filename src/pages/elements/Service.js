@@ -11,6 +11,16 @@ import Documents from './Documents';
 import GrafanaUrl from './GrafanaUrl';
 import Services from './Services';
 
+const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
+const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
+const linkFormat = url => value => (
+  <a href={`${url || ''}${value}`} target="_blank" rel="noopener noreferrer">
+    {value}
+  </a>
+);
+const emptyFormat = value => value || '-';
+const booleanFormat = (t, f) => value => (value ? t : f);
+
 // displays escalation policy 
 const EscalationPolicy = ({app}) => {
   let escalationPolicyDefinition;
@@ -40,16 +50,55 @@ const EscalationPolicy = ({app}) => {
   </React.Fragment>
 }
 
-function Service({ service, reports, documents }) {
-  const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
-  const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
-  const linkFormat = url => value => (
-    <a href={`${url || ''}${value}`} target="_blank" rel="noopener noreferrer">
-      {value}
-    </a>
-  );
-  const emptyFormat = value => value || '-';
-  const booleanFormat = (t, f) => value => (value ? t : f);
+// displays the saas_files section
+const SaasFiles = ({ saas_files }) => {
+
+  let saasFilesTable;
+  if (saas_files == null) {
+    saasFilesTable = <p style={{ 'font-style': 'italic' }}>No Saas Files.</p>;
+  } else {
+    saasFilesTable = (
+      <Table.PfProvider
+        striped
+        bordered
+        columns={[
+          {
+            header: {
+              label: 'Name',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [cellFormat]
+            },
+            property: 'name'
+          },
+          {
+            header: {
+              label: 'Link',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [path=>(<a href={`${window.DATA_DIR_URL}/${path}`} target="_blank" rel="noopener noreferrer">
+              {path}
+            </a>) , cellFormat]
+            },
+            property: 'path'
+          }
+        ]}
+      >
+        <Table.Header />
+        <Table.Body rows={saas_files} rowKey="path" />
+      </Table.PfProvider>
+    );
+  }
+
+  return <React.Fragment>
+    <h4>Saas Files</h4>
+    {saasFilesTable}
+  </React.Fragment>
+}
+
+function Service({ service, reports, documents, saas_files}) {
 
   function matches(r) {
     if (r.app.name === service.name) {
@@ -246,6 +295,8 @@ function Service({ service, reports, documents }) {
               <Reports reports={matchedReports} />
           </details>
         </div>}
+
+      {<SaasFiles saas_files={ saas_files.filter(file => file['app']['name'] === service['name'])} />}
 
       {service.childrenApps.length > 0 &&
         <React.Fragment>
