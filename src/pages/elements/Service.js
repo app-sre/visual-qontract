@@ -275,7 +275,7 @@ function Service({ service, reports, documents, saas_files, settings}) {
 
   // list only latest report
   let latestReport;
-  if (matchedReports != null) {
+  if (matchedReports.length > 0) {
     latestReport = [matchedReports[0]].map(r => [
       [
         r.name, 
@@ -290,7 +290,7 @@ function Service({ service, reports, documents, saas_files, settings}) {
         </Link>
       ]
     ]);
-  }
+  } 
   
   return (
     <React.Fragment>
@@ -311,7 +311,14 @@ function Service({ service, reports, documents, saas_files, settings}) {
 
       {<EscalationPolicy app={service}/>}
 
-      {matchedReports &&
+      {matchedReports.length === 0 &&
+        <div>
+          <h4>Reports</h4>
+          <p style={{ 'font-style': 'italic' }}>No Latest Report.</p>
+        </div>
+      }
+
+      {matchedReports.length > 0 &&
         <div>      
           <h4>Reports</h4>
           <Definition items={latestReport} />
