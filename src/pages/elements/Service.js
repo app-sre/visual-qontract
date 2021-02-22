@@ -50,9 +50,25 @@ const EscalationPolicy = ({app}) => {
   </React.Fragment>
 }
 
-// displays the saas_files section
-const SaasFiles = ({ saas_files }) => {
+// displays the list of Saas Deploy Jobs
+const SaasDeployJobs = ({f, settings}) => {
+  const job_template_name = settings[0].saasDeployJobTemplate;
+  var job_lst = [];
+  for (var template of f.resourceTemplates) {
+    for (var target of template.targets) {
+      var job_name = job_template_name + '-' + f.name + '-' + target.namespace.environment.name;
+      job_lst.push(<li><a href={f.instance.serverUrl + "/job/" + job_name + "/api/json?tree=builds[timestamp,result]"}> {job_name} </a></li>)
+    }
+  }
+  
+  return <ul>
+    {job_lst}
+  </ul>
+};
 
+// displays the saas_files section
+const SaasFiles = ({ saas_files, settings}) => {
+  const get_saas_file = (path) => saas_files.filter(f => f['path'] === path)[0];
   let saasFilesTable;
   if (saas_files == null) {
     saasFilesTable = <p style={{ 'font-style': 'italic' }}>No Saas Files.</p>;
@@ -83,6 +99,16 @@ const SaasFiles = ({ saas_files }) => {
             </a>) , cellFormat]
             },
             property: 'path'
+          },
+          {
+            header: {
+              label: 'Sass Deploy Jobs',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [path=><SaasDeployJobs f={get_saas_file(path)} settings={settings}/>, cellFormat]
+            },
+            property: 'path'
           }
         ]}
       >
@@ -98,7 +124,7 @@ const SaasFiles = ({ saas_files }) => {
   </React.Fragment>
 }
 
-function Service({ service, reports, documents, saas_files}) {
+function Service({ service, reports, documents, saas_files, settings}) {
 
   function matches(r) {
     if (r.app.name === service.name) {
@@ -296,7 +322,7 @@ function Service({ service, reports, documents, saas_files}) {
           </details>
         </div>}
 
-      {<SaasFiles saas_files={ saas_files.filter(file => file['app']['name'] === service['name'])} />}
+      {<SaasFiles saas_files={ saas_files.filter(file => file['app']['name'] === service['name'])} settings={settings} />}
 
       {service.childrenApps.length > 0 &&
         <React.Fragment>
