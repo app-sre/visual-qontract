@@ -60,7 +60,7 @@ const SaasDeployJobs = ({f, settings}) => {
     for (var target of template.targets) {
       job_name = job_template_name + '-' + f.name + '-' + target.namespace.environment.name;
       if (!job_name_lst.includes(job_name)) {
-        job_lst.push(<li><a href={f.instance.serverUrl + "/job/" + job_name + "/api/json?tree=builds[timestamp,result]"}> {job_name} </a></li>);
+        job_lst.push(<li><a href={f.instance.serverUrl + "/job/" + job_name}> {job_name} </a></li>);
         job_name_lst.push(job_name);
       }
     }
