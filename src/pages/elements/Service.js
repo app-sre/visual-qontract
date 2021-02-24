@@ -10,6 +10,7 @@ import Reports from './Reports';
 import Documents from './Documents';
 import GrafanaUrl from './GrafanaUrl';
 import Services from './Services';
+import { render } from 'react-dom';
 
 const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
 const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
@@ -51,16 +52,16 @@ const EscalationPolicy = ({app}) => {
 }
 
 // displays the list of Saas Deploy Jobs
-const SaasDeployJobs = ({f, settings}) => {
+const SaasDeployJobs = ({saas_file, settings}) => {
   const job_template_name = settings[0].saasDeployJobTemplate;
   var job_lst = [];
   var job_name_lst = [];
   var job_name;
-  for (var template of f.resourceTemplates) {
+  for (var template of saas_file.resourceTemplates) {
     for (var target of template.targets) {
-      job_name = job_template_name + '-' + f.name + '-' + target.namespace.environment.name;
+      job_name = job_template_name + '-' + saas_file.name + '-' + target.namespace.environment.name;
       if (!job_name_lst.includes(job_name)) {
-        job_lst.push(<li><a href={f.instance.serverUrl + "/job/" + job_name}> {job_name} </a></li>);
+        job_lst.push(<li><a href={saas_file.instance.serverUrl + "/job/" + job_name}> {job_name} </a></li>);
         job_name_lst.push(job_name);
       }
     }
@@ -111,7 +112,7 @@ const SaasFiles = ({ saas_files, settings}) => {
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [path=><SaasDeployJobs f={get_saas_file(path)} settings={settings}/>, cellFormat]
+              formatters: [path=><SaasDeployJobs saas_file={get_saas_file(path)} settings={settings}/>, cellFormat]
             },
             property: 'path'
           }
@@ -139,6 +140,7 @@ function Service({ service, reports, documents, saas_files, settings}) {
   }
   const matchedReports = sortByDate(reports).filter(matches);
   const matchedDocuments = documents.filter(matches);
+  const matchedSaasFiles = saas_files.filter(matches);
 
   let quayReposTable;
   if (service.quayRepos == null) {
@@ -279,8 +281,9 @@ function Service({ service, reports, documents, saas_files, settings}) {
   ]);
 
   // list only latest report
-  let latestReport;
+  let reportSection;
   if (matchedReports.length > 0) {
+    let latestReport;
     latestReport = [matchedReports[0]].map(r => [
       [
         r.name, 
@@ -295,8 +298,20 @@ function Service({ service, reports, documents, saas_files, settings}) {
         </Link>
       ]
     ]);
-  } 
-  
+    reportSection = (
+      <div>      
+        <Definition items={latestReport} />
+        <details>
+            <summary>More reports</summary>
+            <br></br>
+            <Reports reports={matchedReports} />
+        </details>
+      </div>
+    )
+  } else {
+    reportSection = <p style={{ 'font-style': 'italic' }}>No Latest Report.</p>;
+  }
+
   return (
     <React.Fragment>
       <h4>Description</h4>
@@ -316,21 +331,10 @@ function Service({ service, reports, documents, saas_files, settings}) {
 
       {<EscalationPolicy app={service}/>}
 
-      
       <h4>Reports</h4>
-      {matchedReports.length === 0 && <p style={{ 'font-style': 'italic' }}>No Latest Report.</p>}
-      {matchedReports.length > 0 &&
-        <div>      
-          <Definition items={latestReport} />
-          <details>
-              <summary>More reports</summary>
-              <br></br>
-              <Reports reports={matchedReports} />
-          </details>
-        </div>}
-
-     
-      {<SaasFiles saas_files={ saas_files.filter(matches)} settings={settings} />}
+      {reportSection}
+  
+      {<SaasFiles saas_files={matchedSaasFiles} settings={settings} />}
 
       {service.childrenApps.length > 0 &&
         <React.Fragment>

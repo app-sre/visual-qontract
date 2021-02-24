@@ -98,9 +98,6 @@ const GET_SERVICE = gql`
             environment {
               name
             }
-            app {
-              name
-            }
           }
         }
       }
