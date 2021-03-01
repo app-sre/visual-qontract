@@ -26,6 +26,14 @@ const GET_SERVICE = gql`
         name
         path
         description
+        channels {
+          jiraBoard {
+            server {
+              serverUrl
+            }
+            name
+          }
+        }
       }
       dependencies {
         path
