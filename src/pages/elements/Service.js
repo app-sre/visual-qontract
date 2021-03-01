@@ -10,7 +10,6 @@ import Reports from './Reports';
 import Documents from './Documents';
 import GrafanaUrl from './GrafanaUrl';
 import Services from './Services';
-import { render } from 'react-dom';
 
 const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
 const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
@@ -28,6 +27,16 @@ const EscalationPolicy = ({app}) => {
   if (app.escalationPolicy == null) {
     escalationPolicyDefinition = <p style={{ 'font-style': 'italic' }}>No Escalation Policy.</p>;
   } else {
+    let jiraServer;
+    if (app.escalationPolicy.channels.server == null) {
+      jiraServer = <p style={{ 'font-style': 'italic' }}>No Jira Server Info available.</p>;
+    } else {
+      jiraServer = (
+        <a href={app.escalationPolicy.channels.server.serverUrl} target="_blank" rel="noopener noreferrer">
+          {app.escalationPolicy.channels.server.serverUrl}
+        </a>
+      )
+    }
     escalationPolicyDefinition = 
       <Definition
         items={[
@@ -41,6 +50,10 @@ const EscalationPolicy = ({app}) => {
           [
             'Description',
             <pre>{app.escalationPolicy.description}</pre>
+          ],
+          [
+            'Jira Server Url',
+            jiraServer
           ]
         ]}
       />
