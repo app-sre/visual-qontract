@@ -19,6 +19,7 @@ const GET_NAMESPACE = gql`
         jumpHost {
           hostname
         }
+        consoleUrl
       }
       managedTerraformResources
       terraformResources {
