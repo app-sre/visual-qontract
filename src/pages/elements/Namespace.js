@@ -45,9 +45,7 @@ function Namespace({ namespace, roles }) {
     namespace.terraformResources.map(a => (
       <ListItem>
         <a
-          href={`https://console.${namespace.cluster.name}.openshift.com/console/project/${
-            namespace.name
-            }/browse/secrets/${resourceName(a)}`}
+          href={`${namespace.cluster.consoleUrl}/k8s/ns/${namespace.name}/secrets/${resourceName(a)}`}
           target="_blank"
           rel="noopener noreferrer"
         >
