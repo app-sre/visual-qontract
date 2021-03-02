@@ -324,7 +324,6 @@ function Service({ service, reports, documents, saas_files, settings}) {
 
       <h4>Info</h4>
       <Definition items={[['Onboarding Status', service.onboardingStatus]]} />
-      <Definition items={[['SLO', service.performanceParameters.SLO]]} />
 
       <h4>Service Owners</h4>
       <Definition items={serviceOwners} />
