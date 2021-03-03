@@ -10,7 +10,6 @@ import Reports from './Reports';
 import Documents from './Documents';
 import GrafanaUrl from './GrafanaUrl';
 import Services from './Services';
-import { render } from 'react-dom';
 
 const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
 const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
@@ -324,7 +323,6 @@ function Service({ service, reports, documents, saas_files, settings}) {
 
       <h4>Info</h4>
       <Definition items={[['Onboarding Status', service.onboardingStatus]]} />
-      <Definition items={[['SLO', service.performanceParameters.SLO]]} />
 
       <h4>Service Owners</h4>
       <Definition items={serviceOwners} />

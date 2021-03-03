@@ -19,9 +19,6 @@ const GET_SERVICE = gql`
         name
         email
       }
-      performanceParameters {
-        SLO
-      }
       escalationPolicy {
         name
         path
