@@ -21,6 +21,45 @@ const linkFormat = url => value => (
 const emptyFormat = value => value || '-';
 const booleanFormat = (t, f) => value => (value ? t : f);
 
+// link to window.DATA_DIR_URL path 
+function LinkPath({ item }) {
+  return (
+    <a href={`${window.DATA_DIR_URL}/${item.path}`} target="_blank" rel="noopener noreferrer">
+      {item.name}
+    </a>
+  );
+}
+
+// display a list of definitions if key not null 
+function NonEmptyDefinition({ items }) {
+  var definitions = [];
+  var key;
+  var value;
+  for (var i = 0; i < items.length; i++) {
+    key = items[i][0];
+    value = items[i][1];
+    if (value) {
+      definitions.push(
+        <div className="app-definition-row" key={`${key}-${value}`}>
+          <div className="app-definition-key">{key}</div>
+          <div className="app-definition-val">{value}</div>
+        </div>);
+    }
+  }
+  return (
+    <div className="app-definition">
+      {definitions}
+    </div>
+  );
+}
+
+// displays a list of {name: path} pair 
+function DisplayNamePathList({ items }) {
+  return (
+    <ul>{items && items.map(item=><li><LinkPath item={item}/></li>)}</ul>
+  );
+}
+
 // displays escalation policy 
 const EscalationPolicy = ({app}) => {
   let escalationPolicyDefinition;
@@ -28,22 +67,38 @@ const EscalationPolicy = ({app}) => {
     escalationPolicyDefinition = <p style={{ 'font-style': 'italic' }}>No Escalation Policy.</p>;
   } else {
     escalationPolicyDefinition = 
-      <Definition
+      <NonEmptyDefinition
         items={[
           ['Name', app.escalationPolicy.name],
           [
             'Path',
-            <a href={`${window.DATA_DIR_URL}/${app.escalationPolicy.path}`} target="_blank" rel="noopener noreferrer">
-              {app.escalationPolicy.name}
-            </a>
+            <LinkPath item={app.escalationPolicy}/>
           ],
           [
             'Description',
             <pre>{app.escalationPolicy.description}</pre>
+          ],
+          [
+            'Next Escalation Policy',
+            (app.escalationPolicy.channels.nextEscalationPolicy && <LinkPath item={app.escalationPolicy.channels.nextEscalationPolicy}/>)
+          ],
+          ['Email', app.escalationPolicy.channels.email],
+          [
+            'Jira Board',
+            (app.escalationPolicy.channels.jiraBoard && <DisplayNamePathList items={app.escalationPolicy.channels.jiraBoard}/>)
+          ],
+          [
+            'Pager Duty',
+            (app.escalationPolicy.channels.pagerduty && <LinkPath item={app.escalationPolicy.channels.pagerduty}/>)
+          ],
+          [
+            'Slack User Group',
+            (app.escalationPolicy.channels.slackUserGroup && <DisplayNamePathList items={app.escalationPolicy.channels.slackUserGroup}/>)
           ]
         ]}
       />
   }
+
   return <React.Fragment>
     <h4>Escalation Policy</h4>
     {escalationPolicyDefinition}
