@@ -5,6 +5,7 @@ public/env/env.js
 
 # css
 src/**/*.css
+src/**/*.css.map
 
 # IDE - VSCode
 .vscode/*
