@@ -2,9 +2,11 @@ import React from 'react';
 import { Label, Table } from 'patternfly-react';
 import { Link } from 'react-router-dom';
 import Definition from '../../components/Definition';
+import NonEmptyDefinition from '../../components/NonEmptyDefinition';
 import CodeComponents from '../../components/ServiceCodeComponents';
 import EndPoints from '../../components/ServiceEndPoints';
 import { sortByDate } from '../../components/Utils';
+import { LinkPath, DisplayNamePathList } from '../../components/NamePathList';
 import Namespaces from './Namespaces';
 import Reports from './Reports';
 import Documents from './Documents';
@@ -20,45 +22,6 @@ const linkFormat = url => value => (
 );
 const emptyFormat = value => value || '-';
 const booleanFormat = (t, f) => value => (value ? t : f);
-
-// link to window.DATA_DIR_URL path 
-function LinkPath({ item }) {
-  return (
-    <a href={`${window.DATA_DIR_URL}/${item.path}`} target="_blank" rel="noopener noreferrer">
-      {item.name}
-    </a>
-  );
-}
-
-// display a list of definitions if key not null 
-function NonEmptyDefinition({ items }) {
-  var definitions = [];
-  var key;
-  var value;
-  for (var i = 0; i < items.length; i++) {
-    key = items[i][0];
-    value = items[i][1];
-    if (value) {
-      definitions.push(
-        <div className="app-definition-row" key={`${key}-${value}`}>
-          <div className="app-definition-key">{key}</div>
-          <div className="app-definition-val">{value}</div>
-        </div>);
-    }
-  }
-  return (
-    <div className="app-definition">
-      {definitions}
-    </div>
-  );
-}
-
-// displays a list of {name: path} pair 
-function DisplayNamePathList({ items }) {
-  return (
-    <ul>{items && items.map(item=><li><LinkPath item={item}/></li>)}</ul>
-  );
-}
 
 // displays escalation policy 
 const EscalationPolicy = ({app}) => {
@@ -78,10 +41,6 @@ const EscalationPolicy = ({app}) => {
             'Description',
             <pre>{app.escalationPolicy.description}</pre>
           ],
-          [
-            'Next Escalation Policy',
-            (app.escalationPolicy.channels.nextEscalationPolicy && <LinkPath item={app.escalationPolicy.channels.nextEscalationPolicy}/>)
-          ],
           ['Email', app.escalationPolicy.channels.email],
           [
             'Jira Board',
@@ -94,6 +53,10 @@ const EscalationPolicy = ({app}) => {
           [
             'Slack User Group',
             (app.escalationPolicy.channels.slackUserGroup && <DisplayNamePathList items={app.escalationPolicy.channels.slackUserGroup}/>)
+          ],
+          [
+            'Next Escalation Policy',
+            (app.escalationPolicy.channels.nextEscalationPolicy && <LinkPath item={app.escalationPolicy.channels.nextEscalationPolicy}/>)
           ]
         ]}
       />
