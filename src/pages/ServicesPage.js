@@ -23,6 +23,25 @@ const GET_SERVICE = gql`
         name
         path
         description
+        channels {
+          jiraBoard {
+            name
+            path
+          }
+          email 
+          pagerduty {
+            name
+            path
+          }
+          nextEscalationPolicy {
+            name
+            path
+          }
+          slackUserGroup {
+            name
+            path
+          }
+        }
       }
       dependencies {
         path
