@@ -332,7 +332,7 @@ const DeploymentValidations = ({ get_ns, deployment_validations}) => {
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [validations=>(<p>{('deployment_validation_operator_request_limit_validation' in validations && validations.deployment_validation_operator_request_limit_validation.Passed) || 0}</p>), cellFormat]
+              formatters: [validations=>(<p>{('deployment_validation_operator_request_limit_validation' in validations && validations.deployment_validation_operator_request_limit_validation.Passed) || "No data available"}</p>), cellFormat]
             },
             property: 'validations'
           },
@@ -342,7 +342,7 @@ const DeploymentValidations = ({ get_ns, deployment_validations}) => {
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [validations=>(<p>{('deployment_validation_operator_request_limit_validation' in validations && validations.deployment_validation_operator_request_limit_validation.Failed) || 0}</p>), cellFormat]
+              formatters: [validations=>(<p>{('deployment_validation_operator_request_limit_validation' in validations && validations.deployment_validation_operator_request_limit_validation.Failed) || "No data available"}</p>), cellFormat]
             },
             property: 'validations'
           },
@@ -352,7 +352,7 @@ const DeploymentValidations = ({ get_ns, deployment_validations}) => {
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [validations=>(<p>{('deployment_validation_operator_replica_validation' in validations && validations.deployment_validation_operator_replica_validation.Passed) || 0}</p>), cellFormat]
+              formatters: [validations=>(<p>{('deployment_validation_operator_replica_validation' in validations && validations.deployment_validation_operator_replica_validation.Passed) || "No data available"}</p>), cellFormat]
             },
             property: 'validations'
           },
@@ -362,7 +362,7 @@ const DeploymentValidations = ({ get_ns, deployment_validations}) => {
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [validations=>(<p>{('deployment_validation_operator_replica_validation' in validations && validations.deployment_validation_operator_replica_validation.Failed) || 0}</p>), cellFormat]
+              formatters: [validations=>(<p>{('deployment_validation_operator_replica_validation' in validations && validations.deployment_validation_operator_replica_validation.Failed) || "No data available"}</p>), cellFormat]
             },
             property: 'validations'
           }
