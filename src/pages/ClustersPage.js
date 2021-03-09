@@ -79,6 +79,17 @@ const GET_CLUSTERS = gql`
           path
         }
       }
+      spec {
+        version
+        channel
+        upgrade
+        id
+        external_id
+      }
+      upgradePolicy {
+        schedule_type
+        schedule
+      }
     }
   }
 `;
