@@ -1,61 +1,185 @@
-import React, { useState } from 'react';
-import { Row, Col, Card, CardHeading, CardBody, CardFooter, CardTitle } from 'patternfly-react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { chunk } from 'lodash';
-import GridSearch from '../../components/GridSearch';
+import { Table } from 'patternfly-react';
 import { sortByName } from '../../components/Utils';
 
+function AppSREClustersTable({ clusters }) {
+  const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
+  const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
+  return (
+    <Table.PfProvider
+      striped
+      bordered
+      columns={[
+        {
+          header: {
+            label: 'Name',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [
+              value => (
+                <>
+                  <Link
+                    to={{
+                      pathname: '/clusters',
+                      hash: value[1]
+                    }}
+                  >
+                    {value[0]}
+                  </Link>
+                  &nbsp;&nbsp;
+                  <a href={value[2]}>
+                    <i className="fa fa-desktop" />
+                  </a>
+                </>
+              ),
+              cellFormat
+            ]
+          },
+          property: 'name_path'
+        },
+        {
+          header: {
+            label: 'Description',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'description'
+        },
+        {
+          header: {
+            label: 'Version',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'version'
+        },
+        {
+          header: {
+            label: 'Channel',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'channel'
+        },
+        {
+          header: {
+            label: 'ID',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'id'
+        },
+        {
+          header: {
+            label: 'Upgrade schedule',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'upgrade_schedule'
+        }
+      ]}
+    >
+      <Table.Header />
+      <Table.Body rows={sortByName(clusters)} rowKey="name" />
+    </Table.PfProvider>
+  );
+}
+
+function ExternalClustersTable({ clusters }) {
+  const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
+  const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
+  return (
+    <Table.PfProvider
+      striped
+      bordered
+      columns={[
+        {
+          header: {
+            label: 'Name',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [
+              value => (
+                <>
+                  <Link
+                    to={{
+                      pathname: '/clusters',
+                      hash: value[1]
+                    }}
+                  >
+                    {value[0]}
+                  </Link>
+                  &nbsp;&nbsp;
+                  <a href={value[2]}>
+                    <i className="fa fa-desktop" />
+                  </a>
+                </>
+              ),
+              cellFormat
+            ]
+          },
+          property: 'name_path'
+        },
+        {
+          header: {
+            label: 'Description',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'description'
+        }
+      ]}
+    >
+      <Table.Header />
+      <Table.Body rows={sortByName(clusters)} rowKey="name" />
+    </Table.PfProvider>
+  );
+}
+
 function Clusters({ clusters }) {
-  // cardsWidth * cardsPerRow must be <= 12 (bootstrap grid)
-  const cardWidth = 4;
-  const cardsPerRow = 3;
-  const [selected, changeSelected] = useState('Name');
-  const [filterText, changeFilterText] = useState('');
-  const lcFilter = filterText.toLowerCase();
-  function matches(c) {
-    return selected === 'Name' && c.name.toLowerCase().includes(lcFilter);
-  }
-  const matchedData = clusters.filter(matches);
-  const rows = chunk(sortByName(matchedData), cardsPerRow).map(c => (
-    <Row key={c[0].path}>
-      {c.map(s => (
-        <Col xs={cardWidth} key={s.path}>
-          <Card accented>
-            <CardHeading>
-              <CardTitle>{s.name}</CardTitle>
-            </CardHeading>
-            <CardBody>
-              <p>{s.description}</p>
-              <p>
-                <a href={s.consoleUrl}>{s.consoleUrl}</a>
-              </p>
-            </CardBody>
-            <CardFooter>
-              <p>
-                <Link
-                  to={{
-                    pathname: '/clusters',
-                    hash: s.path
-                  }}
-                >
-                  Details
-                </Link>
-              </p>
-            </CardFooter>
-          </Card>
-        </Col>
-      ))}
-    </Row>
-  ));
+  const clustersData = clusters.map(c => {
+    c.name_path = [c.name, c.path, c.consoleUrl];
+
+    if (c.spec) {
+      c.version = c.spec.version;
+      c.channel = c.spec.channel;
+      c.id = c.spec.id;
+      c.external_id = c.spec.external_id;
+    }
+
+    if (c.upgradePolicy) {
+      c.upgrade_schedule = `${c.upgradePolicy.schedule_type} - ${c.upgradePolicy.schedule}`;
+    }
+
+    return c;
+  });
+
+  const appsreClusters = clustersData.filter(c => c.spec);
+  const externalClusters = clustersData.filter(c => !c.spec);
 
   return (
-    <GridSearch
-      data={rows}
-      filterText={filterText}
-      changeFilterText={changeFilterText}
-      changeSelected={changeSelected}
-      selected={selected}
-    />
+    <>
+      <h2>AppSRE Clusters</h2>
+      <AppSREClustersTable clusters={appsreClusters} />
+
+      <h2>External and v3 Clusters</h2>
+      <ExternalClustersTable clusters={externalClusters} />
+    </>
   );
 }
 

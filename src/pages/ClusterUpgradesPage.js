@@ -18,6 +18,10 @@ const GET_CLUSTERS = gql`
         id
         external_id
       }
+      upgradePolicy {
+        schedule_type
+        schedule
+      }
     }
   }
 `;
@@ -28,7 +32,6 @@ const ClustersPage = ({ location }) => {
       {({ loading, error, data }) => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
-
 
         const body = <ClusterUpgrades clusters={data.clusters_v1} />;
         return <Page title="Cluster Upgrades" body={body} />;
