@@ -71,13 +71,13 @@ function AppSREClustersTable({ clusters }) {
         },
         {
           header: {
-            label: 'External ID',
+            label: 'ID',
             formatters: [headerFormat]
           },
           cell: {
             formatters: [cellFormat]
           },
-          property: 'external_id'
+          property: 'id'
         },
         {
           header: {
