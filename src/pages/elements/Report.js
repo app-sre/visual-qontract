@@ -48,6 +48,8 @@ const ReportVulnerabilities = ({ get_ns, vulnerabilities }) => {
     for (var i = 0; i < vulnerabilities.length; i++) {
       vulnerabilities[i]['ns'] = get_ns(vulnerabilities[i]['cluster'], vulnerabilities[i]['namespace']);
     }
+    // do not display if ns not found 
+    vulnerabilities = vulnerabilities.filter(v => typeof(v['ns']) != "undefined");
     reportVulnerabilitiesTable = (
       <Table.PfProvider
         striped
@@ -298,7 +300,6 @@ const DeploymentValidations = ({ get_ns, deployment_validations}) => {
     for (var i = 0; i < deployment_validations.length; i++) {
       deployment_validations[i]['ns'] = get_ns(deployment_validations[i].cluster, deployment_validations[i].namespace);
     }
- 
     deploymentValidationTable = (
       <Table.PfProvider
         striped
@@ -331,7 +332,7 @@ const DeploymentValidations = ({ get_ns, deployment_validations}) => {
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [validations=>(<p>{validations.deployment_validation_operator_request_limit_validation.Passed || "No data available"}</p>), cellFormat]
+              formatters: [validations=>(<p>{('deployment_validation_operator_request_limit_validation' in validations && validations.deployment_validation_operator_request_limit_validation.Passed) || "No data available"}</p>), cellFormat]
             },
             property: 'validations'
           },
@@ -341,7 +342,7 @@ const DeploymentValidations = ({ get_ns, deployment_validations}) => {
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [validations=>(<p>{validations.deployment_validation_operator_request_limit_validation.Failed || "No data available"}</p>), cellFormat]
+              formatters: [validations=>(<p>{('deployment_validation_operator_request_limit_validation' in validations && validations.deployment_validation_operator_request_limit_validation.Failed) || "No data available"}</p>), cellFormat]
             },
             property: 'validations'
           },
@@ -351,7 +352,7 @@ const DeploymentValidations = ({ get_ns, deployment_validations}) => {
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [validations=>(<p>{validations.deployment_validation_operator_replica_validation.Passed || "No data available"}</p>), cellFormat]
+              formatters: [validations=>(<p>{('deployment_validation_operator_replica_validation' in validations && validations.deployment_validation_operator_replica_validation.Passed) || "No data available"}</p>), cellFormat]
             },
             property: 'validations'
           },
@@ -361,7 +362,7 @@ const DeploymentValidations = ({ get_ns, deployment_validations}) => {
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [validations=>(<p>{validations.deployment_validation_operator_replica_validation.Failed|| "No data available"}</p>), cellFormat]
+              formatters: [validations=>(<p>{('deployment_validation_operator_replica_validation' in validations && validations.deployment_validation_operator_replica_validation.Failed) || "No data available"}</p>), cellFormat]
             },
             property: 'validations'
           }
