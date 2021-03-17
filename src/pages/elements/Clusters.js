@@ -29,7 +29,7 @@ function AppSREClustersTable({ clusters }) {
                     {value[0]}
                   </Link>
                   &nbsp;&nbsp;
-                  <a href={value[2]}>
+                  <a href={value[2]} target="_blank" rel="noopener noreferrer">
                     <i className="fa fa-desktop" />
                   </a>
                 </>
