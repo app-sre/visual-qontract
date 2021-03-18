@@ -167,6 +167,25 @@ a:focus {
    float: right;
  }
 
+ .service_badge {
+  padding: 0px 10px 0px 10px;
+
+  border: 2px solid #42a5f5;
+  border-radius: 50px;
+
+  color: white;
+  background-color: #42a5f5;
+
+  font-size: 12px;
+  font-weight: bold;
+
+  margin: 3px;
+  float: left;
+}
+
+.service_badge a {
+  color: white;
+}
 
 .badge {
   padding: 5px 10px 5px 10px;

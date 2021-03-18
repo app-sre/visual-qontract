@@ -91,6 +91,18 @@ const GET_CLUSTERS = gql`
         schedule
       }
     }
+    apps_v1 {
+      name
+      path
+      parentApp {
+        name
+      }
+      namespaces {
+        cluster {
+          path
+        }
+      }
+    }
   }
 `;
 
@@ -119,7 +131,31 @@ const ClustersPage = ({ location }) => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
 
-        const body = <Clusters clusters={data.clusters_v1} />;
+        const clusterApps = data.apps_v1.reduce((acc, app) => {
+          if (app.parentApp == null && app.namespaces) {
+            app.namespaces.forEach(ns => {
+              if (ns.cluster.path in acc) {
+                if (!acc[ns.cluster.path].includes(app.name)) {
+                  acc[ns.cluster.path].push(app.name);
+                }
+              } else {
+                acc[ns.cluster.path] = [app.name];
+              }
+            });
+          }
+          return acc;
+        }, {});
+
+        const clusters = data.clusters_v1.map(cluster => {
+          if (cluster.path in clusterApps) {
+            cluster.apps = clusterApps[cluster.path];
+          } else {
+            cluster.apps = [];
+          }
+          return cluster;
+        });
+
+        const body = <Clusters clusters={clusters} apps={data.apps_v1} />;
         return <Page title="Clusters" body={body} />;
       }}
     </Query>
