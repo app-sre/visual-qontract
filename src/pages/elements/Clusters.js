@@ -3,9 +3,17 @@ import { Link } from 'react-router-dom';
 import { Table } from 'patternfly-react';
 import { sortByName } from '../../components/Utils';
 
-function AppSREClustersTable({ clusters }) {
+function AppSREClustersTable({ clusters, apps }) {
+  const appByName = appName => apps.find(a => a.name === appName);
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
   const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
+  const appsFormat = appsList =>
+    appsList.map(appName => (
+      <span className="service_badge" key={appName}>
+        <Link to={{ pathname: '/services', hash: appByName(appName).path }}>{appName}</Link>
+      </span>
+    ));
+
   return (
     <Table.PfProvider
       striped
@@ -58,6 +66,16 @@ function AppSREClustersTable({ clusters }) {
             formatters: [cellFormat]
           },
           property: 'version'
+        },
+        {
+          header: {
+            label: 'Services',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [appsFormat, cellFormat]
+          },
+          property: 'apps'
         },
         {
           header: {
@@ -151,7 +169,7 @@ function ExternalClustersTable({ clusters }) {
   );
 }
 
-function Clusters({ clusters }) {
+function Clusters({ clusters, apps }) {
   const clustersData = clusters.map(c => {
     c.name_path = [c.name, c.path, c.consoleUrl];
 
@@ -175,7 +193,7 @@ function Clusters({ clusters }) {
   return (
     <>
       <h2>AppSRE Clusters</h2>
-      <AppSREClustersTable clusters={appsreClusters} />
+      <AppSREClustersTable clusters={appsreClusters} apps={apps} />
 
       <h2>External and v3 Clusters</h2>
       <ExternalClustersTable clusters={externalClusters} />

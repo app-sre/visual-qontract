@@ -28,7 +28,7 @@ const GET_SERVICE = gql`
             name
             path
           }
-          email 
+          email
           pagerduty {
             name
             path
@@ -99,7 +99,7 @@ const GET_SERVICE = gql`
     }
     saas_files_v1 {
       path
-      name 
+      name
       app {
         name
       }
