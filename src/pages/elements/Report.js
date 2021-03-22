@@ -543,11 +543,13 @@ function Report({ report, namespaces, saas_files}) {
   // fetch the namespace. Returns `undefined` if not found
   const get_ns = (c, ns) => namespaces.filter(n => n['name'] === ns && n['cluster']['name'] === c)[0];
 
+  // production_promotions is deprecated and will be replaced by promotions
+  // starting from April 2021
   let promotionSection;
-  if (content.production_promotions) {
-    promotionSection = <ProductionPromotions production_promotions={content.production_promotions}/>; 
-  } else if (content.promotions) {
+  if (content.promotions) {
     promotionSection = <Promotions promotions={content.promotions} get_ns={get_ns} saas_files={saas_files}/>;
+  } else if (content.production_promotions) {
+    promotionSection = <ProductionPromotions production_promotions={content.production_promotions}/>; 
   } else {
     promotionSection = (<React.Fragment>
                         <h4>Promotions</h4>
@@ -555,11 +557,13 @@ function Report({ report, namespaces, saas_files}) {
                        </React.Fragment>);
   }
 
+  // merges_to_master is deprecated and will be replaced by merge_activities
+  // starting from April 2021
   let mergeSection;
-  if (content.merges_to_master) {
-    mergeSection = <MergesToMaster merges_to_master={content.merges_to_master}/>; 
-  } else if (content.merge_activities) {
+  if (content.merge_activities) {
     mergeSection = <MergeActivities merge_activities={content.merge_activities}/>;
+  } else if (content.merges_to_master) {
+    mergeSection = <MergesToMaster merges_to_master={content.merges_to_master}/>; 
   } else {
     mergeSection = (<React.Fragment>
                       <h4>Merge Activties</h4>
