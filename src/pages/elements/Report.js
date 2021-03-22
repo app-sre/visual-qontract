@@ -47,6 +47,7 @@ const ReportVulnerabilities = ({ get_ns, vulnerabilities }) => {
   } else {
     for (var i = 0; i < vulnerabilities.length; i++) {
       vulnerabilities[i]['ns'] = get_ns(vulnerabilities[i]['cluster'], vulnerabilities[i]['namespace']);
+      vulnerabilities[i]['row_key'] = vulnerabilities[i]['cluster'] + "-" + vulnerabilities[i]['namespace'];
     }
     // do not display if ns not found 
     vulnerabilities = vulnerabilities.filter(v => typeof(v['ns']) != "undefined");
@@ -99,7 +100,7 @@ const ReportVulnerabilities = ({ get_ns, vulnerabilities }) => {
         ]}
       >
         <Table.Header />
-        <Table.Body rows={vulnerabilities} rowKey="cluster" />
+        <Table.Body rows={vulnerabilities} rowKey="row_key"/>
       </Table.PfProvider>
     );
   }
@@ -113,51 +114,47 @@ const ReportVulnerabilities = ({ get_ns, vulnerabilities }) => {
 // displays the productionPromotions Table
 const ProductionPromotions = ({production_promotions}) => {
   let productionPromotionsTable;
-  if (production_promotions == null) {
-    productionPromotionsTable = <p style={{ 'font-style': 'italic' }}>No production_promotions.</p>;
-  } else {
-    productionPromotionsTable = (
-      <Table.PfProvider
-        striped
-        bordered
-        columns={[
-          {
-            header: {
-              label: 'Repo',
-              formatters: [headerFormat]
-            },
-            cell: {
-              formatters: [linkFormat(), cellFormat]
-            },
-            property: 'repo'
+  productionPromotionsTable = (
+    <Table.PfProvider
+      striped
+      bordered
+      columns={[
+        {
+          header: {
+            label: 'Repo',
+            formatters: [headerFormat]
           },
-          {
-            header: {
-              label: 'Total',
-              formatters: [headerFormat]
-            },
-            cell: {
-              formatters: [cellFormat]
-            },
-            property: 'total'
+          cell: {
+            formatters: [linkFormat(), cellFormat]
           },
-          {
-            header: {
-              label: 'Success',
-              formatters: [headerFormat]
-            },
-            cell: {
-              formatters: [cellFormat]
-            },
-            property: 'success'
-          }
-        ]}
-      >
-        <Table.Header />
-        <Table.Body rows={production_promotions} rowKey="repo" />
-      </Table.PfProvider>
-    );
-  }
+          property: 'repo'
+        },
+        {
+          header: {
+            label: 'Total',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'total'
+        },
+        {
+          header: {
+            label: 'Success',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'success'
+        }
+      ]}
+    >
+      <Table.Header />
+      <Table.Body rows={production_promotions} rowKey="repo" />
+    </Table.PfProvider>
+  );
 
   return <React.Fragment>
     <h4>Production Promotions</h4>
@@ -165,60 +162,218 @@ const ProductionPromotions = ({production_promotions}) => {
   </React.Fragment>
 }
 
+// displays the Promotions Table
+const Promotions = ({promotions, get_ns, saas_files}) => {
+  const get_saas_file = (name) => saas_files.filter(f => f['name'] === name)[0];
+  var promotions_flattened = [];
+  var promotions_row_keys = [];
+  var promotion;
+  for (var saas_file_name in promotions) {
+    for (var i = 0; i < promotions[saas_file_name].length; i++) {
+      promotion = promotions[saas_file_name][i];
+      promotion['saas_file'] = get_saas_file(saas_file_name);
+      promotion['ns'] = get_ns(promotion['cluster'], promotion['namespace']);
+      promotion['row_key'] = saas_file_name + "-" + promotion['env'] + "-" + promotion['cluster'] + "-" + promotion['namespace']; 
+      if (!promotions_row_keys.includes(promotion['row_key'])) {
+        promotions_flattened.push(promotion);
+        promotions_row_keys.push(promotion['row_key']);
+      }
+    }
+  }
+  let promotionsTable;
+  promotionsTable = (
+    <Table.PfProvider
+      striped
+      bordered
+      columns={[
+        {
+          header: {
+            label: 'Saas File',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [saas_file=>(<p><a href={`${window.DATA_DIR_URL}/${saas_file.path}`} target="_blank" rel="noopener noreferrer">
+            {saas_file.name}
+          </a></p>) , cellFormat]
+          },
+          property: 'saas_file'
+        },
+        {
+          header: {
+            label: 'Environment',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'env'
+        },
+        {
+          header: {
+            label: 'Cluster / Namespace',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [ns=>(<p>
+            <LinkCluster path={ns.cluster.path} name={ns.cluster.name} /> / <LinkNS path={ns.path} name={ns.name} /></p>) , cellFormat]
+          },
+          property: 'ns'
+        },
+        {
+          header: {
+            label: 'Total',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'total'
+        },
+        {
+          header: {
+            label: 'Success',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'success'
+        }
+      ]}
+    >
+      <Table.Header />
+      <Table.Body rows={promotions_flattened} rowKey="row_key"/>
+    </Table.PfProvider>
+  );
+
+  return <React.Fragment>
+    <h4>Promotions</h4>
+    {promotionsTable}
+  </React.Fragment>
+}
+
 // displays the MergesToMaster Table
 const MergesToMaster = ({merges_to_master}) => {
   let mergesToMasterTable;
-  if (merges_to_master == null) {
-    mergesToMasterTable = <p style={{ 'font-style': 'italic' }}>No merges_to_master.</p>;
-  } else {
-    mergesToMasterTable = (
-      <Table.PfProvider
-        striped
-        bordered
-        columns={[
-          {
-            header: {
-              label: 'Repo',
-              formatters: [headerFormat]
-            },
-            cell: {
-              formatters: [linkFormat(), cellFormat]
-            },
-            property: 'repo'
+  mergesToMasterTable = (
+    <Table.PfProvider
+      striped
+      bordered
+      columns={[
+        {
+          header: {
+            label: 'Repo',
+            formatters: [headerFormat]
           },
-          {
-            header: {
-              label: 'Total',
-              formatters: [headerFormat]
-            },
-            cell: {
-              formatters: [cellFormat]
-            },
-            property: 'total'
+          cell: {
+            formatters: [linkFormat(), cellFormat]
           },
-          {
-            header: {
-              label: 'Success',
-              formatters: [headerFormat]
-            },
-            cell: {
-              formatters: [cellFormat]
-            },
-            property: 'success'
-          }
-        ]}
-      >
-        <Table.Header />
-        <Table.Body rows={merges_to_master} rowKey="repo" />
-      </Table.PfProvider>
-    );
-  }
+          property: 'repo'
+        },
+        {
+          header: {
+            label: 'Total',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'total'
+        },
+        {
+          header: {
+            label: 'Success',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'success'
+        }
+      ]}
+    >
+      <Table.Header />
+      <Table.Body rows={merges_to_master} rowKey="repo" />
+    </Table.PfProvider>
+  );
 
   return <React.Fragment>
     <h4>Merges to Master</h4>
     {mergesToMasterTable}
   </React.Fragment>
 }
+
+// displays the MergeActivities Table
+const MergeActivities = ({merge_activities}) => {
+  var merge_activities_flattened = [];
+  var merge_activity;
+  for (var repo in merge_activities) {
+    for (var i = 0; i < merge_activities[repo].length; i++) {
+      merge_activity = merge_activities[repo][i];
+      merge_activity['repo'] = repo;
+      merge_activities_flattened.push(merge_activity);
+    }
+  }
+
+  let MergeActivitiesTable;
+  MergeActivitiesTable = (
+    <Table.PfProvider
+      striped
+      bordered
+      columns={[
+        {
+          header: {
+            label: 'Repo',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [linkFormat(), cellFormat]
+          },
+          property: 'repo'
+        },
+        {
+          header: {
+            label: 'Branch',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'branch'
+        },
+        {
+          header: {
+            label: 'Total',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'total'
+        },
+        {
+          header: {
+            label: 'Success',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'success'
+        }
+      ]}
+    >
+      <Table.Header />
+      <Table.Body rows={merge_activities_flattened} rowKey="repo" />
+    </Table.PfProvider>
+  );
+
+  return <React.Fragment>
+    <h4>Merge Activities</h4>
+    {MergeActivitiesTable}
+  </React.Fragment>
+}
+
 
 // displays the PostDeployJobs Table
 const PostDeployJobs = ({ get_ns, post_deploy_jobs}) => {
@@ -299,6 +454,7 @@ const DeploymentValidations = ({ get_ns, deployment_validations}) => {
   } else {
     for (var i = 0; i < deployment_validations.length; i++) {
       deployment_validations[i]['ns'] = get_ns(deployment_validations[i].cluster, deployment_validations[i].namespace);
+      deployment_validations[i]['row_key'] = deployment_validations[i].cluster + '-' + deployment_validations[i].namespace;
     }
     deploymentValidationTable = (
       <Table.PfProvider
@@ -370,7 +526,7 @@ const DeploymentValidations = ({ get_ns, deployment_validations}) => {
       >
     
         <Table.Header />
-        <Table.Body rows={deployment_validations} />
+        <Table.Body rows={deployment_validations} rowKey='row_key'/>
       </Table.PfProvider>
     );
   }
@@ -381,11 +537,39 @@ const DeploymentValidations = ({ get_ns, deployment_validations}) => {
   </React.Fragment>
 }
 
-function Report({ report, namespaces}) {
+function Report({ report, namespaces, saas_files}) {
   const content = yaml.safeLoad(report.content);
 
   // fetch the namespace. Returns `undefined` if not found
   const get_ns = (c, ns) => namespaces.filter(n => n['name'] === ns && n['cluster']['name'] === c)[0];
+
+  // production_promotions is deprecated and will be replaced by promotions
+  // starting from April 2021
+  let promotionSection;
+  if (content.promotions) {
+    promotionSection = <Promotions promotions={content.promotions} get_ns={get_ns} saas_files={saas_files}/>;
+  } else if (content.production_promotions) {
+    promotionSection = <ProductionPromotions production_promotions={content.production_promotions}/>; 
+  } else {
+    promotionSection = (<React.Fragment>
+                        <h4>Promotions</h4>
+                        <p style={{ 'font-style': 'italic' }}>No promotions.</p>
+                       </React.Fragment>);
+  }
+
+  // merges_to_master is deprecated and will be replaced by merge_activities
+  // starting from April 2021
+  let mergeSection;
+  if (content.merge_activities) {
+    mergeSection = <MergeActivities merge_activities={content.merge_activities}/>;
+  } else if (content.merges_to_master) {
+    mergeSection = <MergesToMaster merges_to_master={content.merges_to_master}/>; 
+  } else {
+    mergeSection = (<React.Fragment>
+                      <h4>Merge Activties</h4>
+                      <p style={{ 'font-style': 'italic' }}>No merge_activities.</p>
+                    </React.Fragment>);
+  }
 
   return (
     <React.Fragment>
@@ -414,8 +598,8 @@ function Report({ report, namespaces}) {
         ]}
       />
       {<ReportVulnerabilities vulnerabilities={content.container_vulnerabilities} get_ns={get_ns}/>}
-      {<ProductionPromotions production_promotions={content.production_promotions}/>}
-      {<MergesToMaster merges_to_master={content.merges_to_master}/>}
+      {promotionSection}
+      {mergeSection}
       {<PostDeployJobs post_deploy_jobs={content.post_deploy_jobs} get_ns={get_ns} />}
       {<DeploymentValidations deployment_validations={content.deployment_validations} get_ns={get_ns}/>}
     </React.Fragment>
