@@ -426,7 +426,7 @@ const PostDeployJobs = ({ get_ns, post_deploy_jobs}) => {
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [booleanFormat(<OnboardingStatus state={"Success"}>Success</OnboardingStatus> , <OnboardingStatus state={"Failure"}>Failure</OnboardingStatus>), cellFormat]
+              formatters: [booleanFormat(<OnboardingStatus state={"Exist"}>Exist</OnboardingStatus> , <OnboardingStatus state={"Not Exist"}>Not Exist</OnboardingStatus>), cellFormat]
             },
             property: 'post_deploy_job'
           }
