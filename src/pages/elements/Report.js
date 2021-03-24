@@ -1,7 +1,6 @@
 import React from 'react';
 import { Table } from 'patternfly-react';
 import { Link } from 'react-router-dom';
-import OnboardingStatus from '../../components/OnboardingStatus';
 import Definition from '../../components/Definition';
 import GrafanaContainerVulnerabilities from '../../components/GrafanaContainerVulnerabilities';
 
@@ -426,7 +425,7 @@ const PostDeployJobs = ({ get_ns, post_deploy_jobs}) => {
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [booleanFormat(<OnboardingStatus state={"Exist"}>Exist</OnboardingStatus> , <OnboardingStatus state={"Not Exist"}>Not Exist</OnboardingStatus>), cellFormat]
+              formatters: [booleanFormat(<span style={{backgroundColor: "green"}} className={`badge Exist`} >Exist</span>, <span style={{backgroundColor: "red"}} className={`badge NotExist`}>Not Exist</span>), cellFormat]
             },
             property: 'post_deploy_job'
           }
