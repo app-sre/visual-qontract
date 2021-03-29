@@ -536,6 +536,76 @@ const DeploymentValidations = ({ get_ns, deployment_validations}) => {
   </React.Fragment>
 }
 
+// displays the ServiceSLO Table
+const ServiceSLO = ({ get_ns, service_slo}) => {
+  let ServiceSLOTable;
+  if (service_slo == null) {
+    ServiceSLOTable = <p style={{ 'font-style': 'italic' }}>No service_slo.</p>;
+  } else {
+    for (var i = 0; i < service_slo.length; i++) {
+      service_slo[i]['ns'] = get_ns(service_slo[i]['cluster'], service_slo[i]['namespace']);
+    }
+    ServiceSLOTable = (
+      <Table.PfProvider
+        striped
+        bordered
+        columns={[
+          {
+            header: {
+              label: 'Cluster / Namespace',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [ns=>(<p>
+              <LinkCluster path={ns.cluster.path} name={ns.cluster.name} /> / <LinkNS path={ns.path} name={ns.name} /></p>) , cellFormat]
+            },
+            property: 'ns'
+          },
+          {
+            header: {
+              label: 'SLO Name',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [cellFormat]
+            },
+            property: 'slo_name'
+          },
+          {
+            header: {
+              label: 'SLO Target',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [cellFormat]
+            },
+            property: 'slo_target'
+          },
+          {
+            header: {
+              label: 'SLO Value',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [cellFormat]
+            },
+            property: 'slo_value'
+          }
+        ]}
+      >
+        <Table.Header />
+        <Table.Body rows={service_slo} rowKey="cluster" />
+      </Table.PfProvider>
+    );
+  }
+
+
+  return <React.Fragment>
+    <h4>Service SLO</h4>
+    {ServiceSLOTable}
+  </React.Fragment>
+}
+
 function Report({ report, namespaces, saas_files}) {
   const content = yaml.safeLoad(report.content);
 
@@ -601,6 +671,7 @@ function Report({ report, namespaces, saas_files}) {
       {mergeSection}
       {<PostDeployJobs post_deploy_jobs={content.post_deploy_jobs} get_ns={get_ns} />}
       {<DeploymentValidations deployment_validations={content.deployment_validations} get_ns={get_ns}/>}
+      {<ServiceSLO service_slo={content.service_slo} get_ns={get_ns}/>}
     </React.Fragment>
   );
 }
