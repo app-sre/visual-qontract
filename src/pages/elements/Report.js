@@ -542,9 +542,19 @@ const ServiceSLO = ({ get_ns, service_slo}) => {
   if (service_slo == null) {
     ServiceSLOTable = <p style={{ 'font-style': 'italic' }}>No service_slo.</p>;
   } else {
+    var slo_value;
+    var slo_target;
     for (var i = 0; i < service_slo.length; i++) {
       service_slo[i]['ns'] = get_ns(service_slo[i]['cluster'], service_slo[i]['namespace']);
+      slo_value = service_slo[i]['slo_value'];
+      slo_target = service_slo[i]['slo_target'];
+      if (slo_value >= slo_target) {
+        service_slo[i]['slo_value_format'] = (<span style={{backgroundColor: "green"}} className={`badge Pass`}> {slo_value}</span>);
+      } else {
+        service_slo[i]['slo_value_format'] = (<span style={{backgroundColor: "red"}} className={`badge Fail`}> {slo_value}</span>);
+      }
     }
+    console.log(service_slo);
     ServiceSLOTable = (
       <Table.PfProvider
         striped
@@ -589,7 +599,7 @@ const ServiceSLO = ({ get_ns, service_slo}) => {
             cell: {
               formatters: [cellFormat]
             },
-            property: 'slo_value'
+            property: 'slo_value_format'
           }
         ]}
       >
