@@ -31,6 +31,13 @@ const GET_REPORT = gql`
       path
       name
     }
+    slo_document_v1 {
+      name
+      slos {
+        name
+        dashboard
+      }
+    }
   }
 `;
 
@@ -59,7 +66,7 @@ const ReportsPage = ({ location }) => {
           if (loading) return 'Loading...';
           if (error) return `Error! ${error.message}`;
           const report = data.reports_v1[0];
-          const body = <Report report={report} namespaces={data.namespaces_v1} saas_files={data.saas_files_v1}/>;
+          const body = <Report report={report} namespaces={data.namespaces_v1} saas_files={data.saas_files_v1} slo_documents={data.slo_document_v1}/>;
           return <Page title={report.name} body={body} path={report.path} />;
         }}
       </Query>

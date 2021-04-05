@@ -30,6 +30,13 @@ const LinkConsole = ({ consoleUrl }) => (
   </a>
 );
 
+// link to Grafana
+const LinkGrafana = ({ grafanaUrl }) => (
+  <a href={grafanaUrl} target="_blank" rel="noopener noreferrer">
+  Dashboard
+  </a>
+);
+
 // displays the list of vulnerabilities
 const Vulnerabilities = ({vs}) => {
   return <ul>
@@ -537,7 +544,8 @@ const DeploymentValidations = ({ get_ns, deployment_validations}) => {
 }
 
 // displays the ServiceSLO Table
-const ServiceSLO = ({ get_ns, service_slo}) => {
+const ServiceSLO = ({ get_ns, service_slo, slo_document}) => {
+
   let ServiceSLOTable;
   if (service_slo == null) {
     ServiceSLOTable = <p style={{ 'font-style': 'italic' }}>No service_slo.</p>;
@@ -546,15 +554,15 @@ const ServiceSLO = ({ get_ns, service_slo}) => {
     var slo_target;
     for (var i = 0; i < service_slo.length; i++) {
       service_slo[i]['ns'] = get_ns(service_slo[i]['cluster'], service_slo[i]['namespace']);
+      service_slo[i]['grafana'] = slo_document['slos'].filter(slo=>slo['name'] ===service_slo[i]['slo_name'])[0]['dashboard'];
       slo_value = service_slo[i]['slo_value'];
       slo_target = service_slo[i]['slo_target'];
       if (slo_value >= slo_target) {
-        service_slo[i]['slo_value_format'] = (<span style={{backgroundColor: "green"}} className={`badge Pass`}> {slo_value}</span>);
+        service_slo[i]['slo_pair'] = (<span style={{backgroundColor: "green"}} className={`badge Pass`}> {slo_value} / {slo_target}</span>);
       } else {
-        service_slo[i]['slo_value_format'] = (<span style={{backgroundColor: "red"}} className={`badge Fail`}> {slo_value}</span>);
+        service_slo[i]['slo_pair'] = (<span style={{backgroundColor: "red"}} className={`badge Fail`}> {slo_value} / {slo_target}</span>);
       }
     }
-    console.log(service_slo);
     ServiceSLOTable = (
       <Table.PfProvider
         striped
@@ -583,23 +591,23 @@ const ServiceSLO = ({ get_ns, service_slo}) => {
           },
           {
             header: {
-              label: 'SLO Target',
+              label: 'Grafana',
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [cellFormat]
+              formatters: [grafana=>(<LinkGrafana grafanaUrl={grafana} />), cellFormat]
             },
-            property: 'slo_target'
+            property: 'grafana'
           },
           {
             header: {
-              label: 'SLO Value',
+              label: 'SLO Value / SLO Target',
               formatters: [headerFormat]
             },
             cell: {
               formatters: [cellFormat]
             },
-            property: 'slo_value_format'
+            property: 'slo_pair'
           }
         ]}
       >
@@ -616,11 +624,14 @@ const ServiceSLO = ({ get_ns, service_slo}) => {
   </React.Fragment>
 }
 
-function Report({ report, namespaces, saas_files}) {
+function Report({ report, namespaces, saas_files, slo_documents}) {
   const content = yaml.safeLoad(report.content);
 
   // fetch the namespace. Returns `undefined` if not found
   const get_ns = (c, ns) => namespaces.filter(n => n['name'] === ns && n['cluster']['name'] === c)[0];
+
+  // For now, use slo_document['name'] as service name
+  const slo_document = slo_documents.filter(doc => doc['name'].toLowerCase() === report.app.name.toLowerCase())[0];
 
   // production_promotions is deprecated and will be replaced by promotions
   // starting from April 2021
@@ -681,7 +692,7 @@ function Report({ report, namespaces, saas_files}) {
       {mergeSection}
       {<PostDeployJobs post_deploy_jobs={content.post_deploy_jobs} get_ns={get_ns} />}
       {<DeploymentValidations deployment_validations={content.deployment_validations} get_ns={get_ns}/>}
-      {<ServiceSLO service_slo={content.service_slo} get_ns={get_ns}/>}
+      {<ServiceSLO service_slo={content.service_slo} get_ns={get_ns} slo_document={slo_document}/>}
     </React.Fragment>
   );
 }
