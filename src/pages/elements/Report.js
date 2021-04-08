@@ -630,8 +630,17 @@ function Report({ report, namespaces, saas_files, slo_documents}) {
   // fetch the namespace. Returns `undefined` if not found
   const get_ns = (c, ns) => namespaces.filter(n => n['name'] === ns && n['cluster']['name'] === c)[0];
 
-  // For now, use slo_document['name'] as service name
-  const slo_document = slo_documents.filter(doc => doc['name'].toLowerCase() === report.app.name.toLowerCase())[0];
+  var slo_document;
+  var ns;
+  for (var i = 0; i < slo_documents.length; i++) {
+    for (var j = 0; j < slo_documents[i]['namespaces'].length; j++) {
+      ns = slo_documents[i]['namespaces'][j];
+      if (ns.app.name === report.app.name) {
+        slo_document = slo_documents[i];
+        break;
+      }
+    }
+  }
 
   // production_promotions is deprecated and will be replaced by promotions
   // starting from April 2021

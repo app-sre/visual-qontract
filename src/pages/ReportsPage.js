@@ -33,6 +33,11 @@ const GET_REPORT = gql`
     }
     slo_document_v1 {
       name
+      namespaces {
+        app {
+          name
+        }
+      }
       slos {
         name
         dashboard
