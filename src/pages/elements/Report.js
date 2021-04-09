@@ -30,6 +30,13 @@ const LinkConsole = ({ consoleUrl }) => (
   </a>
 );
 
+// link to Grafana
+const LinkGrafana = ({ grafanaUrl }) => (
+  <a href={grafanaUrl} target="_blank" rel="noopener noreferrer">
+  Dashboard
+  </a>
+);
+
 // displays the list of vulnerabilities
 const Vulnerabilities = ({vs}) => {
   return <ul>
@@ -536,11 +543,104 @@ const DeploymentValidations = ({ get_ns, deployment_validations}) => {
   </React.Fragment>
 }
 
-function Report({ report, namespaces, saas_files}) {
+// displays the ServiceSLO Table
+const ServiceSLO = ({ get_ns, service_slo, slo_document}) => {
+
+  let ServiceSLOTable;
+  if (service_slo == null) {
+    ServiceSLOTable = <p style={{ 'font-style': 'italic' }}>No service_slo.</p>;
+  } else {
+    var slo_value;
+    var slo_target;
+    for (var i = 0; i < service_slo.length; i++) {
+      service_slo[i]['ns'] = get_ns(service_slo[i]['cluster'], service_slo[i]['namespace']);
+      service_slo[i]['grafana'] = slo_document['slos'].filter(slo=>slo['name'] ===service_slo[i]['slo_name'])[0]['dashboard'];
+      slo_value = service_slo[i]['slo_value'];
+      slo_target = service_slo[i]['slo_target'];
+      if (slo_value >= slo_target) {
+        service_slo[i]['slo_pair'] = (<span style={{backgroundColor: "green"}} className={`badge Pass`}> {slo_value} / {slo_target}</span>);
+      } else {
+        service_slo[i]['slo_pair'] = (<span style={{backgroundColor: "red"}} className={`badge Fail`}> {slo_value} / {slo_target}</span>);
+      }
+    }
+    ServiceSLOTable = (
+      <Table.PfProvider
+        striped
+        bordered
+        columns={[
+          {
+            header: {
+              label: 'Cluster / Namespace',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [ns=>(<p>
+              <LinkCluster path={ns.cluster.path} name={ns.cluster.name} /> / <LinkNS path={ns.path} name={ns.name} /></p>) , cellFormat]
+            },
+            property: 'ns'
+          },
+          {
+            header: {
+              label: 'SLO Name',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [cellFormat]
+            },
+            property: 'slo_name'
+          },
+          {
+            header: {
+              label: 'Grafana',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [grafana=>(<LinkGrafana grafanaUrl={grafana} />), cellFormat]
+            },
+            property: 'grafana'
+          },
+          {
+            header: {
+              label: 'SLO Value / SLO Target',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [cellFormat]
+            },
+            property: 'slo_pair'
+          }
+        ]}
+      >
+        <Table.Header />
+        <Table.Body rows={service_slo} rowKey="cluster" />
+      </Table.PfProvider>
+    );
+  }
+
+
+  return <React.Fragment>
+    <h4>Service SLO</h4>
+    {ServiceSLOTable}
+  </React.Fragment>
+}
+
+function Report({ report, namespaces, saas_files, slo_documents}) {
   const content = yaml.safeLoad(report.content);
 
   // fetch the namespace. Returns `undefined` if not found
   const get_ns = (c, ns) => namespaces.filter(n => n['name'] === ns && n['cluster']['name'] === c)[0];
+
+  var slo_document;
+  var ns;
+  for (var i = 0; i < slo_documents.length; i++) {
+    for (var j = 0; j < slo_documents[i]['namespaces'].length; j++) {
+      ns = slo_documents[i]['namespaces'][j];
+      if (ns.app.name === report.app.name) {
+        slo_document = slo_documents[i];
+        break;
+      }
+    }
+  }
 
   // production_promotions is deprecated and will be replaced by promotions
   // starting from April 2021
@@ -601,6 +701,7 @@ function Report({ report, namespaces, saas_files}) {
       {mergeSection}
       {<PostDeployJobs post_deploy_jobs={content.post_deploy_jobs} get_ns={get_ns} />}
       {<DeploymentValidations deployment_validations={content.deployment_validations} get_ns={get_ns}/>}
+      {<ServiceSLO service_slo={content.service_slo} get_ns={get_ns} slo_document={slo_document}/>}
     </React.Fragment>
   );
 }
