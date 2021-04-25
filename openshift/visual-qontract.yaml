@@ -65,7 +65,7 @@ objects:
             timeoutSeconds: 3
           readinessProbe:
             httpGet:
-              path: /
+              path: /graphql?query={__schema{types{name}}}
               port: 8080
             initialDelaySeconds: 3
             periodSeconds: 10
