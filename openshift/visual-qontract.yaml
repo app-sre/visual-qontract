@@ -64,9 +64,12 @@ objects:
             periodSeconds: 10
             timeoutSeconds: 3
           readinessProbe:
-            httpGet:
-              path: /
-              port: 8080
+            exec:
+              command:
+              - curl
+              - --globoff
+              - --fail
+              - http://localhost:8080/graphql?query={__schema{types{name}}}
             initialDelaySeconds: 3
             periodSeconds: 10
             timeoutSeconds: 3
