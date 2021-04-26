@@ -58,7 +58,7 @@ objects:
           - containerPort: 8080
           livenessProbe:
             httpGet:
-              path: /
+              path: /graphql?query={__schema{types{name}}}
               port: 8080
             initialDelaySeconds: 30
             periodSeconds: 10
