@@ -89,12 +89,38 @@ const SaasDeployJobs = ({saas_file, settings}) => {
   </ul>
 };
 
+// displays the list of Pipeline Runs
+const PipelineRuns = ({saas_file, settings}) => {
+  const pipeline_name = settings[0].saasDeployJobTemplate;
+  var pp_ns = saas_file.pipelinesProvider.namespace
+  var pp_ns_name = pp_ns.name
+  var pp_cluster = pp_ns.cluster
+  var pp_cluster_console_url = pp_cluster.consoleUrl
+  var url_elements = [];
+  var long_name, short_name, url, elem;
+  for (var template of saas_file.resourceTemplates) {
+    for (var target of template.targets) {
+      long_name = saas_file.name + '-' + target.namespace.environment.name
+      short_name = long_name.substring(0, 50); // max name length can be 63. leaving 12 for the timestamp - 51
+      url = pp_cluster_console_url + '/k8s/ns/' + pp_ns_name + '/tekton.dev~v1beta1~Pipeline/' + pipeline_name + '/Runs?name=' + short_name;
+      elem = <li><a href={url} target="_blank"> {target.namespace.environment.name} </a></li>
+      if (!url_elements.includes(elem)) {
+        url_elements.push(elem);
+      }
+    }
+  }
+  
+  return <ul>
+    {url_elements}
+  </ul>
+};
+
 // displays the saas_files section
-const SaasFiles = ({ saas_files, settings}) => {
+const SaasFilesV1 = ({ saas_files, settings}) => {
   const get_saas_file = (path) => saas_files.filter(f => f['path'] === path)[0];
   let saasFilesTable;
-  if (saas_files == null) {
-    saasFilesTable = <p style={{ 'font-style': 'italic' }}>No Saas Files.</p>;
+  if (saas_files == null || saas_files.length == 0) {
+    saasFilesTable = <p/>;
   } else {
     saasFilesTable = (
       <Table.PfProvider
@@ -142,12 +168,68 @@ const SaasFiles = ({ saas_files, settings}) => {
   }
 
   return <React.Fragment>
-    <h4>Saas Files</h4>
     {saasFilesTable}
   </React.Fragment>
 }
 
-function Service({ service, reports, documents, saas_files, settings}) {
+// displays the saas_files section
+const SaasFilesV2 = ({ saas_files, settings}) => {
+  const get_saas_file = (path) => saas_files.filter(f => f['path'] === path)[0];
+  let saasFilesTable;
+  if (saas_files == null || saas_files.length == 0) {
+    saasFilesTable = <p/>;
+  } else {
+    saasFilesTable = (
+      <Table.PfProvider
+        striped
+        bordered
+        columns={[
+          {
+            header: {
+              label: 'Name',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [cellFormat]
+            },
+            property: 'name'
+          },
+          {
+            header: {
+              label: 'Link',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [path=>(<a href={`${window.DATA_DIR_URL}/${path}`} target="_blank" rel="noopener noreferrer">
+              {path}
+            </a>) , cellFormat]
+            },
+            property: 'path'
+          },
+          {
+            header: {
+              label: 'Pipeline Runs',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [path=><PipelineRuns saas_file={get_saas_file(path)} settings={settings}/>, cellFormat]
+            },
+            property: 'path'
+          }
+        ]}
+      >
+        <Table.Header />
+        <Table.Body rows={saas_files} rowKey="path" />
+      </Table.PfProvider>
+    );
+  }
+
+  return <React.Fragment>
+    {saasFilesTable}
+  </React.Fragment>
+}
+
+function Service({ service, reports, documents, saas_files, saas_files_v2, settings}) {
 
   function matches(r) {
     if (r.app.name === service.name) {
@@ -157,7 +239,8 @@ function Service({ service, reports, documents, saas_files, settings}) {
   }
   const matchedReports = sortByDate(reports).filter(matches);
   const matchedDocuments = documents.filter(matches);
-  const matchedSaasFiles = saas_files.filter(matches);
+  const matchedSaasFilesV1 = saas_files.filter(matches);
+  const matchedSaasFilesV2 = saas_files_v2.filter(matches);
 
   let quayReposTable;
   if (service.quayRepos == null) {
@@ -349,8 +432,10 @@ function Service({ service, reports, documents, saas_files, settings}) {
 
       <h4>Reports</h4>
       {reportSection}
-  
-      {<SaasFiles saas_files={matchedSaasFiles} settings={settings} />}
+
+      <h4>Saas Files</h4>
+      {<SaasFilesV1 saas_files={matchedSaasFilesV1} settings={settings} />}
+      {<SaasFilesV2 saas_files={matchedSaasFilesV2} settings={settings} />}
 
       {service.childrenApps.length > 0 &&
         <React.Fragment>
