@@ -118,6 +118,34 @@ const GET_SERVICE = gql`
         }
       }
     }
+    saas_files_v2 {
+      path
+      name
+      app {
+        name
+      }
+      pipelinesProvider {
+        provider
+        ...on PipelinesProviderTekton_v1 {
+          namespace {
+            name
+            cluster {
+              consoleUrl
+            }
+          }
+        }
+      }
+      resourceTemplates {
+        targets {
+          namespace {
+            name
+            environment {
+              name
+            }
+          }
+        }
+      }
+    }
     documents_v1 {
       path
       app {
@@ -161,8 +189,9 @@ const ServicesPage = ({ location }) => {
           const reports = data.reports_v1;
           const documents = data.documents_v1;
           const saas_files = data.saas_files_v1;
+          const saas_files_v2 = data.saas_files_v2;
           const settings = data.app_interface_settings_v1;
-          const body = <Service service={service} reports={reports} documents={documents} saas_files={saas_files} settings={settings}/>
+          const body = <Service service={service} reports={reports} documents={documents} saas_files={saas_files} saas_files_v2={saas_files_v2} settings={settings}/>
           return <Page title={service.name} body={body} path={service.path} />;
         }}
       </Query>
