@@ -96,6 +96,7 @@ const PipelineRuns = ({saas_file, settings}) => {
   var pp_ns_name = pp_ns.name
   var pp_cluster = pp_ns.cluster
   var pp_cluster_console_url = pp_cluster.consoleUrl
+  var urls = [];
   var url_elements = [];
   var long_name, short_name, url, elem;
   for (var template of saas_file.resourceTemplates) {
@@ -103,8 +104,9 @@ const PipelineRuns = ({saas_file, settings}) => {
       long_name = saas_file.name + '-' + target.namespace.environment.name
       short_name = long_name.substring(0, 50); // max name length can be 63. leaving 12 for the timestamp - 51
       url = pp_cluster_console_url + '/k8s/ns/' + pp_ns_name + '/tekton.dev~v1beta1~Pipeline/' + pipeline_name + '/Runs?name=' + short_name;
-      elem = <li><a href={url} target="_blank"> {target.namespace.environment.name} </a></li>
-      if (!url_elements.includes(elem)) {
+      if (!urls.includes(url)) {
+        urls.push(url)
+        elem = <li><a href={url} target="_blank"> {target.namespace.environment.name} </a></li>
         url_elements.push(elem);
       }
     }
