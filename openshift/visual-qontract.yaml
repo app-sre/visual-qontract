@@ -173,6 +173,21 @@ objects:
         protocol: TCP
     selector:
       deploymentconfig: visual-qontract
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: visual-qontract
+    labels:
+      app: visual-qontract
+  spec:
+    type: ClusterIP
+    ports:
+      - name: https
+        port: 443
+        targetPort: 8080
+        protocol: TCP
+    selector:
+      deploymentconfig: visual-qontract
 parameters:
 - name: IMAGE
   value: quay.io/app-sre/visual-qontract
