@@ -552,9 +552,12 @@ const ServiceSLO = ({ get_ns, service_slo, slo_document}) => {
   } else {
     var slo_value;
     var slo_target;
+    let slo_document_filtered;
+
     for (var i = 0; i < service_slo.length; i++) {
       service_slo[i]['ns'] = get_ns(service_slo[i]['cluster'], service_slo[i]['namespace']);
-      service_slo[i]['grafana'] = slo_document['slos'].filter(slo=>slo['name'] ===service_slo[i]['slo_name'])[0]['dashboard'];
+      slo_document_filtered = slo_document['slos'].filter(slo=>slo['name'] ===service_slo[i]['slo_name'])
+      service_slo[i]['grafana'] = slo_document_filtered.length ? slo_document_filtered[0]['dashboard'] : '';
       slo_value = service_slo[i]['slo_value'];
       slo_target = service_slo[i]['slo_target'];
       if (slo_value >= slo_target) {
