@@ -31,6 +31,10 @@ const GET_REPORT = gql`
       path
       name
     }
+    saas_files_v2 {
+      path
+      name
+    }
     slo_document_v1 {
       name
       namespaces {
