@@ -76,6 +76,17 @@ function Namespace({ namespace, roles }) {
               {namespace.cluster.name}
             </Link>
           ],
+          [
+            'App',
+            <Link
+              to={{
+                pathname: '/services',
+                hash: namespace.app.path
+              }}
+            >
+              {namespace.app.name}
+            </Link>
+          ],
           ['Grafana', grafana],
           ['Container Vulnerabilities',
             <GrafanaContainerVulnerabilities namespace={namespace} />
