@@ -21,6 +21,10 @@ const GET_NAMESPACE = gql`
         }
         consoleUrl
       }
+      app {
+        name
+        path
+      }
       managedTerraformResources
       terraformResources {
         provider
