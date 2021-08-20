@@ -20,6 +20,9 @@ function Namespaces({ namespaces, users }) {
       ns.cluster_name_path = [ns.cluster.name, ns.cluster.path];
       ns.grafana_url = [ns.cluster.jumpHost, ns.cluster.name, ns.name, ns.grafanaUrl];
     }
+    if (typeof ns.app !== 'undefined') {
+      ns.app_name_path = [ns.app.name, ns.app.path];
+    }
     return ns;
   });
   const lcFilter = filterText.toLowerCase();
@@ -100,6 +103,29 @@ function Namespaces({ namespaces, users }) {
     property: 'cluster_name_path'
   };
 
+  const colApp = {
+    header: {
+      label: 'App',
+      formatters: [headerFormat]
+    },
+    cell: {
+      formatters: [
+        value => (
+          <Link
+            to={{
+              pathname: '/services',
+              hash: value[1]
+            }}
+          >
+            {value[0]}
+          </Link>
+        ),
+        cellFormat
+      ]
+    },
+    property: 'app_name_path'
+  };
+
   const colGrafana = {
     header: {
       label: 'Grafana',
@@ -125,10 +151,14 @@ function Namespaces({ namespaces, users }) {
     property: 'description'
   };
 
-  const tableCols =
-    typeof namespaces[0].cluster.path === 'undefined'
-      ? [colName, colPath, colGrafana, colDescription]
-      : [colName, colPath, colCluster, colGrafana, colDescription];
+  const tableCols = [colName, colPath];
+  if( typeof namespaces[0].cluster.path !== 'undefined') {
+    tableCols.push(colCluster);
+  }
+  if( namespaces[0].app != null){
+    tableCols.push(colApp);
+  }
+  tableCols.push(colGrafana, colDescription);
 
   return (
     <TableSearch

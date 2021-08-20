@@ -64,6 +64,10 @@ const GET_NAMESPACES = gql`
           hostname
         }
       }
+      app {
+        name
+        path
+      }
     }
   }
 `;
