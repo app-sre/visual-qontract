@@ -18,7 +18,6 @@ const GET_CLUSTERS = gql`
         external_id
       }
       upgradePolicy {
-        schedule_type
         schedule
       }
     }

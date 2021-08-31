@@ -181,7 +181,7 @@ function Clusters({ clusters, apps }) {
     }
 
     if (c.upgradePolicy) {
-      c.upgrade_schedule = `${c.upgradePolicy.schedule_type} - ${c.upgradePolicy.schedule}`;
+      c.upgrade_schedule = `${c.upgradePolicy.schedule}`;
     }
 
     return c;
