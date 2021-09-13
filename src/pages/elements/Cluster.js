@@ -59,7 +59,11 @@ function Cluster({ cluster, roles }) {
           ['Grafana', grafana],
           cluster.network !== null && cluster.network.vpc !== null && ['VPC CIDR', cluster.network.vpc],
           cluster.network !== null && cluster.network.service !== null && ['Service CIDR', cluster.network.service],
-          cluster.network !== null && cluster.network.pod !== null && ['Pod CIDR', cluster.network.pod]
+          cluster.network !== null && cluster.network.pod !== null && ['Pod CIDR', cluster.network.pod],
+          cluster.upgradePolicy !== null && ['Upgrade schedule', cluster.upgradePolicy.schedule],
+          cluster.upgradePolicy !== null && cluster.upgradePolicy.workloads !== null &&['Upgrade workloads', cluster.upgradePolicy.workloads.join(', ')],
+          cluster.upgradePolicy !== null && cluster.upgradePolicy.conditions !== null &&
+            cluster.upgradePolicy.conditions.soakDays !== null && ['Upgrade soak days', cluster.upgradePolicy.conditions.soakDays],
         ]}
       />
 

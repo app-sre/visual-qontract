@@ -40,6 +40,13 @@ const GET_CLUSTER = gql`
           }
         }
       }
+      upgradePolicy {
+        schedule
+        workloads
+        conditions {
+          soakDays
+        }
+      }
     }
     roles_v1 {
       path
@@ -87,6 +94,10 @@ const GET_CLUSTERS = gql`
       }
       upgradePolicy {
         schedule
+        workloads
+        conditions {
+          soakDays
+        }
       }
     }
     apps_v1 {
