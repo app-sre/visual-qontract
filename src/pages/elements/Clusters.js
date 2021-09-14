@@ -60,16 +60,6 @@ function AppSREClustersTable({ clusters, apps }) {
         },
         {
           header: {
-            label: 'Version',
-            formatters: [headerFormat]
-          },
-          cell: {
-            formatters: [cellFormat]
-          },
-          property: 'version'
-        },
-        {
-          header: {
             label: 'Services',
             formatters: [headerFormat]
           },
@@ -77,6 +67,16 @@ function AppSREClustersTable({ clusters, apps }) {
             formatters: [appsFormat, cellFormat]
           },
           property: 'apps'
+        },
+        {
+          header: {
+            label: 'Version',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'version'
         },
         {
           header: {

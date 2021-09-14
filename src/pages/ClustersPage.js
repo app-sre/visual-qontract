@@ -13,6 +13,7 @@ const GET_CLUSTER = gql`
       name
       spec {
         version
+        channel
       }
       description
       consoleUrl
