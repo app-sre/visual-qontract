@@ -13,6 +13,7 @@ const GET_CLUSTER = gql`
       name
       spec {
         version
+        channel
       }
       description
       consoleUrl
@@ -38,6 +39,13 @@ const GET_CLUSTER = gql`
           jumpHost {
             hostname
           }
+        }
+      }
+      upgradePolicy {
+        schedule
+        workloads
+        conditions {
+          soakDays
         }
       }
     }
@@ -87,6 +95,10 @@ const GET_CLUSTERS = gql`
       }
       upgradePolicy {
         schedule
+        workloads
+        conditions {
+          soakDays
+        }
       }
     }
     apps_v1 {

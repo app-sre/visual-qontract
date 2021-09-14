@@ -24,3 +24,4 @@ $ yarn build
 $ yarn start:dev
 ```
 
+The server will then run on http://localhost:3000
