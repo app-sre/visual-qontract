@@ -5,7 +5,9 @@ import { components } from 'react-select';
 import { GREY } from './ColourStyles';
 
 const Select = props => {
-  if (props.allowSelectAll) {
+  const { allowSelectAll } = props;
+
+  if (allowSelectAll) {
     return (
       <CreatableSelect
         {...props}
