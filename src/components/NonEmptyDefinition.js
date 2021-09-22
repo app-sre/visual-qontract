@@ -6,8 +6,7 @@ function NonEmptyDefinition({ items }) {
   let key;
   let value;
   for (let i = 0; i < items.length; i++) {
-    key = items[i][0];
-    value = items[i][1];
+    [key, value] = items[i];
     if (value) {
       definitions.push(
         <div className="app-definition-row" key={`${key}-${value}`}>
