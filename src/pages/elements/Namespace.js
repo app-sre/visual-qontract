@@ -94,9 +94,7 @@ function Namespace({ namespace, roles }) {
             </Link>
           ],
           ['Grafana', grafana],
-          ['Container Vulnerabilities',
-            <GrafanaContainerVulnerabilities namespace={namespace} />
-          ]
+          ['Container Vulnerabilities', <GrafanaContainerVulnerabilities namespace={namespace} />]
         ]}
       />
 

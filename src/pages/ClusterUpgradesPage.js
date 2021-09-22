@@ -24,18 +24,16 @@ const GET_CLUSTERS = gql`
   }
 `;
 
-const ClustersPage = ({ location }) => {
-  return (
-    <Query query={GET_CLUSTERS}>
-      {({ loading, error, data }) => {
-        if (loading) return 'Loading...';
-        if (error) return `Error! ${error.message}`;
+const ClustersPage = ({ location }) => (
+  <Query query={GET_CLUSTERS}>
+    {({ loading, error, data }) => {
+      if (loading) return 'Loading...';
+      if (error) return `Error! ${error.message}`;
 
-        const body = <ClusterUpgrades clusters={data.clusters_v1} />;
-        return <Page title="Cluster Upgrades" body={body} />;
-      }}
-    </Query>
-  );
-};
+      const body = <ClusterUpgrades clusters={data.clusters_v1} />;
+      return <Page title="Cluster Upgrades" body={body} />;
+    }}
+  </Query>
+);
 
 export default ClustersPage;

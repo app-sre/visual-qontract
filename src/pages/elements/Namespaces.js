@@ -133,7 +133,7 @@ function Namespaces({ namespaces, users }) {
     },
     cell: {
       formatters: [
-        value => <GrafanaUrl jumpHost={value[0]} cluster={value[1]} namespace={value[2]} url={value[3]} hide={true} />,
+        value => <GrafanaUrl jumpHost={value[0]} cluster={value[1]} namespace={value[2]} url={value[3]} hide />,
         cellFormat
       ]
     },
@@ -152,10 +152,10 @@ function Namespaces({ namespaces, users }) {
   };
 
   const tableCols = [colName, colPath];
-  if( typeof namespaces[0].cluster.path !== 'undefined') {
+  if (typeof namespaces[0].cluster.path !== 'undefined') {
     tableCols.push(colCluster);
   }
-  if( namespaces[0].app != null){
+  if (namespaces[0].app != null) {
     tableCols.push(colApp);
   }
   tableCols.push(colGrafana, colDescription);

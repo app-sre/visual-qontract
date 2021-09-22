@@ -67,11 +67,7 @@ function User({ user }) {
           ],
           [
             'Red Hat Username',
-            <a
-              href={`https://mojo.redhat.com/people/${user.org_username}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={`https://mojo.redhat.com/people/${user.org_username}`} target="_blank" rel="noopener noreferrer">
               {user.org_username}
             </a>
           ],

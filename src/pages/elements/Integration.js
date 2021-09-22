@@ -20,7 +20,7 @@ function Integration({ integration }) {
               {integration.upstream}
             </a>
           ],
-          ['Description', integration.description],
+          ['Description', integration.description]
         ]}
       />
     </React.Fragment>

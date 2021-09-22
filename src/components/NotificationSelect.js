@@ -1,8 +1,8 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 import CreatableSelect from 'react-select/creatable';
-import {components} from "react-select";
-import {GREY, BLUE} from "./ColourStyles.js";
+import { components } from 'react-select';
+import { GREY, BLUE } from './ColourStyles.js';
 
 const SelectAffected = props => {
   if (props.allowSelectAll) {
@@ -12,14 +12,22 @@ const SelectAffected = props => {
         options={[props.allOption, ...props.options]}
         onChange={(selected, event) => {
           if (selected !== null && selected.length > 0) {
-            if (event.action == "select-option") {
+            if (event.action == 'select-option') {
               if (selected[selected.length - 1].value === props.allOption.value) {
-                let otherSelected = selected.filter(option => option.value !== props.allOption.value && option.color !== BLUE)
-                return props.onChange([props.allOption, ...props.options.filter(option => option.color !== GREY), ...otherSelected]);
+                const otherSelected = selected.filter(
+                  option => option.value !== props.allOption.value && option.color !== BLUE
+                );
+                return props.onChange([
+                  props.allOption,
+                  ...props.options.filter(option => option.color !== GREY),
+                  ...otherSelected
+                ]);
               }
             }
             if (event.action === 'deselect-option' && event.option.value === props.allOption.value) {
-              let otherSelected = selected.filter(option => option.value !== props.allOption.value & option.color !== BLUE)
+              const otherSelected = selected.filter(
+                option => (option.value !== props.allOption.value) & (option.color !== BLUE)
+              );
               return props.onChange([...otherSelected]);
             }
           }
@@ -40,31 +48,24 @@ SelectAffected.propTypes = {
   allOption: PropTypes.shape({
     label: PropTypes.string,
     value: PropTypes.string,
-    contact: PropTypes.string,
+    contact: PropTypes.string
   })
 };
 
 SelectAffected.defaultProps = {
   allOption: {
-    label: "Select all affected",
-    value: "*",
+    label: 'Select all affected',
+    value: '*'
   }
 };
 
-const Option = props => {
-  return (
-    <div>
-      <components.Option {...props}>
-        <input
-          type="checkbox"
-          checked={props.isSelected}
-          onChange={() => null}
-        />{" "}
-        {props.label}
-      </components.Option>
-    </div>
-  );
-};
+const Option = props => (
+  <div>
+    <components.Option {...props}>
+      <input type="checkbox" checked={props.isSelected} onChange={() => null} /> {props.label}
+    </components.Option>
+  </div>
+);
 
 const MultiValue = props => (
   <components.MultiValue {...props}>
@@ -72,4 +73,4 @@ const MultiValue = props => (
   </components.MultiValue>
 );
 
-export {SelectAffected, Option, MultiValue};
+export { SelectAffected, Option, MultiValue };
