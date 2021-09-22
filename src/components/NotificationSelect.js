@@ -65,18 +65,26 @@ SelectAffected.defaultProps = {
   }
 };
 
-const Option = props => (
-  <div>
-    <components.Option {...props}>
-      <input type="checkbox" checked={props.isSelected} onChange={() => null} /> {props.label}
-    </components.Option>
-  </div>
-);
+const Option = props => {
+  const { isSelected, label } = props;
 
-const MultiValue = props => (
-  <components.MultiValue {...props}>
-    <span>{props.data.label}</span>
-  </components.MultiValue>
-);
+  return (
+    <div>
+      <components.Option {...props}>
+        <input type="checkbox" checked={isSelected} onChange={() => null} /> {label}
+      </components.Option>
+    </div>
+  );
+};
+
+const MultiValue = props => {
+  const { data } = props;
+
+  return (
+    <components.MultiValue {...props}>
+      <span>{data.label}</span>
+    </components.MultiValue>
+  );
+};
 
 export { SelectAffected, Option, MultiValue };
