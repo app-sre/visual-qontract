@@ -14,7 +14,7 @@ const SelectAffected = props => {
         options={[props.allOption, ...props.options]}
         onChange={(selected, event) => {
           if (selected !== null && selected.length > 0) {
-            if (event.action == 'select-option') {
+            if (event.action === 'select-option') {
               if (selected[selected.length - 1].value === props.allOption.value) {
                 const otherSelected = selected.filter(
                   option => option.value !== props.allOption.value && option.color !== BLUE
