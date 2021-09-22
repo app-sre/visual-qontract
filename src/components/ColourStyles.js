@@ -7,12 +7,14 @@ const BLUE = chroma('#06c');
 const ColourStyles = {
   control: styles => ({ ...styles, backgroundColor: 'white' }),
   option: (styles, { data, isDisabled, isSelected }) => {
-    const color = data.color || GREY;
+    let color = data.color || GREY;
+    const selectedColor = chroma.contrast(color, 'white') > 2 ? 'white' : 'black';
+    color = isSelected ? selectedColor : color.hex();
 
     return {
       // define option color
       ...styles,
-      color: isDisabled ? '#ccc' : isSelected ? (chroma.contrast(color, 'white') > 2 ? 'white' : 'black') : color.hex()
+      color: isDisabled ? '#ccc' : color
     };
   },
   multiValue: (styles, { data }) => {
