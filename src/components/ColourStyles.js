@@ -7,11 +7,7 @@ const BLUE = chroma('#06c');
 const ColourStyles = {
   control: styles => ({ ...styles, backgroundColor: 'white' }),
   option: (styles, { data, isDisabled, isSelected }) => {
-    if (data.color) {
-      var { color } = data;
-    } else {
-      var color = GREY;
-    }
+    const color = data.color || GREY;
 
     return {
       // define option color
@@ -20,11 +16,8 @@ const ColourStyles = {
     };
   },
   multiValue: (styles, { data }) => {
-    if (data.color) {
-      var { color } = data;
-    } else {
-      var color = GREY;
-    }
+    const color = data.color || GREY;
+
     return {
       // define selected options label background color
       ...styles,
@@ -32,11 +25,8 @@ const ColourStyles = {
     };
   },
   multiValueLabel: (styles, { data }) => {
-    if (data.color) {
-      var { color } = data;
-    } else {
-      var color = GREY;
-    }
+    const color = data.color || GREY;
+
     return {
       // define selected options label color
       ...styles,
@@ -44,11 +34,8 @@ const ColourStyles = {
     };
   },
   multiValueRemove: (styles, { data }) => {
-    if (data.color) {
-      var { color } = data;
-    } else {
-      var color = GREY;
-    }
+    const color = data.color || GREY;
+
     return {
       // define selected options remove label color
       ...styles,
