@@ -55,6 +55,10 @@ SelectAffected.propTypes = {
 };
 
 SelectAffected.defaultProps = {
+  options: [],
+  value: {},
+  onChange: () => {},
+  allowSelectAll: true,
   allOption: {
     label: 'Select all affected',
     value: '*'
