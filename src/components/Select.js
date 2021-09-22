@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CreatableSelect from 'react-select/creatable';
 import { components } from 'react-select';
-import { RED, GREY } from './ColourStyles.js';
+import { GREY } from './ColourStyles';
 
 const Select = props => {
   if (props.allowSelectAll) {
