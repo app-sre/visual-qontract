@@ -28,7 +28,7 @@ const SelectAffected = props => {
             }
             if (event.action === 'deselect-option' && event.option.value === props.allOption.value) {
               const otherSelected = selected.filter(
-                option => (option.value !== props.allOption.value) & (option.color !== BLUE)
+                option => option.value !== props.allOption.value && option.color !== BLUE
               );
               return props.onChange([...otherSelected]);
             }
