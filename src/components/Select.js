@@ -60,44 +60,56 @@ Select.defaultProps = {
   }
 };
 
-const Option = props => (
-  <div>
-    <components.Option {...props}>
-      <input type="checkbox" checked={props.isSelected} onChange={() => null} /> {props.label}
-    </components.Option>
-  </div>
-);
+const Option = props => {
+  const { isSelected, label } = props;
 
-const MultiValue = props => (
-  <components.MultiValue {...props}>
-    <span>{props.data.label}</span>
-  </components.MultiValue>
-);
+  return (
+    <div>
+      <components.Option {...props}>
+        <input type="checkbox" checked={isSelected} onChange={() => null} /> {label}
+      </components.Option>
+    </div>
+  );
+};
 
-const SelectService = props => (
-  <CreatableSelect
-    {...props}
-    options={[props.allServiceOption, ...props.options]}
-    onChange={(selected, event) => {
-      if (selected !== null && selected.length > 0) {
-        if (selected[selected.length - 1].value === props.allServiceOption.value) {
-          return props.onChange([props.allServiceOption, ...props.options.filter(option => option.color !== GREY)]);
-        }
-        let result = [];
-        if (selected.length === props.options.filter(option => option.color !== GREY).length) {
-          if (selected.includes(props.allServiceOption)) {
-            result = selected.filter(option => option.value !== props.allServiceOption.value);
-          } else if (event.action === 'select-option') {
-            result = [props.allServiceOption, ...props.options];
+const MultiValue = props => {
+  const { data } = props;
+
+  return (
+    <components.MultiValue {...props}>
+      <span>{data.label}</span>
+    </components.MultiValue>
+  );
+};
+
+const SelectService = props => {
+  const { allServiceOption, options } = props;
+
+  return (
+    <CreatableSelect
+      {...props}
+      options={[allServiceOption, ...options]}
+      onChange={(selected, event) => {
+        if (selected !== null && selected.length > 0) {
+          if (selected[selected.length - 1].value === props.allServiceOption.value) {
+            return props.onChange([props.allServiceOption, ...props.options.filter(option => option.color !== GREY)]);
           }
-          return props.onChange(result);
+          let result = [];
+          if (selected.length === props.options.filter(option => option.color !== GREY).length) {
+            if (selected.includes(props.allServiceOption)) {
+              result = selected.filter(option => option.value !== props.allServiceOption.value);
+            } else if (event.action === 'select-option') {
+              result = [props.allServiceOption, ...props.options];
+            }
+            return props.onChange(result);
+          }
         }
-      }
 
-      return props.onChange(selected);
-    }}
-  />
-);
+        return props.onChange(selected);
+      }}
+    />
+  );
+};
 
 SelectService.defaultProps = {
   allServiceOption: {
@@ -106,44 +118,48 @@ SelectService.defaultProps = {
   }
 };
 
-const SelectRecepient = props => (
-  <CreatableSelect
-    {...props}
-    options={[props.allOption, props.allEmailOption, props.allSlackOption, ...props.options]}
-    onChange={(selected, event) => {
-      if (selected !== null && selected.length > 0) {
-        if (selected[selected.length - 1].value === props.allOption.value) {
-          return props.onChange([props.allOption, props.allEmailOption, props.allSlackOption, ...props.options]);
-        }
-        if (selected[selected.length - 1].value === props.allEmailOption.value) {
-          return props.onChange([props.allEmailOption, ...props.options.filter(option => option.contact === 'Email')]);
-        }
-        if (selected[selected.length - 1].value === props.allSlackOption.value) {
-          return props.onChange([props.allSlackOption, ...props.options.filter(option => option.contact === 'Slack')]);
-        }
-        let result = [];
-        if (selected.length === props.options.filter(option => option.contact !== 'Email').length) {
-          if (selected.includes(props.allEmailOption)) {
-            result = selected.filter(option => option.value !== props.allEmailOption.value);
-          } else if (event.action === 'select-option') {
-            result = [props.allEmailOption, ...props.options];
-          }
-          return props.onChange(result);
-        }
-        if (selected.length === props.options.filter(option => option.contact !== 'Slack').length) {
-          if (selected.includes(props.allSlackOption)) {
-            result = selected.filter(option => option.value !== props.allSlackOption.value);
-          } else if (event.action === 'select-option') {
-            result = [props.allSlackOption, ...props.options];
-          }
-          return props.onChange(result);
-        }
-      }
+const SelectRecepient = props => {
+  const { allOption, allEmailOption, allSlackOption, options } = props;
 
-      return props.onChange(selected);
-    }}
-  />
-);
+  return (
+    <CreatableSelect
+      {...props}
+      options={[allOption, allEmailOption, allSlackOption, ...options]}
+      onChange={(selected, event) => {
+        if (selected !== null && selected.length > 0) {
+          if (selected[selected.length - 1].value === props.allOption.value) {
+            return props.onChange([props.allOption, props.allEmailOption, props.allSlackOption, ...props.options]);
+          }
+          if (selected[selected.length - 1].value === props.allEmailOption.value) {
+            return props.onChange([allEmailOption, ...options.filter(option => option.contact === 'Email')]);
+          }
+          if (selected[selected.length - 1].value === allSlackOption.value) {
+            return props.onChange([allSlackOption, ...options.filter(option => option.contact === 'Slack')]);
+          }
+          let result = [];
+          if (selected.length === props.options.filter(option => option.contact !== 'Email').length) {
+            if (selected.includes(props.allEmailOption)) {
+              result = selected.filter(option => option.value !== props.allEmailOption.value);
+            } else if (event.action === 'select-option') {
+              result = [props.allEmailOption, ...props.options];
+            }
+            return props.onChange(result);
+          }
+          if (selected.length === options.filter(option => option.contact !== 'Slack').length) {
+            if (selected.includes(props.allSlackOption)) {
+              result = selected.filter(option => option.value !== props.allSlackOption.value);
+            } else if (event.action === 'select-option') {
+              result = [props.allSlackOption, ...props.options];
+            }
+            return props.onChange(result);
+          }
+        }
+
+        return props.onChange(selected);
+      }}
+    />
+  );
+};
 
 SelectRecepient.defaultProps = {
   allOption: {
