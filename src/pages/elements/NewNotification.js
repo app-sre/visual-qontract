@@ -377,19 +377,22 @@ The AppSRE team`
                     }
                     const all_users = [];
                     for (const user_name in user_dic) {
-                      const dic = {};
-                      dic.org_username = user_dic[user_name].org_username;
-                      dic.name = user_name;
-                      dic.value = user_name;
-                      dic.label = user_name;
-                      if (recipients) {
-                        if (recipients.has(dic.name)) {
-                          dic.color = BLUE;
-                        } else {
-                          dic.color = GREY;
+                      if (Object.prototype.hasOwnProperty.call(user_dic, user_name)) {
+                        const dic = {};
+                        dic.org_username = user_dic[user_name].org_username;
+                        dic.name = user_name;
+                        dic.value = user_name;
+                        dic.label = user_name;
+                        if (recipients) {
+                          if (recipients.has(dic.name)) {
+                            dic.color = BLUE;
+                          } else {
+                            dic.color = GREY;
+                          }
+                          all_users.push(dic);
                         }
+                        all_users.push(dic);
                       }
-                      all_users.push(dic);
                     }
 
                     return (
@@ -452,19 +455,22 @@ The AppSRE team`
                     }
                     const all_users = [];
                     for (const user_name in user_dic) {
-                      const dic = {};
-                      dic.org_username = user_dic[user_name].org_username;
-                      dic.name = user_name;
-                      dic.value = user_name;
-                      dic.label = user_name;
-                      if (recipients) {
-                        if (recipients.has(dic.name)) {
-                          dic.color = BLUE;
-                        } else {
-                          dic.color = GREY;
+                      if (Object.prototype.hasOwnProperty.call(user_dic, user_name)) {
+                        const dic = {};
+                        dic.org_username = user_dic[user_name].org_username;
+                        dic.name = user_name;
+                        dic.value = user_name;
+                        dic.label = user_name;
+                        if (recipients) {
+                          if (recipients.has(dic.name)) {
+                            dic.color = BLUE;
+                          } else {
+                            dic.color = GREY;
+                          }
+                          all_users.push(dic);
                         }
+                        all_users.push(dic);
                       }
-                      all_users.push(dic);
                     }
 
                     return (
