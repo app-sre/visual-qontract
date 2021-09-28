@@ -14,8 +14,7 @@ import {
   TextArea,
   FormSelect,
   FormSelectOption,
-  Button,
-  Label
+  Button
 } from '@patternfly/react-core';
 
 import Page from '../../components/Page';
