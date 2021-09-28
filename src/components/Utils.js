@@ -1,5 +1,3 @@
-import chroma from 'chroma-js';
-
 const sortByName = items =>
   items.slice().sort((a, b) => {
     if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
