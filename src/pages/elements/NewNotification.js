@@ -223,7 +223,6 @@ The AppSRE team`
       selectedDependencies,
       selectedServices,
       selectedEmailUsers,
-      channel,
       selectedSlackUsers,
       subject,
       description
