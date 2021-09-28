@@ -124,13 +124,12 @@ class NewNotification extends React.Component {
       channel: '',
       selectedSlackUsers: [],
       subject: '',
-      description:
-        'Hello, \n \
-      The AppSRE team is current investigating an outage of [SERVICE NAME]. The AppSRE team will send regular updates as we work on resolving this issue. \n \
-      App-SRE tracking JIRA: [JIRA]  \n \
-      Live RCA: [RCA DOCUMENT URL] \n \
-      Bridge link: [BRIDGE LINK URL] \n \
-The AppSRE team'
+      description: `Hello, \n
+The AppSRE team is current investigating an outage of [SERVICE NAME]. The AppSRE team will send regular updates as we work on resolving this issue. \n
+App-SRE tracking JIRA: [JIRA]  \n
+Live RCA: [RCA DOCUMENT URL] \n
+Bridge link: [BRIDGE LINK URL] \n
+The AppSRE team`
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.options = [
