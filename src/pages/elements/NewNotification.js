@@ -185,7 +185,7 @@ The AppSRE team`
 
     // eslint-disable-next-line no-restricted-globals
     const r = confirm(
-      `${'Preview' + '\n' + '• Notification Type: '}${notification_type}\n` +
+      `${'Preview\n• Notification Type: '}${notification_type}\n` +
         `• Recipients (Email): ${email_users_str}\n` +
         `• Recipients (Slack): ${slack_users_str}\n` +
         `• Subject: ${subject}\n` +
