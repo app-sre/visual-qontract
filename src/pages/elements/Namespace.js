@@ -67,14 +67,20 @@ function Namespace({ namespace, roles }) {
           ],
           [
             'Cluster',
-            <Link
-              to={{
-                pathname: '/clusters',
-                hash: namespace.cluster.path
-              }}
-            >
-              {namespace.cluster.name}
-            </Link>
+            <>
+              <Link
+                to={{
+                  pathname: '/clusters',
+                  hash: namespace.cluster.path
+                }}
+              >
+                {namespace.cluster.name}
+              </Link>
+              &nbsp;&nbsp;
+              <a href={namespace.cluster.consoleUrl + "/k8s/cluster/projects/" + namespace.name} target="_blank">
+                <i className="fa fa-desktop" />
+              </a>
+            </>
           ],
           [
             'App',
