@@ -123,7 +123,7 @@ const PipelineRuns = ({ saas_file, settings }) => {
         urls.push(url);
         elem = (
           <li>
-            <a href={url} target="_blank" data-tip={tooltip}>
+            <a href={url} target="_blank" rel="noopener noreferrer" data-tip={tooltip}>
               {' '}
               {target.namespace.environment.name}{' '}
             </a>
