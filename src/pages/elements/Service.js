@@ -411,8 +411,7 @@ function Service({ service, reports, documents, saas_files, saas_files_v2, setti
   // list only latest report
   let reportSection;
   if (matchedReports.length > 0) {
-    let latestReport;
-    latestReport = [matchedReports[0]].map(r => [
+    const latestReport = [matchedReports[0]].map(r => [
       [
         r.name,
         ': ',
