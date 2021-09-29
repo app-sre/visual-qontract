@@ -136,8 +136,7 @@ const ReportVulnerabilities = ({ get_ns, vulnerabilities }) => {
 
 // displays the productionPromotions Table
 const ProductionPromotions = ({ production_promotions }) => {
-  let productionPromotionsTable;
-  productionPromotionsTable = (
+  const productionPromotionsTable = (
     <Table.PfProvider
       striped
       bordered
@@ -205,8 +204,7 @@ const Promotions = ({ promotions, get_ns, saas_files }) => {
       }
     }
   }
-  let promotionsTable;
-  promotionsTable = (
+  const promotionsTable = (
     <Table.PfProvider
       striped
       bordered
@@ -295,8 +293,7 @@ const Promotions = ({ promotions, get_ns, saas_files }) => {
 
 // displays the MergesToMaster Table
 const MergesToMaster = ({ merges_to_master }) => {
-  let mergesToMasterTable;
-  mergesToMasterTable = (
+  const mergesToMasterTable = (
     <Table.PfProvider
       striped
       bordered
@@ -358,8 +355,7 @@ const MergeActivities = ({ merge_activities }) => {
     }
   }
 
-  let MergeActivitiesTable;
-  MergeActivitiesTable = (
+  const MergeActivitiesTable = (
     <Table.PfProvider
       striped
       bordered
