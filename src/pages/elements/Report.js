@@ -114,7 +114,7 @@ const ReportVulnerabilities = ({ get_ns, vulnerabilities }) => {
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [vulnerabilities => <Vulnerabilities vs={vulnerabilities} />, cellFormat]
+              formatters: [vs => <Vulnerabilities vs={vs} />, cellFormat]
             },
             property: 'vulnerabilities'
           }
