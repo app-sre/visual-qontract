@@ -142,28 +142,38 @@ The AppSRE team`
   }
 
   handleSubmit(event) {
+    const {
+      selectedDependencies,
+      selectedServices,
+      selectedEmailUsers,
+      selectedSlackUsers,
+      notification_type,
+      subject,
+      description,
+      channel
+    } = this.state;
     const dependency_names = [];
     const service_names = [];
     const email_users = [];
     let email_users_str = '';
     const slack_users = [];
     let slack_users_str = '';
-    for (const s of this.state.selectedDependencies) {
+    for (const s of selectedDependencies) {
       dependency_names.push(s.value);
     }
-    for (const s of this.state.selectedServices) {
+    for (const s of selectedServices) {
       service_names.push(s.value);
     }
-    if (this.state.selectedEmailUsers) {
-      for (const u of this.state.selectedEmailUsers) {
+    if (selectedEmailUsers) {
+      for (const u of selectedEmailUsers) {
         if (user_dic.hasOwnProperty(u.value)) {
           email_users.push(user_dic[u.value].path);
           email_users_str += `${u.value} | `;
         }
       }
     }
-    if (this.state.selectedSlackUsers) {
-      for (const u of this.state.selectedSlackUsers) {
+    if (selectedSlackUsers) {
+      for (const u of selectedSlackUsers) {
         if (user_dic.hasOwnProperty(u.value)) {
           slack_users.push(user_dic[u.value].path);
         } else {
@@ -175,11 +185,11 @@ The AppSRE team`
 
     // eslint-disable-next-line no-restricted-globals
     const r = confirm(
-      `${'Preview' + '\n' + '• Notification Type: '}${this.state.notification_type}\n` +
+      `${'Preview' + '\n' + '• Notification Type: '}${notification_type}\n` +
         `• Recipients (Email): ${email_users_str}\n` +
         `• Recipients (Slack): ${slack_users_str}\n` +
-        `• Subject: ${this.state.subject}\n` +
-        `• Description: ${this.state.description}\n` +
+        `• Subject: ${subject}\n` +
+        `• Description: ${description}\n` +
         `========================= ` +
         `\n` +
         `Are you sure to send the notification? ` +
@@ -189,15 +199,15 @@ The AppSRE team`
     );
     if (r) {
       const notification = {
-        notification_type: this.state.notification_type,
+        notification_type,
         labels: '{}',
         affected_dependencies: dependency_names,
         affected_services: service_names,
         recipients: email_users,
-        channel: this.state.channel,
+        channel,
         slack_recipients: slack_users,
-        short_description: this.state.subject,
-        description: this.state.description
+        short_description: subject,
+        description
       };
       fetch(`${window.QONTRACT_API_URL}/notifications`, {
         method: 'POST',
