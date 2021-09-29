@@ -654,13 +654,10 @@ const ServiceSLO = ({ get_ns, service_slo, slo_document }) => {
   if (service_slo == null) {
     ServiceSLOTable = <p style={{ 'font-style': 'italic' }}>No service_slo.</p>;
   } else {
-    let slo_value;
-    let slo_target;
     for (let i = 0; i < service_slo.length; i++) {
       service_slo[i].ns = get_ns(service_slo[i].cluster, service_slo[i].namespace);
       service_slo[i].grafana = slo_document.slos.filter(slo => slo.name === service_slo[i].slo_name)[0].dashboard;
-      slo_value = service_slo[i].slo_value;
-      slo_target = service_slo[i].slo_target;
+      const { slo_value, slo_target } = service_slo[i];
       if (slo_value >= slo_target) {
         service_slo[i].slo_pair = (
           <span style={{ backgroundColor: 'green' }} className="badge Pass">
