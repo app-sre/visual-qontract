@@ -93,12 +93,12 @@ client
       const service_notificators = service.serviceNotifications;
       const recipients = new Set();
       if (service_owners) {
-        for (var user of service_owners) {
+        for (const user of service_owners) {
           recipients.add(user.name);
         }
       }
       if (service_notificators) {
-        for (var user of service_notificators) {
+        for (const user of service_notificators) {
           recipients.add(user.name);
         }
       }
@@ -148,14 +148,14 @@ The AppSRE team`
     let email_users_str = '';
     const slack_users = [];
     let slack_users_str = '';
-    for (var s of this.state.selectedDependencies) {
+    for (const s of this.state.selectedDependencies) {
       dependency_names.push(s.value);
     }
-    for (var s of this.state.selectedServices) {
+    for (const s of this.state.selectedServices) {
       service_names.push(s.value);
     }
     if (this.state.selectedEmailUsers) {
-      for (var u of this.state.selectedEmailUsers) {
+      for (const u of this.state.selectedEmailUsers) {
         if (user_dic.hasOwnProperty(u.value)) {
           email_users.push(user_dic[u.value].path);
           email_users_str += `${u.value} | `;
@@ -163,7 +163,7 @@ The AppSRE team`
       }
     }
     if (this.state.selectedSlackUsers) {
-      for (var u of this.state.selectedSlackUsers) {
+      for (const u of this.state.selectedSlackUsers) {
         if (user_dic.hasOwnProperty(u.value)) {
           slack_users.push(user_dic[u.value].path);
         } else {
@@ -364,12 +364,12 @@ The AppSRE team`
                         const service_owners = service.serviceOwners;
                         const service_notificators = service.serviceNotifications;
                         if (service_owners) {
-                          for (var user of service_owners) {
+                          for (const user of service_owners) {
                             recipients.add(user.name);
                           }
                         }
                         if (service_notificators) {
-                          for (var user of service_notificators) {
+                          for (const user of service_notificators) {
                             recipients.add(user.name);
                           }
                         }
@@ -442,12 +442,12 @@ The AppSRE team`
                         const service_owners = service.serviceOwners;
                         const service_notificators = service.serviceNotifications;
                         if (service_owners) {
-                          for (var user of service_owners) {
+                          for (const user of service_owners) {
                             recipients.add(user.name);
                           }
                         }
                         if (service_notificators) {
-                          for (var user of service_notificators) {
+                          for (const user of service_notificators) {
                             recipients.add(user.name);
                           }
                         }
