@@ -193,14 +193,16 @@ const Promotions = ({ promotions, get_ns, saas_files }) => {
   const promotions_row_keys = [];
   let promotion;
   for (const saas_file_name in promotions) {
-    for (let i = 0; i < promotions[saas_file_name].length; i++) {
-      promotion = promotions[saas_file_name][i];
-      promotion.saas_file = get_saas_file(saas_file_name);
-      promotion.ns = get_ns(promotion.cluster, promotion.namespace);
-      promotion.row_key = `${saas_file_name}-${promotion.env}-${promotion.cluster}-${promotion.namespace}`;
-      if (!promotions_row_keys.includes(promotion.row_key)) {
-        promotions_flattened.push(promotion);
-        promotions_row_keys.push(promotion.row_key);
+    if (Object.prototype.hasOwnProperty.call(promotions, saas_file_name)) {
+      for (let i = 0; i < promotions[saas_file_name].length; i++) {
+        promotion = promotions[saas_file_name][i];
+        promotion.saas_file = get_saas_file(saas_file_name);
+        promotion.ns = get_ns(promotion.cluster, promotion.namespace);
+        promotion.row_key = `${saas_file_name}-${promotion.env}-${promotion.cluster}-${promotion.namespace}`;
+        if (!promotions_row_keys.includes(promotion.row_key)) {
+          promotions_flattened.push(promotion);
+          promotions_row_keys.push(promotion.row_key);
+        }
       }
     }
   }
@@ -348,10 +350,12 @@ const MergeActivities = ({ merge_activities }) => {
   const merge_activities_flattened = [];
   let merge_activity;
   for (const repo in merge_activities) {
-    for (let i = 0; i < merge_activities[repo].length; i++) {
-      merge_activity = merge_activities[repo][i];
-      merge_activity.repo = repo;
-      merge_activities_flattened.push(merge_activity);
+    if (Object.prototype.hasOwnProperty.call(merge_activities, repo)) {
+      for (let i = 0; i < merge_activities[repo].length; i++) {
+        merge_activity = merge_activities[repo][i];
+        merge_activity.repo = repo;
+        merge_activities_flattened.push(merge_activity);
+      }
     }
   }
 
