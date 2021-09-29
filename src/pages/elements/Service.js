@@ -142,7 +142,7 @@ const PipelineRuns = ({ saas_file, settings }) => {
 const SaasFilesV1 = ({ saas_files, settings }) => {
   const get_saas_file = path => saas_files.filter(f => f.path === path)[0];
   let saasFilesTable;
-  if (saas_files == null || saas_files.length == 0) {
+  if (saas_files == null || saas_files.length === 0) {
     saasFilesTable = <p />;
   } else {
     saasFilesTable = (
@@ -202,7 +202,7 @@ const SaasFilesV1 = ({ saas_files, settings }) => {
 const SaasFilesV2 = ({ saas_files, settings }) => {
   const get_saas_file = path => saas_files.filter(f => f.path === path)[0];
   let saasFilesTable;
-  if (saas_files == null || saas_files.length == 0) {
+  if (saas_files == null || saas_files.length === 0) {
     saasFilesTable = <p />;
   } else {
     saasFilesTable = (
