@@ -1,0 +1,15 @@
+FROM quay.io/centos/centos:7
+
+# Set PATH, because "scl enable" does not have any effects to "docker build"
+ENV PATH /opt/rh/rh-nodejs10/root/usr/bin:$PATH
+
+RUN yum install -y centos-release-scl-rh epel-release && \
+    yum install -y rh-nodejs10 rh-nodejs10-npm nginx && \
+    yum clean all && \
+    npm install -g yarn
+
+COPY . .
+
+RUN yarn --frozen-lockfile && yarn build
+
+CMD [ "yarn", "lint" ]
