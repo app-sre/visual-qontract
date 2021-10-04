@@ -1,10 +1,8 @@
 import React from 'react';
-import Definition from '../../components/Definition';
 import { Link } from 'react-router-dom';
-
+import Definition from '../../components/Definition';
 
 function Notification({ notification }) {
-
   return (
     <React.Fragment>
       <h4>Info</h4>
@@ -22,26 +20,25 @@ function Notification({ notification }) {
           [
             'Related Users',
             <div>
-              {notification.to.users && notification.to.users.map(o => 
-                <Link
-                  to={{
-                    pathname: '/users',
-                    hash: o.path
-                  }}
-                >
-                  <p>
-                    {o.name}
-                  </p>
-                </Link>
-              )}
+              {notification.to.users &&
+                notification.to.users.map(o => (
+                  <Link
+                    to={{
+                      pathname: '/users',
+                      hash: o.path
+                    }}
+                  >
+                    <p>{o.name}</p>
+                  </Link>
+                ))}
             </div>
           ],
-          [ 
-            'Body', 
+          [
+            'Body',
             <div>
-              {notification.body.split("\n").map((i,key) => {
-                return <div key={key}>{i}</div>;
-              })}
+              {notification.body.split('\n').map((i, key) => (
+                <div key={key}>{i}</div>
+              ))}
             </div>
           ]
         ]}

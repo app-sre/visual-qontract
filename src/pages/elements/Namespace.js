@@ -77,7 +77,11 @@ function Namespace({ namespace, roles }) {
                 {namespace.cluster.name}
               </Link>
               &nbsp;&nbsp;
-              <a href={namespace.cluster.consoleUrl + "/k8s/cluster/projects/" + namespace.name} target="_blank">
+              <a
+                href={`${namespace.cluster.consoleUrl}/k8s/cluster/projects/${namespace.name}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <i className="fa fa-desktop" />
               </a>
             </>
@@ -94,9 +98,7 @@ function Namespace({ namespace, roles }) {
             </Link>
           ],
           ['Grafana', grafana],
-          ['Container Vulnerabilities',
-            <GrafanaContainerVulnerabilities namespace={namespace} />
-          ]
+          ['Container Vulnerabilities', <GrafanaContainerVulnerabilities namespace={namespace} />]
         ]}
       />
 

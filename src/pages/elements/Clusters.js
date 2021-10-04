@@ -7,7 +7,13 @@ function AppSREClustersTable({ clusters, apps }) {
   const appByName = appName => apps.find(a => a.name === appName);
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
   const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
-  const workloadsFormat = workloadsList => <ul>{workloadsList.map(w => <li>{w}</li>)}</ul>;
+  const workloadsFormat = workloadsList => (
+    <ul>
+      {workloadsList.map(w => (
+        <li>{w}</li>
+      ))}
+    </ul>
+  );
   const appsFormat = appsList =>
     appsList.map(appName => (
       <span className="service_badge" key={appName}>
@@ -201,14 +207,14 @@ function Clusters({ clusters, apps }) {
       c.external_id = c.spec.external_id;
     }
 
-    c.upgrade_workloads = []
+    c.upgrade_workloads = [];
     if (c.upgradePolicy) {
       c.upgrade_schedule = `${c.upgradePolicy.schedule}`;
       if (c.upgradePolicy.workloads) {
-        c.upgrade_workloads = c.upgradePolicy.workloads
+        c.upgrade_workloads = c.upgradePolicy.workloads;
       }
       if (c.upgradePolicy.conditions && c.upgradePolicy.conditions.soakDays != null) {
-        c.upgrade_soak_days = c.upgradePolicy.conditions.soakDays
+        c.upgrade_soak_days = c.upgradePolicy.conditions.soakDays;
       }
     }
 

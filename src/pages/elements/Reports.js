@@ -96,7 +96,6 @@ function Reports({ reports }) {
     }
   ];
 
-  
   return (
     <TableSearch
       filterText={filterText}

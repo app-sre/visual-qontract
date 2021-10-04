@@ -18,7 +18,9 @@ function Cluster({ cluster, roles }) {
     return false;
   }
   const matchedData = roles.filter(matches);
-  const grafana = <GrafanaUrl jumpHost={cluster.jumpHost} cluster={cluster.name} url={cluster.grafanaUrl} hide={false} />;
+  const grafana = (
+    <GrafanaUrl jumpHost={cluster.jumpHost} cluster={cluster.name} url={cluster.grafanaUrl} hide={false} />
+  );
   return (
     <React.Fragment>
       <h4>Info</h4>
@@ -61,10 +63,18 @@ function Cluster({ cluster, roles }) {
           cluster.network !== null && cluster.network.service !== null && ['Service CIDR', cluster.network.service],
           cluster.network !== null && cluster.network.pod !== null && ['Pod CIDR', cluster.network.pod],
           cluster.spec !== null && cluster.spec.channel !== null && ['Channel', cluster.spec.channel],
-          cluster.upgradePolicy !== null && cluster.upgradePolicy.workloads !== null &&['Upgrade workloads', cluster.upgradePolicy.workloads.join(', ')],
+          cluster.upgradePolicy !== null &&
+            cluster.upgradePolicy.workloads !== null && [
+              'Upgrade workloads',
+              cluster.upgradePolicy.workloads.join(', ')
+            ],
           cluster.upgradePolicy !== null && ['Upgrade schedule', cluster.upgradePolicy.schedule],
-          cluster.upgradePolicy !== null && cluster.upgradePolicy.conditions !== null &&
-            cluster.upgradePolicy.conditions.soakDays !== null && ['Upgrade soak days', cluster.upgradePolicy.conditions.soakDays],
+          cluster.upgradePolicy !== null &&
+            cluster.upgradePolicy.conditions !== null &&
+            cluster.upgradePolicy.conditions.soakDays !== null && [
+              'Upgrade soak days',
+              cluster.upgradePolicy.conditions.soakDays
+            ]
         ]}
       />
 

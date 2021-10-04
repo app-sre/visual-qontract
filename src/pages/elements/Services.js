@@ -24,8 +24,8 @@ function Services({ services, table }) {
   }
   const matchedServices = services.filter(matches);
 
-  if (typeof(table) !== 'undefined' && table) {
-    return <ServicesTable services={matchedServices}/>;
+  if (typeof table !== 'undefined' && table) {
+    return <ServicesTable services={matchedServices} />;
   }
 
   const rows = chunk(sortByName(matchedServices), cardsPerRow).map(c => (
@@ -40,9 +40,10 @@ function Services({ services, table }) {
                   <Link
                     to={{
                       pathname: '/services',
-                      hash: s.parentApp['path']
-                    }}>
-                      <Label text={s.parentApp['name']} />
+                      hash: s.parentApp.path
+                    }}
+                  >
+                    <Label text={s.parentApp.name} />
                   </Link>
                 )}
               </CardTitle>
@@ -50,7 +51,7 @@ function Services({ services, table }) {
             <CardBody>
               <OnboardingStatus state={s.onboardingStatus} />
               {s.description}
-              </CardBody>
+            </CardBody>
             <CardFooter>
               <p>
                 <Link

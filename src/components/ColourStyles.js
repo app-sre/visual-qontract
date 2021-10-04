@@ -5,33 +5,21 @@ const GREY = chroma('#363636');
 const BLUE = chroma('#06c');
 
 const ColourStyles = {
-  control: styles => ({ ...styles, backgroundColor: "white" }),
+  control: styles => ({ ...styles, backgroundColor: 'white' }),
   option: (styles, { data, isDisabled, isSelected }) => {
-    if (data.color) {
-      var color = data.color;
-    } else {
-      var color = GREY;
-    }
-    
+    let color = data.color || GREY;
+    const selectedColor = chroma.contrast(color, 'white') > 2 ? 'white' : 'black';
+    color = isSelected ? selectedColor : color.hex();
+
     return {
-      // define option color 
+      // define option color
       ...styles,
-      color: 
-        isDisabled
-        ? "#ccc"
-        : isSelected
-        ? chroma.contrast(color, "white") > 2
-        ? "white"
-        : "black"
-        : color.hex()
+      color: isDisabled ? '#ccc' : color
     };
   },
   multiValue: (styles, { data }) => {
-    if (data.color) {
-      var color = data.color;
-    } else {
-      var color = GREY;
-    }
+    const color = data.color || GREY;
+
     return {
       // define selected options label background color
       ...styles,
@@ -39,11 +27,8 @@ const ColourStyles = {
     };
   },
   multiValueLabel: (styles, { data }) => {
-    if (data.color) {
-      var color = data.color;
-    } else {
-      var color = GREY;
-    }
+    const color = data.color || GREY;
+
     return {
       // define selected options label color
       ...styles,
@@ -51,21 +36,18 @@ const ColourStyles = {
     };
   },
   multiValueRemove: (styles, { data }) => {
-    if (data.color) {
-      var color = data.color;
-    } else {
-      var color = GREY;
-    }
+    const color = data.color || GREY;
+
     return {
       // define selected options remove label color
       ...styles,
       color: color.hex(),
-      ":hover": {
-            backgroundColor: color.hex(),
-            color: "white"
-          }
+      ':hover': {
+        backgroundColor: color.hex(),
+        color: 'white'
+      }
     };
-  },
+  }
 };
 
-export {ColourStyles, RED, GREY, BLUE};
+export { ColourStyles, RED, GREY, BLUE };

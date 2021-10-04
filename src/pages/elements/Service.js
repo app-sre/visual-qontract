@@ -24,107 +24,126 @@ const linkFormat = url => value => (
 const emptyFormat = value => value || '-';
 const booleanFormat = (t, f) => value => (value ? t : f);
 
-// displays escalation policy 
-const EscalationPolicy = ({app}) => {
+// displays escalation policy
+const EscalationPolicy = ({ app }) => {
   let escalationPolicyDefinition;
   if (app.escalationPolicy == null) {
     escalationPolicyDefinition = <p style={{ 'font-style': 'italic' }}>No Escalation Policy.</p>;
   } else {
-    escalationPolicyDefinition = 
+    escalationPolicyDefinition = (
       <NonEmptyDefinition
         items={[
           ['Name', app.escalationPolicy.name],
-          [
-            'Path',
-            <LinkPath item={app.escalationPolicy}/>
-          ],
-          [
-            'Description',
-            <pre>{app.escalationPolicy.description}</pre>
-          ],
+          ['Path', <LinkPath item={app.escalationPolicy} />],
+          ['Description', <pre>{app.escalationPolicy.description}</pre>],
           ['Email', app.escalationPolicy.channels.email],
           [
             'Jira Board',
-            (app.escalationPolicy.channels.jiraBoard && <DisplayNamePathList items={app.escalationPolicy.channels.jiraBoard}/>)
+            app.escalationPolicy.channels.jiraBoard && (
+              <DisplayNamePathList items={app.escalationPolicy.channels.jiraBoard} />
+            )
           ],
           [
             'Pager Duty',
-            (app.escalationPolicy.channels.pagerduty && <LinkPath item={app.escalationPolicy.channels.pagerduty}/>)
+            app.escalationPolicy.channels.pagerduty && <LinkPath item={app.escalationPolicy.channels.pagerduty} />
           ],
           [
             'Slack User Group',
-            (app.escalationPolicy.channels.slackUserGroup && <DisplayNamePathList items={app.escalationPolicy.channels.slackUserGroup}/>)
+            app.escalationPolicy.channels.slackUserGroup && (
+              <DisplayNamePathList items={app.escalationPolicy.channels.slackUserGroup} />
+            )
           ],
           [
             'Next Escalation Policy',
-            (app.escalationPolicy.channels.nextEscalationPolicy && <LinkPath item={app.escalationPolicy.channels.nextEscalationPolicy}/>)
+            app.escalationPolicy.channels.nextEscalationPolicy && (
+              <LinkPath item={app.escalationPolicy.channels.nextEscalationPolicy} />
+            )
           ]
         ]}
       />
+    );
   }
 
-  return <React.Fragment>
-    <h4>Escalation Policy</h4>
-    {escalationPolicyDefinition}
-  </React.Fragment>
-}
+  return (
+    <React.Fragment>
+      <h4>Escalation Policy</h4>
+      {escalationPolicyDefinition}
+    </React.Fragment>
+  );
+};
 
 // displays the list of Saas Deploy Jobs
-const SaasDeployJobs = ({saas_file, settings}) => {
+const SaasDeployJobs = ({ saas_file, settings }) => {
   const job_template_name = settings[0].saasDeployJobTemplate;
-  var job_lst = [];
-  var job_name_lst = [];
-  var job_name;
-  for (var template of saas_file.resourceTemplates) {
-    for (var target of template.targets) {
-      job_name = job_template_name + '-' + saas_file.name + '-' + target.namespace.environment.name;
+  const job_lst = [];
+  const job_name_lst = [];
+  let job_name;
+  for (const template of saas_file.resourceTemplates) {
+    for (const target of template.targets) {
+      job_name = `${job_template_name}-${saas_file.name}-${target.namespace.environment.name}`;
       if (!job_name_lst.includes(job_name)) {
-        job_lst.push(<li><a href={saas_file.instance.serverUrl + "/job/" + job_name}> {job_name} </a></li>);
+        job_lst.push(
+          <li>
+            <a href={`${saas_file.instance.serverUrl}/job/${job_name}`}> {job_name} </a>
+          </li>
+        );
         job_name_lst.push(job_name);
       }
     }
   }
-  
-  return <ul>
-    {job_lst}
-  </ul>
+
+  return <ul>{job_lst}</ul>;
 };
 
 // displays the list of Pipeline Runs
-const PipelineRuns = ({saas_file, settings}) => {
+const PipelineRuns = ({ saas_file, settings }) => {
   const pipeline_name = settings[0].saasDeployJobTemplate;
-  var pp_ns = saas_file.pipelinesProvider.namespace
-  var pp_ns_name = pp_ns.name
-  var pp_cluster = pp_ns.cluster
-  var pp_cluster_console_url = pp_cluster.consoleUrl
-  var urls = [];
-  var url_elements = [];
-  var long_name, short_name, url, elem;
-  for (var template of saas_file.resourceTemplates) {
-    for (var target of template.targets) {
-      long_name = saas_file.name + '-' + target.namespace.environment.name
+  const pp_ns = saas_file.pipelinesProvider.namespace;
+  const pp_ns_name = pp_ns.name;
+  const pp_cluster = pp_ns.cluster;
+  const pp_cluster_console_url = pp_cluster.consoleUrl;
+  const urls = [];
+  const url_elements = [];
+  let long_name;
+  let short_name;
+  let url;
+  let elem;
+  for (const template of saas_file.resourceTemplates) {
+    for (const target of template.targets) {
+      long_name = `${saas_file.name}-${target.namespace.environment.name}`;
       short_name = long_name.substring(0, 50); // max name length can be 63. leaving 12 for the timestamp - 51
-      url = pp_cluster_console_url + '/k8s/ns/' + pp_ns_name + '/tekton.dev~v1beta1~Pipeline/' + pipeline_name + '/Runs?name=' + short_name;
-      var tooltip = 'to trigger a deployment, click Actions -> Start. details:' + '<br />' + 'saas_file_name: ' + saas_file.name + '<br />' + 'env_name: ' + target.namespace.environment.name + '<br />' + 'tkn_cluster_console_url: ' + pp_cluster_console_url + '<br />' + 'tkn_namespace_name: ' + pp_ns_name
+      url = `${pp_cluster_console_url}/k8s/ns/${pp_ns_name}/tekton.dev~v1beta1~Pipeline/${pipeline_name}/Runs?name=${short_name}`;
+      const tooltip =
+        'to trigger a deployment, click Actions -> Start. details:<br />' +
+        `saas_file_name: ${saas_file.name}<br />` +
+        `env_name: ${target.namespace.environment.name}<br />` +
+        `tkn_cluster_console_url: ${pp_cluster_console_url}<br />` +
+        `tkn_namespace_name: ${pp_ns_name}`;
       if (!urls.includes(url)) {
-        urls.push(url)
-        elem = <li><a href={url} target="_blank" data-tip={tooltip}> {target.namespace.environment.name} </a><ReactTooltip multiline={true} clickable={true} /></li>
+        urls.push(url);
+        elem = (
+          <li>
+            <a href={url} target="_blank" rel="noopener noreferrer" data-tip={tooltip}>
+              {' '}
+              {target.namespace.environment.name}{' '}
+            </a>
+            <ReactTooltip multiline clickable />
+          </li>
+        );
         url_elements.push(elem);
       }
     }
   }
-  
-  return <ul>
-    {url_elements}
-  </ul>
+
+  return <ul>{url_elements}</ul>;
 };
 
 // displays the saas_files section
-const SaasFilesV1 = ({ saas_files, settings}) => {
-  const get_saas_file = (path) => saas_files.filter(f => f['path'] === path)[0];
+const SaasFilesV1 = ({ saas_files, settings }) => {
+  const get_saas_file = path => saas_files.filter(f => f.path === path)[0];
   let saasFilesTable;
-  if (saas_files == null || saas_files.length == 0) {
-    saasFilesTable = <p/>;
+  if (saas_files == null || saas_files.length === 0) {
+    saasFilesTable = <p />;
   } else {
     saasFilesTable = (
       <Table.PfProvider
@@ -147,9 +166,14 @@ const SaasFilesV1 = ({ saas_files, settings}) => {
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [path=>(<a href={`${window.DATA_DIR_URL}/${path}`} target="_blank" rel="noopener noreferrer">
-              {path}
-            </a>) , cellFormat]
+              formatters: [
+                path => (
+                  <a href={`${window.DATA_DIR_URL}/${path}`} target="_blank" rel="noopener noreferrer">
+                    {path}
+                  </a>
+                ),
+                cellFormat
+              ]
             },
             property: 'path'
           },
@@ -159,7 +183,7 @@ const SaasFilesV1 = ({ saas_files, settings}) => {
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [path=><SaasDeployJobs saas_file={get_saas_file(path)} settings={settings}/>, cellFormat]
+              formatters: [path => <SaasDeployJobs saas_file={get_saas_file(path)} settings={settings} />, cellFormat]
             },
             property: 'path'
           }
@@ -171,17 +195,15 @@ const SaasFilesV1 = ({ saas_files, settings}) => {
     );
   }
 
-  return <React.Fragment>
-    {saasFilesTable}
-  </React.Fragment>
-}
+  return <React.Fragment>{saasFilesTable}</React.Fragment>;
+};
 
 // displays the saas_files section
-const SaasFilesV2 = ({ saas_files, settings}) => {
-  const get_saas_file = (path) => saas_files.filter(f => f['path'] === path)[0];
+const SaasFilesV2 = ({ saas_files, settings }) => {
+  const get_saas_file = path => saas_files.filter(f => f.path === path)[0];
   let saasFilesTable;
-  if (saas_files == null || saas_files.length == 0) {
-    saasFilesTable = <p/>;
+  if (saas_files == null || saas_files.length === 0) {
+    saasFilesTable = <p />;
   } else {
     saasFilesTable = (
       <Table.PfProvider
@@ -204,9 +226,14 @@ const SaasFilesV2 = ({ saas_files, settings}) => {
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [path=>(<a href={`${window.DATA_DIR_URL}/${path}`} target="_blank" rel="noopener noreferrer">
-              {path}
-            </a>) , cellFormat]
+              formatters: [
+                path => (
+                  <a href={`${window.DATA_DIR_URL}/${path}`} target="_blank" rel="noopener noreferrer">
+                    {path}
+                  </a>
+                ),
+                cellFormat
+              ]
             },
             property: 'path'
           },
@@ -216,7 +243,7 @@ const SaasFilesV2 = ({ saas_files, settings}) => {
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [path=><PipelineRuns saas_file={get_saas_file(path)} settings={settings}/>, cellFormat]
+              formatters: [path => <PipelineRuns saas_file={get_saas_file(path)} settings={settings} />, cellFormat]
             },
             property: 'path'
           }
@@ -228,13 +255,10 @@ const SaasFilesV2 = ({ saas_files, settings}) => {
     );
   }
 
-  return <React.Fragment>
-    {saasFilesTable}
-  </React.Fragment>
-}
+  return <React.Fragment>{saasFilesTable}</React.Fragment>;
+};
 
-function Service({ service, reports, documents, saas_files, saas_files_v2, settings}) {
-
+function Service({ service, reports, documents, saas_files, saas_files_v2, settings }) {
   function matches(r) {
     if (r.app.name === service.name) {
       return true;
@@ -387,31 +411,30 @@ function Service({ service, reports, documents, saas_files, saas_files_v2, setti
   // list only latest report
   let reportSection;
   if (matchedReports.length > 0) {
-    let latestReport;
-    latestReport = [matchedReports[0]].map(r => [
+    const latestReport = [matchedReports[0]].map(r => [
       [
-        r.name, 
+        r.name,
         ': ',
         <Link
           to={{
-              pathname: '/reports',
-              hash: r.path
-              }}
+            pathname: '/reports',
+            hash: r.path
+          }}
         >
           {r.path}
         </Link>
       ]
     ]);
     reportSection = (
-      <div>      
+      <div>
         <Definition items={latestReport} />
         <details>
-            <summary>More reports</summary>
-            <br></br>
-            <Reports reports={matchedReports} />
+          <summary>More reports</summary>
+          <br />
+          <Reports reports={matchedReports} />
         </details>
       </div>
-    )
+    );
   } else {
     reportSection = <p style={{ 'font-style': 'italic' }}>No Latest Report.</p>;
   }
@@ -421,10 +444,14 @@ function Service({ service, reports, documents, saas_files, saas_files_v2, setti
       <h4>Description</h4>
       <p>{service.description}</p>
 
-      {service.grafanaUrl &&
-        <div><h4>Grafana</h4>
-          <p><GrafanaUrl jumpHost={null} url={service.grafanaUrl} hide={false} /></p>
-        </div>}
+      {service.grafanaUrl && (
+        <div>
+          <h4>Grafana</h4>
+          <p>
+            <GrafanaUrl jumpHost={null} url={service.grafanaUrl} hide={false} />
+          </p>
+        </div>
+      )}
 
       <h4>Info</h4>
       <Definition items={[['Onboarding Status', service.onboardingStatus]]} />
@@ -432,7 +459,7 @@ function Service({ service, reports, documents, saas_files, saas_files_v2, setti
       <h4>Service Owners</h4>
       <Definition items={serviceOwners} />
 
-      {<EscalationPolicy app={service}/>}
+      {<EscalationPolicy app={service} />}
 
       <h4>Reports</h4>
       {reportSection}
@@ -441,12 +468,12 @@ function Service({ service, reports, documents, saas_files, saas_files_v2, setti
       {<SaasFilesV1 saas_files={matchedSaasFilesV1} settings={settings} />}
       {<SaasFilesV2 saas_files={matchedSaasFilesV2} settings={settings} />}
 
-      {service.childrenApps.length > 0 &&
+      {service.childrenApps.length > 0 && (
         <React.Fragment>
           <h4>Children Services</h4>
-          <Services services={service.childrenApps} table={true} />
+          <Services services={service.childrenApps} table />
         </React.Fragment>
-      }
+      )}
 
       {service.serviceDocs && (
         <React.Fragment>

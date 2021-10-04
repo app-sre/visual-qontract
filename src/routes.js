@@ -129,7 +129,7 @@ const routes = () => [
     title: 'Notifications',
     to: '/notifications',
     component: NotificationsPage
-  },
+  }
 ];
 
 export { baseName, routes };

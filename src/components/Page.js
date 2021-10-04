@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, Button } from 'patternfly-react';
 import { Link } from 'react-router-dom';
 
-function Page({ title, body, path, create}) {
+function Page({ title, body, path, create }) {
   return (
     <Grid fluid className="container-pf-nav-pf-vertical">
       <Grid.Row>
@@ -21,13 +21,11 @@ function Page({ title, body, path, create}) {
                 <span className="edit-button">
                   <Link
                     to={{
-                      pathname: create["path"],
-                      hash: create["hash"]
+                      pathname: create.path,
+                      hash: create.hash
                     }}
                   >
-                    <Button>
-                      {create["label"]}
-                    </Button>
+                    <Button>{create.label}</Button>
                   </Link>
                 </span>
               )}

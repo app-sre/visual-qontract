@@ -51,29 +51,25 @@ const GET_NOTIFICATIONS = gql`
   }
 `;
 
-
 const NotificationsPage = ({ location }) => {
   const path = location.hash.substring(1);
 
   if (path) {
-    if (path === "create") {
-      return (
-        <NewNotification />
-      )
-    } else {
-      return (
-        <Query query={GET_NOTIFICATION} variables={{ path }}>
-          {({ loading, error, data }) => {
-            if (loading) return 'Loading...';
-            if (error) return `Error! ${error.message}`;
-  
-            const notification = data.app_interface_emails_v1[0];
-            const body = <Notification notification={notification} />;
-            return <Page title={notification.name} body={body} path={notification.path} />;
-          }}
-        </Query>
-      );
+    if (path === 'create') {
+      return <NewNotification />;
     }
+    return (
+      <Query query={GET_NOTIFICATION} variables={{ path }}>
+        {({ loading, error, data }) => {
+          if (loading) return 'Loading...';
+          if (error) return `Error! ${error.message}`;
+
+          const notification = data.app_interface_emails_v1[0];
+          const body = <Notification notification={notification} />;
+          return <Page title={notification.name} body={body} path={notification.path} />;
+        }}
+      </Query>
+    );
   }
 
   return (
@@ -83,10 +79,15 @@ const NotificationsPage = ({ location }) => {
         if (error) return `Error! ${error.message}`;
 
         const body = <Notifications notifications={data.app_interface_emails_v1} />;
-        return <Page title="Notifications" body={body} create={{"hash": "create", "path":"/notifications", "label": "Create a new notification"}}/>;
+        return (
+          <Page
+            title="Notifications"
+            body={body}
+            create={{ hash: 'create', path: '/notifications', label: 'Create a new notification' }}
+          />
+        );
       }}
     </Query>
-
   );
 };
 

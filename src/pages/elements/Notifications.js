@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Table } from 'patternfly-react';
+import { Link } from 'react-router-dom';
 import { sortByName } from '../../components/Utils';
 import TableSearch from '../../components/TableSearch';
-import { Link } from 'react-router-dom';
 
 function Notifications({ notifications }) {
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
@@ -19,7 +19,7 @@ function Notifications({ notifications }) {
     return (
       (selected === 'Name' && u.name.toLowerCase().includes(lcFilter)) ||
       (selected === 'Path' && u.path.toLowerCase().includes(lcFilter)) ||
-      (selected === 'Subject' && u.subject.toLowerCase().includes(lcFilter)) 
+      (selected === 'Subject' && u.subject.toLowerCase().includes(lcFilter))
     );
   }
   const matchedNotifications = processedNotifications.filter(matches);
