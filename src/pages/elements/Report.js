@@ -648,31 +648,36 @@ const DeploymentValidations = ({ get_ns, deployment_validations }) => {
   );
 };
 
+const add_to_slo = ({ get_ns, slo, slo_doc_for_report }) => {
+  slo.ns = get_ns(slo.cluster, slo.namespace);
+  slo.grafana = slo_doc_for_report.slos.filter(slo => slo.name === slo.slo_name)[0].dashboard;
+  const { slo_value, slo_target } = slo;
+  if (slo_value >= slo_target) {
+    slo.slo_pair = (
+      <span style={{ backgroundColor: 'green' }} className="badge Pass">
+        {' '}
+        {slo_value} / {slo_target}
+      </span>
+    );
+  } else {
+    slo.slo_pair = (
+      <span style={{ backgroundColor: 'red' }} className="badge Fail">
+        {' '}
+        {slo_value} / {slo_target}
+      </span>
+    );
+  }
+}
+
 // displays the ServiceSLO Table
-const ServiceSLO = ({ get_ns, service_slo, slo_document }) => {
+const ServiceSLO = ({ get_ns, service_slo, slo_documents_for_report }) => {
   let ServiceSLOTable;
   if (service_slo == null) {
     ServiceSLOTable = <p style={{ 'font-style': 'italic' }}>No service_slo.</p>;
   } else {
     for (let i = 0; i < service_slo.length; i++) {
-      service_slo[i].ns = get_ns(service_slo[i].cluster, service_slo[i].namespace);
-      service_slo[i].grafana = slo_document.slos.filter(slo => slo.name === service_slo[i].slo_name)[0].dashboard;
-      const { slo_value, slo_target } = service_slo[i];
-      if (slo_value >= slo_target) {
-        service_slo[i].slo_pair = (
-          <span style={{ backgroundColor: 'green' }} className="badge Pass">
-            {' '}
-            {slo_value} / {slo_target}
-          </span>
-        );
-      } else {
-        service_slo[i].slo_pair = (
-          <span style={{ backgroundColor: 'red' }} className="badge Fail">
-            {' '}
-            {slo_value} / {slo_target}
-          </span>
-        );
-      }
+      slo_doc_for_report = slo_documents_for_report.filter(doc => doc.name === service_slo[i].slo_doc_name)[0]
+      add_to_slo(get_ns, service_slo[i], slo_doc_for_report)
     }
     ServiceSLOTable = (
       <Table.PfProvider
@@ -705,7 +710,7 @@ const ServiceSLO = ({ get_ns, service_slo, slo_document }) => {
             cell: {
               formatters: [cellFormat]
             },
-            property: 'slo_doc'
+            property: 'slo_doc_name'
           },
           {
             header: {
@@ -759,13 +764,13 @@ function Report({ report, namespaces, saas_files, slo_documents }) {
   // fetch the namespace. Returns `undefined` if not found
   const get_ns = (c, ns) => namespaces.filter(n => n.name === ns && n.cluster.name === c)[0];
 
-  let slo_document;
+  let slo_documents_for_report = [];
   let ns;
   for (let i = 0; i < slo_documents.length; i++) {
     for (let j = 0; j < slo_documents[i].namespaces.length; j++) {
       ns = slo_documents[i].namespaces[j];
       if (ns.app.name === report.app.name) {
-        slo_document = slo_documents[i];
+        slo_documents_for_report.append(slo_documents[i]);
         break;
       }
     }
@@ -834,7 +839,7 @@ function Report({ report, namespaces, saas_files, slo_documents }) {
       {mergeSection}
       {<PostDeployJobs post_deploy_jobs={content.post_deploy_jobs} get_ns={get_ns} />}
       {<DeploymentValidations deployment_validations={content.deployment_validations} get_ns={get_ns} />}
-      {<ServiceSLO service_slo={content.service_slo} get_ns={get_ns} slo_document={slo_document} />}
+      {<ServiceSLO service_slo={content.service_slo} get_ns={get_ns} slo_documents_for_report={slo_documents_for_report} />}
     </React.Fragment>
   );
 }
