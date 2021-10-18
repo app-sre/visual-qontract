@@ -648,19 +648,19 @@ const DeploymentValidations = ({ get_ns, deployment_validations }) => {
   );
 };
 
-const add_to_slo = ({ get_ns, slo, slo_doc_for_report }) => {
-  slo.ns = get_ns(slo.cluster, slo.namespace);
-  slo.grafana = slo_doc_for_report.slos.filter(slo => slo.name === slo.slo_name)[0].dashboard;
-  const { slo_value, slo_target } = slo;
+const add_to_slo = ({ get_ns, slo: service_slo, slo_doc }) => {
+  service_slo.ns = get_ns(service_slo.cluster, service_slo.namespace);
+  service_slo.grafana = slo_doc.slos.filter(slo => slo.name === service_slo.slo_name)[0].dashboard;
+  const { slo_value, slo_target } = service_slo;
   if (slo_value >= slo_target) {
-    slo.slo_pair = (
+    service_slo.slo_pair = (
       <span style={{ backgroundColor: 'green' }} className="badge Pass">
         {' '}
         {slo_value} / {slo_target}
       </span>
     );
   } else {
-    slo.slo_pair = (
+    service_slo.slo_pair = (
       <span style={{ backgroundColor: 'red' }} className="badge Fail">
         {' '}
         {slo_value} / {slo_target}
@@ -676,8 +676,8 @@ const ServiceSLO = ({ get_ns, service_slo, slo_documents_for_report }) => {
     ServiceSLOTable = <p style={{ 'font-style': 'italic' }}>No service_slo.</p>;
   } else {
     for (let i = 0; i < service_slo.length; i++) {
-      slo_doc_for_report = slo_documents_for_report.filter(doc => doc.name === service_slo[i].slo_doc_name)[0]
-      add_to_slo(get_ns, service_slo[i], slo_doc_for_report)
+      slo_doc = slo_documents_for_report.filter(doc => doc.name === service_slo[i].slo_doc_name)[0]
+      add_to_slo(get_ns, service_slo[i], slo_doc)
     }
     ServiceSLOTable = (
       <Table.PfProvider
