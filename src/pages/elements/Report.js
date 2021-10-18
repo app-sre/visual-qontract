@@ -699,6 +699,16 @@ const ServiceSLO = ({ get_ns, service_slo, slo_document }) => {
           },
           {
             header: {
+              label: 'SLO Doc',
+              formatters: [headerFormat]
+            },
+            cell: {
+              formatters: [cellFormat]
+            },
+            property: 'slo_doc'
+          },
+          {
+            header: {
               label: 'SLO Name',
               formatters: [headerFormat]
             },
