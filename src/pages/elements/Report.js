@@ -32,6 +32,11 @@ const LinkConsole = ({ consoleUrl }) => (
   </a>
 );
 
+// link to SLODoc
+const LinkSLODoc = ({ slo_doc_name, path }) => (
+  <Link to={{ pathname: '/sloDocs', hash: path }}>{slo_doc_name}</Link>
+);
+
 // link to Grafana
 const LinkGrafana = ({ grafanaUrl }) => (
   <a href={grafanaUrl} target="_blank" rel="noopener noreferrer">
@@ -703,7 +708,14 @@ const ServiceSLO = ({ get_ns, service_slo, slo_document }) => {
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [cellFormat]
+              formatters: [
+                slo_doc => (
+                  <p>
+                    <LinkSLODoc name={slo_document.name} path={slo_document.path} />
+                  </p>
+                ),
+                cellFormat
+              ]
             },
             property: 'slo_doc'
           },
