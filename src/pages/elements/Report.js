@@ -667,7 +667,7 @@ const add_to_slo = ({ get_ns, slo: service_slo, slo_doc }) => {
       </span>
     );
   }
-}
+};
 
 // displays the ServiceSLO Table
 const ServiceSLO = ({ get_ns, service_slo, slo_documents_for_report }) => {
@@ -676,8 +676,8 @@ const ServiceSLO = ({ get_ns, service_slo, slo_documents_for_report }) => {
     ServiceSLOTable = <p style={{ 'font-style': 'italic' }}>No service_slo.</p>;
   } else {
     for (let i = 0; i < service_slo.length; i++) {
-      let slo_doc = slo_documents_for_report.filter(doc => doc.name === service_slo[i].slo_doc_name)[0]
-      add_to_slo(get_ns, service_slo[i], slo_doc)
+      const slo_doc = slo_documents_for_report.filter(doc => doc.name === service_slo[i].slo_doc_name)[0];
+      add_to_slo(get_ns, service_slo[i], slo_doc);
     }
     ServiceSLOTable = (
       <Table.PfProvider
@@ -764,7 +764,7 @@ function Report({ report, namespaces, saas_files, slo_documents }) {
   // fetch the namespace. Returns `undefined` if not found
   const get_ns = (c, ns) => namespaces.filter(n => n.name === ns && n.cluster.name === c)[0];
 
-  let slo_documents_for_report = [];
+  const slo_documents_for_report = [];
   let ns;
   for (let i = 0; i < slo_documents.length; i++) {
     for (let j = 0; j < slo_documents[i].namespaces.length; j++) {
@@ -839,7 +839,13 @@ function Report({ report, namespaces, saas_files, slo_documents }) {
       {mergeSection}
       {<PostDeployJobs post_deploy_jobs={content.post_deploy_jobs} get_ns={get_ns} />}
       {<DeploymentValidations deployment_validations={content.deployment_validations} get_ns={get_ns} />}
-      {<ServiceSLO service_slo={content.service_slo} get_ns={get_ns} slo_documents_for_report={slo_documents_for_report} />}
+      {
+        <ServiceSLO
+          service_slo={content.service_slo}
+          get_ns={get_ns}
+          slo_documents_for_report={slo_documents_for_report}
+        />
+      }
     </React.Fragment>
   );
 }
