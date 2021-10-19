@@ -676,7 +676,7 @@ const ServiceSLO = ({ get_ns, service_slo, slo_documents_for_report }) => {
     ServiceSLOTable = <p style={{ 'font-style': 'italic' }}>No service_slo.</p>;
   } else {
     for (let i = 0; i < service_slo.length; i++) {
-      slo_doc = slo_documents_for_report.filter(doc => doc.name === service_slo[i].slo_doc_name)[0]
+      let slo_doc = slo_documents_for_report.filter(doc => doc.name === service_slo[i].slo_doc_name)[0]
       add_to_slo(get_ns, service_slo[i], slo_doc)
     }
     ServiceSLOTable = (
