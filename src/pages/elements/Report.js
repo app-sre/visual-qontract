@@ -648,7 +648,7 @@ const DeploymentValidations = ({ get_ns, deployment_validations }) => {
   );
 };
 
-const add_to_slo = ( get_ns, service_slo, slo_doc ) => {
+const add_to_slo = (get_ns, service_slo, slo_doc) => {
   service_slo.ns = get_ns(service_slo.cluster, service_slo.namespace);
   service_slo.grafana = slo_doc.slos.filter(slo => slo.name === service_slo.slo_name)[0].dashboard;
   const { slo_value, slo_target } = service_slo;
@@ -677,8 +677,8 @@ const ServiceSLO = ({ get_ns, service_slo, slo_documents_for_report }) => {
   } else {
     for (let i = 0; i < service_slo.length; i++) {
       const slo_doc = slo_documents_for_report.filter(doc => doc.name === service_slo[i].slo_doc_name)[0];
-      if (slo_doc == undefined) {
-        throw 'No slo-docs found matching \'' + service_slo[i].slo_doc_name + '\''
+      if (slo_doc === undefined) {
+        throw new Error(`No slo-docs found matching ${service_slo[i].slo_doc_name}`);
       }
       add_to_slo(get_ns, service_slo[i], slo_doc);
     }
