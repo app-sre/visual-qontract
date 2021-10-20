@@ -648,7 +648,7 @@ const DeploymentValidations = ({ get_ns, deployment_validations }) => {
   );
 };
 
-const add_to_slo = ({ get_ns, slo: service_slo, slo_doc }) => {
+const add_to_slo = ( get_ns, service_slo, slo_doc ) => {
   service_slo.ns = get_ns(service_slo.cluster, service_slo.namespace);
   service_slo.grafana = slo_doc.slos.filter(slo => slo.name === service_slo.slo_name)[0].dashboard;
   const { slo_value, slo_target } = service_slo;
@@ -770,7 +770,7 @@ function Report({ report, namespaces, saas_files, slo_documents }) {
     for (let j = 0; j < slo_documents[i].namespaces.length; j++) {
       ns = slo_documents[i].namespaces[j];
       if (ns.app.name === report.app.name) {
-        slo_documents_for_report.append(slo_documents[i]);
+        slo_documents_for_report.push(slo_documents[i]);
         break;
       }
     }
