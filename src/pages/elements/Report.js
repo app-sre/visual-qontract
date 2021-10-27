@@ -648,6 +648,7 @@ const DeploymentValidations = ({ get_ns, deployment_validations }) => {
   );
 };
 
+// populates extra fields for 'service_slo'
 const add_to_slo = (get_ns, service_slo, slo_doc) => {
   service_slo.ns = get_ns(service_slo.cluster, service_slo.namespace);
   service_slo.grafana = slo_doc.slos.filter(slo => slo.name === service_slo.slo_name)[0].dashboard;
@@ -669,6 +670,30 @@ const add_to_slo = (get_ns, service_slo, slo_doc) => {
   }
 };
 
+// gets the slo_doc from 'slo_documents_for_report' that matches the slo_item 
+const get_doc_for_slo = (slo_documents_for_report, slo_item) => {
+  if (slo_documents_for_report.length === 1) {
+    slo_doc = slo_documents_for_report[0];
+  } else if (slo_item.slo_doc_name === undefined) {
+    // If slo_doc is not found from the filter, this means the report was generated before we started
+    // to include the 'slo_doc_name' property in SLO reports. If there is only 1 item in 
+    // 'slo_documents_for_report', we can safely assume that this is the correct item.
+    // If there is more than 1 item in 'slo_documents_for_report', and the filter finds no items, we
+    // have no way of knowing for sure which slo_document this SLO actually applies to. Therefore, we
+    // arbitrarily use the first item in 'slo_documents_for_report' to give the illusion that things are
+    // fine... arguably in this case it may be more appropriate to error out and not display any slo-table
+    // at all?
+    slo_doc = slo_documents_for_report[0];
+    console.warn(`No 'slo_doc_name' for ${slo_item.slo_name}! SLO data shown may be inaccurate!`);
+  } else {
+    slo_doc = slo_documents_for_report.filter(doc => doc.name === slo_item.slo_doc_name)[0];
+    if (slo_doc === undefined) {
+      throw new Error(`slo-doc ${slo_item.slo_doc_name} for slo ${slo_item.slo_name} not found!`);
+    }
+  }
+  return slo_doc;
+};
+
 // displays the ServiceSLO Table
 const ServiceSLO = ({ get_ns, service_slo, slo_documents_for_report }) => {
   let ServiceSLOTable;
@@ -676,10 +701,7 @@ const ServiceSLO = ({ get_ns, service_slo, slo_documents_for_report }) => {
     ServiceSLOTable = <p style={{ 'font-style': 'italic' }}>No service_slo.</p>;
   } else {
     for (let i = 0; i < service_slo.length; i++) {
-      const slo_doc = slo_documents_for_report.filter(doc => doc.name === service_slo[i].slo_doc_name)[0];
-      if (slo_doc === undefined) {
-        throw new Error(`No slo-docs found matching ${service_slo[i].slo_doc_name}`);
-      }
+      slo_doc = get_doc_for_slo(slo_documents_for_report, service_slo[i])
       add_to_slo(get_ns, service_slo[i], slo_doc);
     }
     ServiceSLOTable = (
