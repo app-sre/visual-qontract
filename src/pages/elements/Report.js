@@ -733,7 +733,7 @@ const ServiceSLO = ({ get_ns, service_slo, slo_documents_for_report }) => {
           },
           {
             header: {
-              label: 'SLO Doc',
+              label: 'SLO Document',
               formatters: [headerFormat]
             },
             cell: {
