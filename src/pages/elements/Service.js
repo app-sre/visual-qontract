@@ -11,7 +11,6 @@ import { LinkPath, DisplayNamePathList } from '../../components/NamePathList';
 import Namespaces from './Namespaces';
 import Reports from './Reports';
 import Documents from './Documents';
-import GrafanaUrl from './GrafanaUrl';
 import Services from './Services';
 
 const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
@@ -439,19 +438,23 @@ function Service({ service, reports, documents, saas_files, saas_files_v2, setti
     reportSection = <p style={{ 'font-style': 'italic' }}>No Latest Report.</p>;
   }
 
+  const grafanaUrls = service.grafanaUrls.map(g => [
+    [
+      g.title,
+      ': ',
+      <a key={g.title} href={g.url}>
+        {g.url}
+      </a>
+    ]
+  ]);
+
   return (
     <React.Fragment>
       <h4>Description</h4>
       <p>{service.description}</p>
 
-      {service.grafanaUrl && (
-        <div>
-          <h4>Grafana</h4>
-          <p>
-            <GrafanaUrl jumpHost={null} url={service.grafanaUrl} hide={false} />
-          </p>
-        </div>
-      )}
+      <h4>Grafana Urls</h4>
+      <Definition items={grafanaUrls} />
 
       <h4>Info</h4>
       <Definition items={[['Onboarding Status', service.onboardingStatus]]} />
