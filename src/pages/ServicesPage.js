@@ -13,7 +13,10 @@ const GET_SERVICE = gql`
       name
       description
       onboardingStatus
-      grafanaUrl
+      grafanaUrls {
+        title
+        url
+      }
       serviceDocs
       serviceOwners {
         name
