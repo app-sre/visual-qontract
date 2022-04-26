@@ -71,7 +71,6 @@ const EscalationPolicy = ({ app }) => {
   );
 };
 
-
 // displays the list of Pipeline Runs
 const PipelineRuns = ({ saas_file, settings }) => {
   const pipeline_name = settings[0].saasDeployJobTemplate;
@@ -114,7 +113,6 @@ const PipelineRuns = ({ saas_file, settings }) => {
 
   return <ul>{url_elements}</ul>;
 };
-
 
 // displays the saas_files section
 const SaasFilesV2 = ({ saas_files, settings }) => {
