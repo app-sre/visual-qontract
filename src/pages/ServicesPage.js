@@ -100,27 +100,6 @@ const GET_SERVICE = gql`
       name
       date
     }
-    saas_files_v1 {
-      path
-      name
-      app {
-        name
-      }
-      instance {
-        name
-        serverUrl
-      }
-      resourceTemplates {
-        targets {
-          namespace {
-            name
-            environment {
-              name
-            }
-          }
-        }
-      }
-    }
     saas_files_v2 {
       path
       name
@@ -191,7 +170,6 @@ const ServicesPage = ({ location }) => {
           const service = data.apps_v1[0];
           const reports = data.reports_v1;
           const documents = data.documents_v1;
-          const saas_files = data.saas_files_v1;
           const { saas_files_v2 } = data;
           const settings = data.app_interface_settings_v1;
           const body = (
@@ -199,7 +177,6 @@ const ServicesPage = ({ location }) => {
               service={service}
               reports={reports}
               documents={documents}
-              saas_files={saas_files}
               saas_files_v2={saas_files_v2}
               settings={settings}
             />

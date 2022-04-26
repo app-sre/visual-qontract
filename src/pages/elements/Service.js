@@ -71,28 +71,6 @@ const EscalationPolicy = ({ app }) => {
   );
 };
 
-// displays the list of Saas Deploy Jobs
-const SaasDeployJobs = ({ saas_file, settings }) => {
-  const job_template_name = settings[0].saasDeployJobTemplate;
-  const job_lst = [];
-  const job_name_lst = [];
-  let job_name;
-  for (const template of saas_file.resourceTemplates) {
-    for (const target of template.targets) {
-      job_name = `${job_template_name}-${saas_file.name}-${target.namespace.environment.name}`;
-      if (!job_name_lst.includes(job_name)) {
-        job_lst.push(
-          <li>
-            <a href={`${saas_file.instance.serverUrl}/job/${job_name}`}> {job_name} </a>
-          </li>
-        );
-        job_name_lst.push(job_name);
-      }
-    }
-  }
-
-  return <ul>{job_lst}</ul>;
-};
 
 // displays the list of Pipeline Runs
 const PipelineRuns = ({ saas_file, settings }) => {
@@ -137,65 +115,6 @@ const PipelineRuns = ({ saas_file, settings }) => {
   return <ul>{url_elements}</ul>;
 };
 
-// displays the saas_files section
-const SaasFilesV1 = ({ saas_files, settings }) => {
-  const get_saas_file = path => saas_files.filter(f => f.path === path)[0];
-  let saasFilesTable;
-  if (saas_files == null || saas_files.length === 0) {
-    saasFilesTable = <p />;
-  } else {
-    saasFilesTable = (
-      <Table.PfProvider
-        striped
-        bordered
-        columns={[
-          {
-            header: {
-              label: 'Name',
-              formatters: [headerFormat]
-            },
-            cell: {
-              formatters: [cellFormat]
-            },
-            property: 'name'
-          },
-          {
-            header: {
-              label: 'Link',
-              formatters: [headerFormat]
-            },
-            cell: {
-              formatters: [
-                path => (
-                  <a href={`${window.DATA_DIR_URL}/${path}`} target="_blank" rel="noopener noreferrer">
-                    {path}
-                  </a>
-                ),
-                cellFormat
-              ]
-            },
-            property: 'path'
-          },
-          {
-            header: {
-              label: 'Sass Deploy Jobs',
-              formatters: [headerFormat]
-            },
-            cell: {
-              formatters: [path => <SaasDeployJobs saas_file={get_saas_file(path)} settings={settings} />, cellFormat]
-            },
-            property: 'path'
-          }
-        ]}
-      >
-        <Table.Header />
-        <Table.Body rows={saas_files} rowKey="path" />
-      </Table.PfProvider>
-    );
-  }
-
-  return <React.Fragment>{saasFilesTable}</React.Fragment>;
-};
 
 // displays the saas_files section
 const SaasFilesV2 = ({ saas_files, settings }) => {
@@ -257,7 +176,7 @@ const SaasFilesV2 = ({ saas_files, settings }) => {
   return <React.Fragment>{saasFilesTable}</React.Fragment>;
 };
 
-function Service({ service, reports, documents, saas_files, saas_files_v2, settings }) {
+function Service({ service, reports, documents, saas_files_v2, settings }) {
   function matches(r) {
     if (r.app.name === service.name) {
       return true;
@@ -266,7 +185,6 @@ function Service({ service, reports, documents, saas_files, saas_files_v2, setti
   }
   const matchedReports = sortByDate(reports).filter(matches);
   const matchedDocuments = documents.filter(matches);
-  const matchedSaasFilesV1 = saas_files.filter(matches);
   const matchedSaasFilesV2 = saas_files_v2.filter(matches);
 
   let quayReposTable;
@@ -468,7 +386,6 @@ function Service({ service, reports, documents, saas_files, saas_files_v2, setti
       {reportSection}
 
       <h4>Saas Files</h4>
-      {<SaasFilesV1 saas_files={matchedSaasFilesV1} settings={settings} />}
       {<SaasFilesV2 saas_files={matchedSaasFilesV2} settings={settings} />}
 
       {service.childrenApps.length > 0 && (
