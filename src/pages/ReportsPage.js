@@ -27,10 +27,6 @@ const GET_REPORT = gql`
         consoleUrl
       }
     }
-    saas_files_v1 {
-      path
-      name
-    }
     saas_files_v2 {
       path
       name
@@ -78,7 +74,7 @@ const ReportsPage = ({ location }) => {
             <Report
               report={report}
               namespaces={data.namespaces_v1}
-              saas_files={data.saas_files_v1.concat(data.saas_files_v2)}
+              saas_files={data.saas_files_v2}
               slo_documents={data.slo_document_v1}
             />
           );
