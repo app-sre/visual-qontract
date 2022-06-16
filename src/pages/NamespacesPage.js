@@ -25,12 +25,19 @@ const GET_NAMESPACE = gql`
         name
         path
       }
-      managedTerraformResources
-      terraformResources {
+      managedExternalResources
+      externalResources {
         provider
-        account
-        identifier
-        output_resource_name
+        provisioner {
+          name
+        }
+        ... on NamespaceTerraformProviderResourceAWS_v1 {
+          resources {
+            provider
+            identifier
+            output_resource_name
+          }
+        }
       }
     }
     roles_v1 {
