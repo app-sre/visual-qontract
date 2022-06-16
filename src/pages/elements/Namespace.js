@@ -53,7 +53,8 @@ function Namespace({ namespace, roles }) {
             [{p.provider}/{p.provisioner.name}] {a.provider} - {a.identifier}
           </a>
         </ListItem>
-    )));
+      ))
+    );
   return (
     <React.Fragment>
       <h4>Info</h4>
