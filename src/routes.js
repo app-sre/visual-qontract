@@ -13,7 +13,6 @@ import GitHubOrgsPage from './pages/GitHubOrgsPage';
 import QuayOrgsPage from './pages/QuayOrgsPage';
 import JenkinsInstancesPage from './pages/JenkinsInstancesPage';
 import DependenciesPage from './pages/DependenciesPage';
-import DocumentsPage from './pages/DocumentsPage';
 import ReportsPage from './pages/ReportsPage';
 import NotificationsPage from './pages/NotificationsPage';
 
@@ -51,12 +50,6 @@ const routes = () => [
     title: 'Namespaces',
     to: '/namespaces',
     component: NamespacesPage
-  },
-  {
-    iconClass: 'fa  fa-file-text-o',
-    title: 'Documents',
-    to: '/documents',
-    component: DocumentsPage
   },
   {
     iconClass: 'fa  fa-file-text-o',

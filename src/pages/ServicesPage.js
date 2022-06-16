@@ -128,14 +128,6 @@ const GET_SERVICE = gql`
         }
       }
     }
-    documents_v1 {
-      path
-      app {
-        path
-        name
-      }
-      name
-    }
     app_interface_settings_v1 {
       saasDeployJobTemplate
     }
@@ -169,17 +161,10 @@ const ServicesPage = ({ location }) => {
 
           const service = data.apps_v1[0];
           const reports = data.reports_v1;
-          const documents = data.documents_v1;
           const { saas_files_v2 } = data;
           const settings = data.app_interface_settings_v1;
           const body = (
-            <Service
-              service={service}
-              reports={reports}
-              documents={documents}
-              saas_files_v2={saas_files_v2}
-              settings={settings}
-            />
+            <Service service={service} reports={reports} saas_files_v2={saas_files_v2} settings={settings} />
           );
           return <Page title={service.name} body={body} path={service.path} />;
         }}

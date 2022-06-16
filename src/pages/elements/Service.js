@@ -10,7 +10,6 @@ import { sortByDate } from '../../components/Utils';
 import { LinkPath, DisplayNamePathList } from '../../components/NamePathList';
 import Namespaces from './Namespaces';
 import Reports from './Reports';
-import Documents from './Documents';
 import Services from './Services';
 
 const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
@@ -174,7 +173,7 @@ const SaasFilesV2 = ({ saas_files, settings }) => {
   return <React.Fragment>{saasFilesTable}</React.Fragment>;
 };
 
-function Service({ service, reports, documents, saas_files_v2, settings }) {
+function Service({ service, reports, saas_files_v2, settings }) {
   function matches(r) {
     if (r.app.name === service.name) {
       return true;
@@ -182,7 +181,6 @@ function Service({ service, reports, documents, saas_files_v2, settings }) {
     return false;
   }
   const matchedReports = sortByDate(reports).filter(matches);
-  const matchedDocuments = documents.filter(matches);
   const matchedSaasFilesV2 = saas_files_v2.filter(matches);
 
   let quayReposTable;
@@ -428,13 +426,6 @@ function Service({ service, reports, documents, saas_files_v2, settings }) {
 
       <h4>Quay Repos</h4>
       {quayReposTable}
-
-      {matchedDocuments.length > 0 && (
-        <React.Fragment>
-          <h4>Documents</h4>
-          <Documents documents={matchedDocuments} />
-        </React.Fragment>
-      )}
     </React.Fragment>
   );
 }
