@@ -41,18 +41,20 @@ function Namespace({ namespace, roles }) {
     return `${r.identifier}-${r.provider}`;
   }
   const listItems =
-    namespace.managedTerraformResources &&
-    namespace.terraformResources.map(a => (
-      <ListItem>
-        <a
-          href={`${namespace.cluster.consoleUrl}/k8s/ns/${namespace.name}/secrets/${resourceName(a)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {a.provider} - {a.identifier}
-        </a>
-      </ListItem>
-    ));
+    namespace.managedExternalResources &&
+    namespace.externalResources.map(p =>
+      p.resources.map(a => (
+        <ListItem>
+          <a
+            href={`${namespace.cluster.consoleUrl}/k8s/ns/${namespace.name}/secrets/${resourceName(a)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            [{p.provider}/{p.provisioner.name}] {a.provider} - {a.identifier}
+          </a>
+        </ListItem>
+      ))
+    );
   return (
     <React.Fragment>
       <h4>Info</h4>
@@ -113,7 +115,7 @@ function Namespace({ namespace, roles }) {
       )}
       {listItems && (
         <React.Fragment>
-          <h4> Terraform resources </h4>
+          <h4> External resources </h4>
           <List className="policyList">{listItems}</List>
         </React.Fragment>
       )}
