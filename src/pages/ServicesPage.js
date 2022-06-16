@@ -164,12 +164,7 @@ const ServicesPage = ({ location }) => {
           const { saas_files_v2 } = data;
           const settings = data.app_interface_settings_v1;
           const body = (
-            <Service
-              service={service}
-              reports={reports}
-              saas_files_v2={saas_files_v2}
-              settings={settings}
-            />
+            <Service service={service} reports={reports} saas_files_v2={saas_files_v2} settings={settings} />
           );
           return <Page title={service.name} body={body} path={service.path} />;
         }}
