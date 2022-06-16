@@ -42,7 +42,7 @@ function Namespace({ namespace, roles }) {
   }
   const listItems =
     namespace.managedExternalResources &&
-    namespace.externalResources.map(p => (
+    namespace.externalResources.map(p =>
       p.resources.map(a => (
         <ListItem>
           <a
@@ -53,7 +53,7 @@ function Namespace({ namespace, roles }) {
             [{p.provider}/{p.provisioner.name}] {a.provider} - {a.identifier}
           </a>
         </ListItem>
-    ))));
+    )));
   return (
     <React.Fragment>
       <h4>Info</h4>
