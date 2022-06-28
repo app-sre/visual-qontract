@@ -26,13 +26,7 @@ function Namespace({ namespace, roles }) {
   }
   const matchedData = roles.filter(matches);
   const grafana = (
-    <GrafanaUrl
-      jumpHost={namespace.cluster.jumpHost}
-      cluster={namespace.cluster.name}
-      namespace={namespace.name}
-      url={namespace.grafanaUrl}
-      hide={false}
-    />
+    <GrafanaUrl cluster={namespace.cluster.name} namespace={namespace.name} url={namespace.grafanaUrl} hide={false} />
   );
   function resourceName(r) {
     if (r.output_resource_name) {
