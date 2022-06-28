@@ -57,6 +57,12 @@ function Cluster({ cluster, roles }) {
             </a>
           ],
           ['Grafana', grafana],
+          cluster.network !== null &&
+            cluster.network.vpc !== null &&
+            cluster.jumpHost !== null && [
+              'SSHUTTLE COMMAND',
+              `sshuttle -r ${cluster.jumpHost.hostname} ${cluster.network.vpc}`
+            ],
           cluster.network !== null && cluster.network.vpc !== null && ['VPC CIDR', cluster.network.vpc],
           cluster.network !== null && cluster.network.service !== null && ['Service CIDR', cluster.network.service],
           cluster.network !== null && cluster.network.pod !== null && ['Pod CIDR', cluster.network.pod],
