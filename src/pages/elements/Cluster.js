@@ -18,9 +18,7 @@ function Cluster({ cluster, roles }) {
     return false;
   }
   const matchedData = roles.filter(matches);
-  const grafana = (
-    <GrafanaUrl jumpHost={cluster.jumpHost} cluster={cluster.name} url={cluster.grafanaUrl} hide={false} />
-  );
+  const grafana = <GrafanaUrl cluster={cluster.name} url={cluster.grafanaUrl} hide={false} />;
   return (
     <React.Fragment>
       <h4>Info</h4>

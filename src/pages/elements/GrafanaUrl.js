@@ -1,9 +1,6 @@
 import React from 'react';
 
-function GrafanaUrl({ jumpHost, cluster, namespace, url, hide }) {
-  if (jumpHost !== null) {
-    return 'Not available';
-  }
+function GrafanaUrl({ cluster, namespace, url, hide }) {
   let grafanaUrl;
   if (url !== null && url !== undefined) {
     grafanaUrl = url;

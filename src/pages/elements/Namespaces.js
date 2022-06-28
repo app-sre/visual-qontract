@@ -18,7 +18,7 @@ function Namespaces({ namespaces, users }) {
     ns.name_path = [ns.name, ns.path];
     if (typeof ns.cluster !== 'undefined') {
       ns.cluster_name_path = [ns.cluster.name, ns.cluster.path];
-      ns.grafana_url = [ns.cluster.jumpHost, ns.cluster.name, ns.name, ns.grafanaUrl];
+      ns.grafana_url = [ns.cluster.name, ns.name, ns.grafanaUrl];
     }
     if (typeof ns.app !== 'undefined') {
       ns.app_name_path = [ns.app.name, ns.app.path];
@@ -132,10 +132,7 @@ function Namespaces({ namespaces, users }) {
       formatters: [headerFormat]
     },
     cell: {
-      formatters: [
-        value => <GrafanaUrl jumpHost={value[0]} cluster={value[1]} namespace={value[2]} url={value[3]} hide />,
-        cellFormat
-      ]
+      formatters: [value => <GrafanaUrl cluster={value[1]} namespace={value[2]} url={value[3]} hide />, cellFormat]
     },
     property: 'grafana_url'
   };
