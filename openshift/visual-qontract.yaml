@@ -154,8 +154,6 @@ objects:
             items:
             - key: env
               path: env.js
-    triggers:
-    - type: ConfigChange
 - apiVersion: v1
   kind: Service
   metadata:
