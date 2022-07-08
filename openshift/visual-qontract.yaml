@@ -4,8 +4,8 @@ kind: Template
 metadata:
   name: visual-qontract
 objects:
-- apiVersion: v1
-  kind: DeploymentConfig
+- apiVersion: apps/v1
+  kind: Deployment
   metadata:
     labels:
       app: visual-qontract
@@ -13,21 +13,19 @@ objects:
   spec:
     replicas: 1
     selector:
-      app: visual-qontract
-      deploymentconfig: visual-qontract
+      matchLabels:
+        app: visual-qontract
+        deployment: visual-qontract
     strategy:
-      rollingParams:
-        intervalSeconds: 1
+      rollingUpdate:
         maxSurge: 25%
         maxUnavailable: 25%
-        timeoutSeconds: 600
-        updatePeriodSeconds: 1
-      type: Rolling
+      type: RollingUpdate
     template:
       metadata:
         labels:
           app: visual-qontract
-          deploymentconfig: visual-qontract
+          deployment: visual-qontract
       spec:
         containers:
         - image: ${IMAGE}:${IMAGE_TAG}
@@ -172,7 +170,7 @@ objects:
         targetPort: 4180
         protocol: TCP
     selector:
-      deploymentconfig: visual-qontract
+      deployment: visual-qontract
 - apiVersion: v1
   kind: Service
   metadata:
@@ -187,7 +185,7 @@ objects:
         targetPort: 8080
         protocol: TCP
     selector:
-      deploymentconfig: visual-qontract
+      deployment: visual-qontract
 parameters:
 - name: IMAGE
   value: quay.io/app-sre/visual-qontract
