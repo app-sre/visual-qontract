@@ -10,8 +10,11 @@ objects:
     labels:
       app: visual-qontract
     name: visual-qontract
+    annotations:
+      ignore-check.kube-linter.io/minimum-three-replicas: "The internal instance of Visual Qontract does not need 3 replicas"
   spec:
-    replicas: 1
+    serviceAccountName: visual-qontract
+    replicas: ${{REPLICAS}}
     selector:
       matchLabels:
         app: visual-qontract
@@ -213,3 +216,5 @@ parameters:
   value: quay.io/pusher/oauth2_proxy
 - name: IMAGE_OAUTH2_PROXY_TAG
   value: v4.0.0-amd64
+- name: REPLICAS
+  value: '3'
