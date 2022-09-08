@@ -11,7 +11,8 @@ objects:
       app: visual-qontract
     name: visual-qontract
   spec:
-    replicas: 1
+    serviceAccountName: visual-qontract
+    replicas: ${{REPLICAS}}
     selector:
       matchLabels:
         app: visual-qontract
@@ -213,3 +214,5 @@ parameters:
   value: quay.io/pusher/oauth2_proxy
 - name: IMAGE_OAUTH2_PROXY_TAG
   value: v4.0.0-amd64
+- name: REPLICAS
+  value: '3'
