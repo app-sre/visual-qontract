@@ -10,6 +10,8 @@ objects:
     labels:
       app: visual-qontract
     name: visual-qontract
+    annotations:
+      ignore-check.kube-linter.io/minimum-three-replicas: "The internal instance of Visual Qontract does not need 3 replicas"
   spec:
     serviceAccountName: visual-qontract
     replicas: ${{REPLICAS}}
