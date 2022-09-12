@@ -13,28 +13,6 @@ objects:
     annotations:
       ignore-check.kube-linter.io/minimum-three-replicas: "The internal instance of Visual Qontract does not need 3 replicas"
   spec:
-    affinity:
-      podAntiAffinity:
-        preferredDuringSchedulingIgnoredDuringExecution:
-        - podAffinityTerm:
-            labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - visual-qontract
-            topologyKey: kubernetes.io/hostname
-          weight: 90
-        - podAffinityTerm:
-            labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - visual-qontract
-            topologyKey: topology.kubernetes.io/zone
-          weight: 100
-    serviceAccountName: visual-qontract
     replicas: ${{REPLICAS}}
     selector:
       matchLabels:
@@ -51,6 +29,28 @@ objects:
           app: visual-qontract
           deployment: visual-qontract
       spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - visual-qontract
+                topologyKey: kubernetes.io/hostname
+              weight: 90
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - visual-qontract
+                topologyKey: topology.kubernetes.io/zone
+              weight: 100
+        serviceAccountName: visual-qontract
         containers:
         - image: ${IMAGE}:${IMAGE_TAG}
           imagePullPolicy: Always
