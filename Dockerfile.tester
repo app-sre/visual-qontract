@@ -1,12 +1,8 @@
-FROM quay.io/centos/centos:7
+FROM registry.access.redhat.com/ubi8/nodejs-16
 
-# Set PATH, because "scl enable" does not have any effects to "docker build"
-ENV PATH /opt/rh/rh-nodejs10/root/usr/bin:$PATH
-
-RUN yum install -y centos-release-scl-rh epel-release && \
-    yum install -y rh-nodejs10 rh-nodejs10-npm nginx && \
-    yum clean all && \
-    npm install -g yarn
+RUN dnf -y update-minimal --security --sec-severity=Important --sec-severity=Critical && \
+    dnf install -y nginx && \
+    dnf clean all
 
 COPY . .
 
