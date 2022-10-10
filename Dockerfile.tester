@@ -1,5 +1,7 @@
 FROM registry.access.redhat.com/ubi8/nodejs-16
 
+USER root
+
 RUN dnf -y update-minimal --security --sec-severity=Important --sec-severity=Critical && \
     dnf install -y nginx && \
     dnf clean all
