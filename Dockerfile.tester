@@ -1,6 +1,5 @@
 FROM registry.access.redhat.com/ubi8/nodejs-16
 
-ENV PATH /opt/app-root/src/.npm-global/bin:$PATH
 USER root
 
 RUN dnf -y update-minimal --security --sec-severity=Important --sec-severity=Critical && \
@@ -9,6 +8,4 @@ RUN dnf -y update-minimal --security --sec-severity=Important --sec-severity=Cri
 
 COPY . .
 
-RUN yarn --frozen-lockfile && yarn build
-
-CMD [ "yarn", "lint" ]
+RUN yarn install && yarn run lint && yarn test 
