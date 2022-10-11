@@ -8,7 +8,7 @@ RUN dnf -y update-minimal --security --sec-severity=Important --sec-severity=Cri
     dnf install -y nginx && \
     dnf clean all
 
-COPY . .
+COPY . ./opt/visual-qontract
 
 WORKDIR /opt/visual-qontract
 
