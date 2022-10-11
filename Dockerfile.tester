@@ -10,6 +10,6 @@ RUN npm install --location=global yarn
 ADD . ${APP_ROOT}
 WORKDIR ${APP_ROOT}
 
-USER 1001
+# USER 1001
 
 RUN yarn install && yarn run lint && yarn test 
