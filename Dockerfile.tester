@@ -7,9 +7,7 @@ FROM registry.access.redhat.com/ubi8/nodejs-16
 
 RUN npm install --location=global yarn
 
-COPY . .
+ADD . /opt/visual-qontract
+WORKDIR /opt/visual-qontract
 
-RUN yarn --frozen-lockfile && \
-    yarn install && \
-    yarn run lint && \
-    yarn test 
+RUN yarn install && yarn run lint && yarn test 
