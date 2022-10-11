@@ -8,8 +8,7 @@ RUN dnf -y update-minimal --security --sec-severity=Important --sec-severity=Cri
     dnf install -y nginx && \
     dnf clean all
 
-COPY . ./opt/visual-qontract
-
-WORKDIR /opt/visual-qontract
+ADD . ${APP_ROOT}
+WORKDIR ${APP_ROOT}
 
 RUN yarn install && yarn run lint && yarn test 
