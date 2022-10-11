@@ -9,4 +9,7 @@ RUN npm install --location=global yarn
 
 COPY . .
 
-RUN yarn install && yarn run lint && yarn test 
+RUN yarn --frozen-lockfile && \
+    yarn install && \
+    yarn run lint && \
+    yarn test 
