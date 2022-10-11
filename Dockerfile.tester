@@ -7,8 +7,8 @@ RUN dnf -y update-minimal --security --sec-severity=Important --sec-severity=Cri
 
 RUN npm install --location=global yarn
 
-ADD . ${APP_ROOT}
-WORKDIR ${APP_ROOT}
+ADD . ${HOME}
+# WORKDIR ${HOME}
 
 # USER 1001
 
