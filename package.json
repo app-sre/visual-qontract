@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "@patternfly/react-core": "^3.16.10",
+    "@patternfly/react-core": "^3.158.4",
     "apollo-boost": "^0.3.1",
     "chroma-js": "^2.1.0",
     "classnames": "^2.2.6",
@@ -13,7 +13,7 @@
     "lodash.orderby": "^4.6.0",
     "ncp": "^2.0.0",
     "numeral": "^2.0.6",
-    "patternfly-react": "^2.33.0",
+    "patternfly-react": "^2.40.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-apollo": "^2.5.3",
