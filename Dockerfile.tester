@@ -1,16 +1,12 @@
 FROM registry.access.redhat.com/ubi8/nodejs-16
 
-USER root
+# USER root
 
-RUN dnf -y update-minimal --security --sec-severity=Important --sec-severity=Critical && \
-    dnf clean all
+# RUN dnf -y update-minimal --security --sec-severity=Important --sec-severity=Critical && \
+#     dnf clean all
 
 RUN npm install --location=global yarn
 
-# ADD . ${HOME}
 COPY . .
-# WORKDIR ${HOME}
-
-# USER 1001
 
 RUN yarn install && yarn run lint && yarn test 
