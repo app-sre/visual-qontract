@@ -2,6 +2,7 @@
 
 # env
 public/env/env.js
+public/env/env.js.bak
 
 # css
 src/**/*.css
