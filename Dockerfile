@@ -7,6 +7,7 @@ COPY deployment/entrypoint.sh /
 ADD . /opt/visual-qontract
 
 RUN dnf -y update-minimal --security --sec-severity=Important --sec-severity=Critical && \
+    dnf module enable nginx:1.20 -y && \
     dnf install -y nginx && \
     dnf clean all
 
