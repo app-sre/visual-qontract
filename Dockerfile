@@ -15,7 +15,7 @@ RUN chmod 777 /var/log/nginx /var/run && \
     chmod 666 /etc/nginx/nginx.conf && \
     rm -rf /var/log/nginx/*
 
-COPY deployment/nginx.conf.template /etc/nginx/conf.d/default.template
+COPY deployment/nginx.conf.template /etc/nginx/nginx.conf.template
 
 RUN npm install --location=global yarn
 
