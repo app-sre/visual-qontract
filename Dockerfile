@@ -2,7 +2,6 @@ FROM registry.access.redhat.com/ubi8/nodejs-16
 
 USER root
 
-COPY deployment/nginx.conf.template /etc/nginx/nginx.conf.template
 COPY deployment/entrypoint.sh /
 ADD . /opt/visual-qontract
 
@@ -15,6 +14,8 @@ RUN chmod 777 /var/log/nginx /var/run && \
     chmod -R 777 /var/lib/nginx && \
     chmod 666 /etc/nginx/nginx.conf && \
     rm -rf /var/log/nginx/*
+
+COPY deployment/nginx.conf.template /etc/nginx/nginx.conf.template
 
 RUN npm install --location=global yarn
 
