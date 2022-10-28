@@ -387,7 +387,7 @@ function Service({ service, reports, saas_files_v2, settings }) {
       {service.childrenApps.length > 0 && (
         <React.Fragment>
           <h4>Children Services</h4>
-          <Services services={service.childrenApps} table />
+          <Services services={service.childrenApps} omitParentApp />
         </React.Fragment>
       )}
 
