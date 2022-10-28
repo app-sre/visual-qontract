@@ -12,7 +12,7 @@ function Services({ services, omitParentApp }) {
   services = sortByName(services.slice()).map(s => {
     s.name_path = [s.name, s.path];
     if (s.parentApp) {
-      s.parentApp_name_path = <Link to={{ pathname: '/services', hash: s.parentApp.path }} >{s.parentApp.name}</Link>
+      s.parentApp_name_path = <Link to={{ pathname: '/services', hash: s.parentApp.path }}>{s.parentApp.name}</Link>;
     }
     return s;
   });
