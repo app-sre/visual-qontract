@@ -1,84 +1,83 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Table } from 'patternfly-react';
 import { Link } from 'react-router-dom';
-import { chunk } from 'lodash';
-import { Row, Col, Card, CardHeading, CardBody, CardFooter, CardTitle } from 'patternfly-react';
 import { sortByName } from '../../components/Utils';
-import ServicesTable from '../../components/ServicesTable';
-import GridSearch from '../../components/GridSearch';
-import Label from '../../components/Label';
 import OnboardingStatus from '../../components/OnboardingStatus';
 
-function Services({ services, table }) {
-  // cardsWidth * cardsPerRow must be <= 12 (bootstrap grid)
-  const cardWidth = 4;
-  const cardsPerRow = 3;
-  const options = ['Show children apps', 'Hide children apps'];
-  const [selected, changeSelected] = useState(options[0]);
-  const [filterText, changeFilterText] = useState('');
-  const lcFilter = filterText.toLowerCase();
-  function matches(s) {
-    return (
-      (selected === options[0] && s.name.toLowerCase().includes(lcFilter)) ||
-      (selected === options[1] && s.name.toLowerCase().includes(lcFilter) && s.parentApp === null)
-    );
-  }
-  const matchedServices = services.filter(matches);
+function Services({ services }) {
+  const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
+  const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
+  const onboardingStatusFormat = value => <OnboardingStatus state={value} />;
+  services = sortByName(services.slice()).map(s => {
+    s.name_path = [s.name, s.path];
+    if (s.parentApp) {
+      s.parentApp_name_path = <Link to={{ pathname: '/services', hash: s.parentApp.path }} >{s.parentApp.name}</Link>
+    }
+    return s;
+  });
 
-  if (typeof table !== 'undefined' && table) {
-    return <ServicesTable services={matchedServices} />;
-  }
-
-  const rows = chunk(sortByName(matchedServices), cardsPerRow).map(c => (
-    <Row key={c[0].path}>
-      {c.map(s => (
-        <Col xs={cardWidth} key={s.path}>
-          <Card accented>
-            <CardHeading>
-              <CardTitle>
-                {s.name}
-                {s.parentApp && (
-                  <Link
-                    to={{
-                      pathname: '/services',
-                      hash: s.parentApp.path
-                    }}
-                  >
-                    <Label text={s.parentApp.name} />
-                  </Link>
-                )}
-              </CardTitle>
-            </CardHeading>
-            <CardBody>
-              <OnboardingStatus state={s.onboardingStatus} />
-              {s.description}
-            </CardBody>
-            <CardFooter>
-              <p>
+  return (
+    <Table.PfProvider
+      striped
+      bordered
+      columns={[
+        {
+          header: {
+            label: 'Name',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [
+              value => (
                 <Link
                   to={{
                     pathname: '/services',
-                    hash: s.path
+                    hash: value[1]
                   }}
                 >
-                  Details
+                  {value[0]}
                 </Link>
-              </p>
-            </CardFooter>
-          </Card>
-        </Col>
-      ))}
-    </Row>
-  ));
-
-  return (
-    <GridSearch
-      data={rows}
-      filterText={filterText}
-      changeFilterText={changeFilterText}
-      changeSelected={changeSelected}
-      options={options}
-      selected={selected}
-    />
+              ),
+              cellFormat
+            ]
+          },
+          property: 'name_path'
+        },
+        {
+          header: {
+            label: 'Onboarding Status',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [onboardingStatusFormat, cellFormat]
+          },
+          property: 'onboardingStatus'
+        },
+        {
+          header: {
+            label: 'Parent App',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'parentApp_name_path'
+        },
+        {
+          header: {
+            label: 'Description',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'description'
+        }
+      ]}
+    >
+      <Table.Header />
+      <Table.Body rows={sortByName(services)} rowKey="name" />
+    </Table.PfProvider>
   );
 }
 
