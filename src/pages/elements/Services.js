@@ -12,7 +12,7 @@ function Services({ services, omitParentApp }) {
   services = sortByName(services.slice()).map(s => {
     s.name_path = [s.name, s.path];
     if (s.parentApp) {
-      s.parentApp_name_path = <Link to={{ pathname: '/services', hash: s.parentApp.path }}>{s.parentApp.name}</Link>;
+      s.parentAppLink = <Link to={{ pathname: '/services', hash: s.parentApp.path }}>{s.parentApp.name}</Link>;
     }
     return s;
   });
@@ -58,7 +58,7 @@ function Services({ services, omitParentApp }) {
       cell: {
         formatters: [cellFormat]
       },
-      property: 'parentApp_name_path'
+      property: 'parentAppLink'
     },
     {
       header: {
@@ -73,7 +73,7 @@ function Services({ services, omitParentApp }) {
   ];
 
   if (omitParentApp) {
-    columns = columns.filter((value, index, array) => value.property !== 'parentApp_name_path');
+    columns = columns.filter((value, index, array) => value.property !== 'parentAppLink');
   }
 
   return (
