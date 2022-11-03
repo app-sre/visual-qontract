@@ -107,16 +107,6 @@ objects:
           imagePullPolicy: Always
           name: visual-qontract-oauth2-proxy
           env:
-          - name: OAUTH2_PROXY_PROVIDER
-            valueFrom:
-              configMapKeyRef:
-                key: oauth2.proxy.provider
-                name: oauth2-proxy
-          - name: OAUTH2_PROXY_GITHUB_ORG
-            valueFrom:
-              configMapKeyRef:
-                key: oauth2.proxy.github.org
-                name: oauth2-proxy
           - name: OAUTH2_PROXY_REDIRECT_URL
             valueFrom:
               configMapKeyRef:
@@ -138,16 +128,19 @@ objects:
                   key: oauth2.proxy.client.secret
                   name: oauth2-proxy
           args:
-          - -http-address=0.0.0.0:4180
-          - -email-domain=*
-          - -upstream=http://localhost:8080
-          - -cookie-secret=$(OAUTH2_PROXY_COOKIE_SECRET)
-          - -client-id=$(OAUTH2_PROXY_CLIENT_ID)
-          - -client-secret=$(OAUTH2_PROXY_CLIENT_SECRET)
-          - -provider=$(OAUTH2_PROXY_PROVIDER)
-          - -github-org=$(OAUTH2_PROXY_GITHUB_ORG)
-          - -redirect-url=$(OAUTH2_PROXY_REDIRECT_URL)
-          - -pass-user-headers
+          - --provider=github
+          - --https-address=:4180
+          - --http-address=
+          - --email-domain=*
+          - --upstream=http://localhost:8080
+          - --tls-cert-file=/etc/tls/private/tls.crt
+          - --tls-key-file=/etc/tls/private/tls.key
+          - --github-org=app-sre
+          - --pass-user-headers
+          - --cookie-secret=$(OAUTH2_PROXY_COOKIE_SECRET)
+          - --client-id=$(OAUTH2_PROXY_CLIENT_ID)
+          - --client-secret=$(OAUTH2_PROXY_CLIENT_SECRET)
+          - --redirect-url=$(OAUTH2_PROXY_REDIRECT_URL)
           resources:
             requests:
               memory: ${OAUTH_MEMORY_REQUESTS}
@@ -236,6 +229,6 @@ parameters:
 - name: IMAGE_OAUTH2_PROXY
   value: quay.io/pusher/oauth2_proxy
 - name: IMAGE_OAUTH2_PROXY_TAG
-  value: v4.0.0-amd64
+  value: v7.4.0-amd64
 - name: REPLICAS
   value: '3'
