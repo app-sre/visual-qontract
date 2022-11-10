@@ -419,4 +419,4 @@ parameters:
 - name: REPLICAS
   value: '3'
 - name: REPLICAS_CANARY
-  value: '1'
+  value: '0'
