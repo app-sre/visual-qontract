@@ -14,6 +14,9 @@ function HomePage() {
         </Grid.Col>
       </Grid.Row>
       <Grid.Row>
+        <Grid.Col xs={12}>Hello, HyperShift F2F!</Grid.Col>
+      </Grid.Row>
+      <Grid.Row>
         <Grid.Col xs={12}>This web application is the visual representation of the App-Interface.</Grid.Col>
       </Grid.Row>
       <Grid.Row>
