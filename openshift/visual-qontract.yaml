@@ -178,6 +178,181 @@ objects:
             items:
             - key: env
               path: env.js
+# Canary
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    labels:
+      app: visual-qontract
+    name: visual-qontract-canary
+    annotations:
+      ignore-check.kube-linter.io/minimum-three-replicas: "The internal instance of Visual Qontract does not need 3 replicas"
+  spec:
+    replicas: ${{REPLICAS_CANARY}}
+    selector:
+      matchLabels:
+        app: visual-qontract
+        deployment: visual-qontract
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        labels:
+          app: visual-qontract
+          deployment: visual-qontract
+      spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - visual-qontract
+                topologyKey: kubernetes.io/hostname
+              weight: 90
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - visual-qontract
+                topologyKey: topology.kubernetes.io/zone
+              weight: 100
+        serviceAccountName: visual-qontract
+        containers:
+        - image: ${IMAGE}:${IMAGE_TAG_CANARY}
+          imagePullPolicy: Always
+          name: visual-qontract
+          env:
+          - name: GRAPHQL_URI
+            valueFrom:
+              configMapKeyRef:
+                key: graphql.uri
+                name: visual-qontract
+          - name: AUTHORIZATION
+            valueFrom:
+              secretKeyRef:
+                  key: authorization
+                  name: visual-qontract
+          - name: API_URI
+            valueFrom:
+              configMapKeyRef:
+                key: api.uri
+                name: visual-qontract
+          - name: API_AUTH
+            valueFrom:
+              secretKeyRef:
+                  key: api.auth
+                  name: visual-qontract
+          ports:
+          - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /graphql?query={__schema{types{name}}}
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /graphql?query={__schema{types{name}}}
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            timeoutSeconds: 3
+          resources:
+            requests:
+              memory: ${MEMORY_REQUESTS}
+              cpu: ${CPU_REQUESTS}
+            limits:
+              memory: ${MEMORY_LIMIT}
+              cpu: ${CPU_LIMIT}
+          volumeMounts:
+            - name: visual-qontract-env
+              mountPath: /opt/visual-qontract/build/env/
+              readOnly: true
+        - image: ${IMAGE_OAUTH2_PROXY}:${IMAGE_OAUTH2_PROXY_TAG}
+          imagePullPolicy: Always
+          name: visual-qontract-oauth2-proxy
+          env:
+          - name: OAUTH2_PROXY_PROVIDER
+            valueFrom:
+              configMapKeyRef:
+                key: oauth2.proxy.provider
+                name: oauth2-proxy
+          - name: OAUTH2_PROXY_GITHUB_ORG
+            valueFrom:
+              configMapKeyRef:
+                key: oauth2.proxy.github.org
+                name: oauth2-proxy
+          - name: OAUTH2_PROXY_REDIRECT_URL
+            valueFrom:
+              configMapKeyRef:
+                key: oauth2.proxy.redirect.url
+                name: oauth2-proxy
+          - name: OAUTH2_PROXY_COOKIE_SECRET
+            valueFrom:
+              secretKeyRef:
+                  key: oauth2.proxy.cookie.secret
+                  name: oauth2-proxy
+          - name: OAUTH2_PROXY_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                  key: oauth2.proxy.client.id
+                  name: oauth2-proxy
+          - name: OAUTH2_PROXY_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                  key: oauth2.proxy.client.secret
+                  name: oauth2-proxy
+          args:
+          - -http-address=0.0.0.0:4180
+          - -email-domain=*
+          - -upstream=http://localhost:8080
+          - -cookie-secret=$(OAUTH2_PROXY_COOKIE_SECRET)
+          - -client-id=$(OAUTH2_PROXY_CLIENT_ID)
+          - -client-secret=$(OAUTH2_PROXY_CLIENT_SECRET)
+          - -provider=$(OAUTH2_PROXY_PROVIDER)
+          - -github-org=$(OAUTH2_PROXY_GITHUB_ORG)
+          - -redirect-url=$(OAUTH2_PROXY_REDIRECT_URL)
+          - -pass-user-headers
+          resources:
+            requests:
+              memory: ${OAUTH_MEMORY_REQUESTS}
+              cpu: ${OAUTH_CPU_REQUESTS}
+            limits:
+              memory: ${OAUTH_MEMORY_LIMIT}
+              cpu: ${OAUTH_CPU_LIMIT}
+          ports:
+          - containerPort: 4180
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: 4180
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: 4180
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            timeoutSeconds: 3
+        volumes:
+        - name: visual-qontract-env
+          configMap:
+            name: visual-qontract
+            items:
+            - key: env
+              path: env.js
 - apiVersion: v1
   kind: Service
   metadata:
@@ -217,6 +392,10 @@ parameters:
   value: latest
   displayName: visual qontract version
   description: visual qontract version which defaults to latest
+- name: IMAGE_TAG_CANARY
+  value: latest
+  displayName: visual qontract canary version
+  description: visual qontract canary version which defaults to latest
 - name: MEMORY_REQUESTS
   value: 16Mi
 - name: MEMORY_LIMIT
@@ -239,3 +418,5 @@ parameters:
   value: v4.0.0-amd64
 - name: REPLICAS
   value: '3'
+- name: REPLICAS_CANARY
+  value: '1'
