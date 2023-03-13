@@ -125,9 +125,9 @@ const routes = () => [
     component: NotificationsPage
   },
   {
-    iconClass: 'fa  fa-bell',
+    iconClass: 'fa  fa-star-o',
     title: 'Scorecards',
-    to: '/scorecard',
+    to: '/scorecards',
     component: ScoreCardPage
   }
 ];

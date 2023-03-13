@@ -173,15 +173,17 @@ const SaasFilesV2 = ({ saas_files, settings }) => {
   return <React.Fragment>{saasFilesTable}</React.Fragment>;
 };
 
-function Service({ service, reports, saas_files_v2, settings }) {
+function Service({ service, reports, saas_files_v2, settings, scorecards }) {
   function matches(r) {
     if (r.app.name === service.name) {
       return true;
     }
     return false;
   }
+
   const matchedReports = sortByDate(reports).filter(matches);
   const matchedSaasFilesV2 = saas_files_v2.filter(matches);
+  const matchedScorecards = scorecards.filter(matches);
 
   let quayReposTable;
   if (service.quayRepos == null) {
@@ -352,6 +354,17 @@ function Service({ service, reports, saas_files_v2, settings }) {
     reportSection = <p style={{ 'font-style': 'italic' }}>No Latest Report.</p>;
   }
 
+  // scorecards
+  let scorecardSection;
+  if (matchedScorecards.length > 0) {
+    const scorecard = matchedScorecards[0];
+    const scorecardLink =  <Link to={{ pathname: '/scorecard', hash: scorecard.path }}>Scorecard for {service.name}</Link>;
+    scorecardSection = scorecardLink;
+  } else {
+    scorecardSection = <p>None</p>;
+  }
+
+  // grafanaUrls
   const grafanaUrls = service.grafanaUrls.map(g => [
     [
       g.title,
@@ -377,6 +390,9 @@ function Service({ service, reports, saas_files_v2, settings }) {
       <Definition items={serviceOwners} />
 
       {<EscalationPolicy app={service} />}
+
+      <h4>Scorecard</h4>
+      {scorecardSection}
 
       <h4>Reports</h4>
       {reportSection}
