@@ -9,11 +9,11 @@ import Scorecards from './elements/Scorecards';
 const GET_SCORECARDS = gql`
   query Scorecards {
     scorecards_v2 {
+      path
+      app {
+        name
         path
-        app {
-            name
-            path
-        }
+      }
     }
   }
 `;
@@ -21,15 +21,15 @@ const GET_SCORECARDS = gql`
 const GET_SCORECARD = gql`
   query Scorecard($path: String) {
     scorecards_v2(path: $path) {
-        path
-        app {
-            name
-        }
-        acceptanceCriteria {
-            name
-            status
-            comment
-        }
+      path
+      app {
+        name
+      }
+      acceptanceCriteria {
+        name
+        status
+        comment
+      }
     }
   }
 `;
@@ -63,7 +63,6 @@ const ScoreCardPage = ({ location }) => {
       }}
     </Query>
   );
-
 };
 
 export default ScoreCardPage;

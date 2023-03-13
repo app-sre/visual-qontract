@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Table } from 'patternfly-react';
-import { sortByName, sortByDate } from '../../components/Utils';
 import TableSearch from '../../components/TableSearch';
 
 function Scorecards({ scorecards }) {
@@ -20,18 +19,6 @@ function Scorecards({ scorecards }) {
     r.name_path = [r.app.name, r.path];
     return r;
   });
-
-  console.log(processedScorecards);
-
-  const lcFilter = filterText.toLowerCase();
-
-  // function matches(report) {
-  //   return (
-  //     (selected === 'Name' && report.name && report.name.toLowerCase().includes(lcFilter)) ||
-  //     (selected === 'App' && report.app.name && report.app.name.toLowerCase().includes(lcFilter))
-  //   );
-  // }
-  // const matchedReports = processedReports.filter(matches);
 
   const columns = [
     {
@@ -87,7 +74,7 @@ function Scorecards({ scorecards }) {
         ]
       },
       property: 'app'
-    },
+    }
   ];
 
   return (

@@ -358,7 +358,9 @@ function Service({ service, reports, saas_files_v2, settings, scorecards }) {
   let scorecardSection;
   if (matchedScorecards.length > 0) {
     const scorecard = matchedScorecards[0];
-    const scorecardLink =  <Link to={{ pathname: '/scorecard', hash: scorecard.path }}>Scorecard for {service.name}</Link>;
+    const scorecardLink = (
+      <Link to={{ pathname: '/scorecard', hash: scorecard.path }}>Scorecard for {service.name}</Link>
+    );
     scorecardSection = scorecardLink;
   } else {
     scorecardSection = <p>None</p>;
