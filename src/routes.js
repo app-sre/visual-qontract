@@ -15,6 +15,7 @@ import JenkinsInstancesPage from './pages/JenkinsInstancesPage';
 import DependenciesPage from './pages/DependenciesPage';
 import ReportsPage from './pages/ReportsPage';
 import NotificationsPage from './pages/NotificationsPage';
+import ScoreCardPage from './pages/ScorecardPage';
 
 const baseName = '/';
 
@@ -122,6 +123,12 @@ const routes = () => [
     title: 'Notifications',
     to: '/notifications',
     component: NotificationsPage
+  },
+  {
+    iconClass: 'fa  fa-star-o',
+    title: 'Scorecards',
+    to: '/scorecards',
+    component: ScoreCardPage
   }
 ];
 
