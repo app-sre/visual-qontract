@@ -22,8 +22,6 @@ const statusFormat = value => (
   </div>
 );
 
-const SECTIONS = ['INCIDENT-MGMT', 'CONTINUITY', 'OBSERVABILITY', 'RELIABILITY', 'SECURITY'];
-
 const MILESTONES = ['Service Preview', 'Field Trial', 'Limited Availability', 'General Availability'];
 
 function getMilestoneID(milestone) {
@@ -60,11 +58,11 @@ function ScoreTable({ data }) {
   );
 }
 
-function ScorecardSection({ section, data }) {
+function ScorecardSection({ milestone, data, milestoneScore }) {
   return (
     <div>
       <h3>
-        {section} - {score(data)}%
+        {milestone} - {milestoneScore}%
       </h3>
       <Table.PfProvider
         striped
@@ -132,6 +130,17 @@ function ProgressBarScore({ now }) {
   );
 }
 
+function milestoneMatcher(e, m) {
+  const levels = {
+    'Service Preview': ['Service Preview'],
+    'Field Trial': ['Service Preview', 'Field Trial'],
+    'Limited Availability': ['Service Preview', 'Field Trial', 'Limited Availability'],
+    'General Availability': ['Service Preview', 'Field Trial', 'Limited Availability', 'General Availability']
+  };
+
+  return levels[m].includes(e.milestone);
+}
+
 function Scorecard({ scorecard }) {
   const scorecardData = ScorecardData.map(e => {
     let ac = scorecard.acceptanceCriteria.find(acItem => acItem.name === e.id);
@@ -140,23 +149,23 @@ function Scorecard({ scorecard }) {
     return { ...e, ...ac, ...milestoneId };
   }).sort(sortScorecardItems);
 
-  const serviceScore = [['Overall', score(scorecardData)]];
-  const milestoneScores = MILESTONES.map(m => [m, score(scorecardData.filter(e => m === e.milestone))]);
-  const categoryScores = SECTIONS.map(section => [section, score(scorecardData.filter(e => section === e.category))]);
+  const milestoneScores = MILESTONES.map(m => [m, score(scorecardData.filter(e => milestoneMatcher(e, m)))]);
 
-  const sections = SECTIONS.map(section => (
-    <ScorecardSection key={section} section={section} data={scorecardData.filter(e => e.category === section)} />
+  const sections = MILESTONES.map(milestone => (
+    <ScorecardSection
+      key={milestone}
+      milestone={milestone}
+      milestoneScore={milestoneScores.find(e => e[0] === milestone)[1]}
+      data={scorecardData.filter(e => e.milestone === milestone)}
+    />
   ));
+
   return (
     <React.Fragment>
       <h4>SRE Milestone Recommendation</h4>
       <p>Service not yet ready for Service Preview.</p>
-      <h4>Score</h4>
-      <ScoreTable data={serviceScore} />
       <h4>Milestone Scores</h4>
       <ScoreTable data={milestoneScores} />
-      <h4>Category Scores</h4>
-      <ScoreTable data={categoryScores} />
       {sections}
     </React.Fragment>
   );
