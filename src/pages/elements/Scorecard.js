@@ -59,11 +59,14 @@ function ScoreTable({ data }) {
 }
 
 function ScorecardSection({ milestone, data, milestoneScore }) {
+  const prevReqs = MILESTONES.slice(0, MILESTONES.findIndex(e => e === milestone)).join(', ');
+
   return (
     <div>
       <h3>
         {milestone} - {milestoneScore}%
       </h3>
+      {prevReqs && <p style={{ 'font-style': 'italic' }}>(The score includes {prevReqs} requirements.)</p>}
       <Table.PfProvider
         striped
         bordered
@@ -80,11 +83,6 @@ function ScorecardSection({ milestone, data, milestoneScore }) {
             header: { label: 'Summary', formatters: [headerFormat] },
             cell: { formatters: [cellFormat] },
             property: 'summary'
-          },
-          {
-            header: { label: 'Milestone', formatters: [headerFormat] },
-            cell: { formatters: [noWrapFormat, cellFormat] },
-            property: 'milestone'
           },
           {
             header: { label: 'Status', formatters: [headerFormat] },
@@ -131,14 +129,7 @@ function ProgressBarScore({ now }) {
 }
 
 function milestoneMatcher(e, m) {
-  const levels = {
-    'Service Preview': ['Service Preview'],
-    'Field Trial': ['Service Preview', 'Field Trial'],
-    'Limited Availability': ['Service Preview', 'Field Trial', 'Limited Availability'],
-    'General Availability': ['Service Preview', 'Field Trial', 'Limited Availability', 'General Availability']
-  };
-
-  return levels[m].includes(e.milestone);
+  return MILESTONES.slice(0, MILESTONES.findIndex(el => el === m) + 1).includes(e.milestone);
 }
 
 function Scorecard({ scorecard }) {
