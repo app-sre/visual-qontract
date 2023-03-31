@@ -22,7 +22,6 @@ const statusFormat = value => (
   </div>
 );
 
-
 function sortScorecardItems(a, b) {
   return a.id.localeCompare(b.id);
 }
@@ -129,7 +128,7 @@ function Scorecard({ scorecard }) {
     return { ...e, ...ac };
   }).sort(sortScorecardItems);
 
-  const categories = ["CONTINUITY", "INCIDENT-MGMT", "OBSERVABILITY", "RELEASING", "RELIABILITY", "SECURITY"];
+  const categories = ['CONTINUITY', 'INCIDENT-MGMT', 'OBSERVABILITY', 'RELEASING', 'RELIABILITY', 'SECURITY'];
 
   const categoryScores = categories.map(m => [m, score(scorecardData.filter(e => categoryMatcher(categories, e, m)))]);
 
@@ -142,11 +141,11 @@ function Scorecard({ scorecard }) {
     />
   ));
 
-  const onboardingProgress = [["SRE Onboarding Progress", score(scorecardData)]];
+  const onboardingProgress = [['SRE Onboarding Progress', score(scorecardData)]];
 
   return (
     <React.Fragment>
-      <ScoreTable data={onboardingProgress}/>
+      <ScoreTable data={onboardingProgress} />
       {sections}
     </React.Fragment>
   );
