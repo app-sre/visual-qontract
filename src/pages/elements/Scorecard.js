@@ -8,7 +8,7 @@ const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
 const mdFormat = value => <ReactMarkdown>{value}</ReactMarkdown>;
 
 const linkFormat = e => (
-  <a href={window.ACS_URL + "/" + e[1]} target="_blank" rel="noopener noreferrer">
+  <a href={`${window.ACS_URL}/${e[1]}`} target="_blank" rel="noopener noreferrer">
     <span style={{ whiteSpace: 'nowrap' }}>{e[0]}</span>
   </a>
 );
@@ -34,16 +34,18 @@ function score(scorecardData) {
 
 function ScoreTable({ data }) {
   return (
-    <table style={{ width: '40%' }}><tbody>
-      {data.map(m => (
-        <tr key={m[0]}>
-          <td style={{ width: '30%' }}>{m[0]}</td>
-          <td>
-            <ProgressBarScore now={m[1]} />
-          </td>
-        </tr>
-      ))}
-    </tbody></table>
+    <table style={{ width: '40%' }}>
+      <tbody>
+        {data.map(m => (
+          <tr key={m[0]}>
+            <td style={{ width: '30%' }}>{m[0]}</td>
+            <td>
+              <ProgressBarScore now={m[1]} />
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }
 
@@ -122,9 +124,9 @@ function categoryMatcher(categories, e, m) {
 function Scorecard({ scorecard }) {
   const scorecardData = ScorecardData.map(e => {
     let ac = scorecard.acceptanceCriteria.find(acItem => acItem.name === e.id);
-    const link = {"link": [e.id, e.relative_url]};
+    const link = { link: [e.id, e.relative_url] };
     if (typeof ac === 'undefined') ac = { status: 'red' };
-    return { ...e, ...ac, ...link};
+    return { ...e, ...ac, ...link };
   }).sort(sortScorecardItems);
 
   const categories = ['CONTINUITY', 'INCIDENT-MGMT', 'OBSERVABILITY', 'RELEASING', 'RELIABILITY', 'SECURITY'];
