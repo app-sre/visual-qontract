@@ -5,13 +5,11 @@ import ScorecardData from '../../components/ScorecardData';
 
 const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
 const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
-const noWrapFormat = value => <span style={{ whiteSpace: 'nowrap' }}>{value}</span>;
 const mdFormat = value => <ReactMarkdown>{value}</ReactMarkdown>;
 
-// TODO: replace this with link to specific AC
-const acLinkFormat = value => (
-  <a href={window.ACCEPTANCE_CRITERIA} target="_blank" rel="noopener noreferrer">
-    {value}
+const linkFormat = e => (
+  <a href={window.ACS_URL + "/" + e[1]} target="_blank" rel="noopener noreferrer">
+    <span style={{ whiteSpace: 'nowrap' }}>{e[0]}</span>
   </a>
 );
 
@@ -36,16 +34,16 @@ function score(scorecardData) {
 
 function ScoreTable({ data }) {
   return (
-    <table style={{ width: '40%' }}>
+    <table style={{ width: '40%' }}><tbody>
       {data.map(m => (
-        <tr>
+        <tr key={m[0]}>
           <td style={{ width: '30%' }}>{m[0]}</td>
           <td>
             <ProgressBarScore now={m[1]} />
           </td>
         </tr>
       ))}
-    </table>
+    </tbody></table>
   );
 }
 
@@ -65,8 +63,8 @@ function ScorecardSection({ category, data, categoryScore }) {
               label: 'ID',
               formatters: [headerFormat]
             },
-            cell: { formatters: [noWrapFormat, acLinkFormat, cellFormat] },
-            property: 'id'
+            cell: { formatters: [linkFormat, cellFormat] },
+            property: 'link'
           },
           {
             header: { label: 'Summary', formatters: [headerFormat] },
@@ -124,8 +122,9 @@ function categoryMatcher(categories, e, m) {
 function Scorecard({ scorecard }) {
   const scorecardData = ScorecardData.map(e => {
     let ac = scorecard.acceptanceCriteria.find(acItem => acItem.name === e.id);
+    const link = {"link": [e.id, e.relative_url]};
     if (typeof ac === 'undefined') ac = { status: 'red' };
-    return { ...e, ...ac };
+    return { ...e, ...ac, ...link};
   }).sort(sortScorecardItems);
 
   const categories = ['CONTINUITY', 'INCIDENT-MGMT', 'OBSERVABILITY', 'RELEASING', 'RELIABILITY', 'SECURITY'];
