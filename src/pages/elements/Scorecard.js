@@ -22,17 +22,9 @@ const statusFormat = value => (
   </div>
 );
 
-const MILESTONES = ['Service Preview', 'Field Trial', 'Limited Availability', 'General Availability'];
-
-function getMilestoneID(milestone) {
-  return MILESTONES.indexOf(milestone);
-}
 
 function sortScorecardItems(a, b) {
-  if (a.milestoneID === b.milestoneID) {
-    return a.id.localeCompare(b.id);
-  }
-  return a.milestoneID > b.milestoneID ? 1 : -1;
+  return a.id.localeCompare(b.id);
 }
 
 function score(scorecardData) {
@@ -58,15 +50,13 @@ function ScoreTable({ data }) {
   );
 }
 
-function ScorecardSection({ milestone, data, milestoneScore }) {
-  const prevReqs = MILESTONES.slice(0, MILESTONES.findIndex(e => e === milestone)).join(', ');
-
+function ScorecardSection({ category, data, categoryScore }) {
   return (
     <div>
       <h3>
-        {milestone} - {milestoneScore}%
+        {category} - {categoryScore}%
       </h3>
-      {prevReqs && <p style={{ 'font-style': 'italic' }}>(The score includes {prevReqs} requirements.)</p>}
+
       <Table.PfProvider
         striped
         bordered
@@ -128,35 +118,35 @@ function ProgressBarScore({ now }) {
   );
 }
 
-function milestoneMatcher(e, m) {
-  return MILESTONES.slice(0, MILESTONES.findIndex(el => el === m) + 1).includes(e.milestone);
+function categoryMatcher(categories, e, m) {
+  return categories.slice(0, categories.findIndex(el => el === m) + 1).includes(e.category);
 }
 
 function Scorecard({ scorecard }) {
   const scorecardData = ScorecardData.map(e => {
     let ac = scorecard.acceptanceCriteria.find(acItem => acItem.name === e.id);
     if (typeof ac === 'undefined') ac = { status: 'red' };
-    const milestoneId = { milestoneID: getMilestoneID(e.milestone) };
-    return { ...e, ...ac, ...milestoneId };
+    return { ...e, ...ac };
   }).sort(sortScorecardItems);
 
-  const milestoneScores = MILESTONES.map(m => [m, score(scorecardData.filter(e => milestoneMatcher(e, m)))]);
+  const categories = ["CONTINUITY", "INCIDENT-MGMT", "OBSERVABILITY", "RELEASING", "RELIABILITY", "SECURITY"];
 
-  const sections = MILESTONES.map(milestone => (
+  const categoryScores = categories.map(m => [m, score(scorecardData.filter(e => categoryMatcher(categories, e, m)))]);
+
+  const sections = categories.map(category => (
     <ScorecardSection
-      key={milestone}
-      milestone={milestone}
-      milestoneScore={milestoneScores.find(e => e[0] === milestone)[1]}
-      data={scorecardData.filter(e => e.milestone === milestone)}
+      key={category}
+      category={category}
+      categoryScore={categoryScores.find(e => e[0] === category)[1]}
+      data={scorecardData.filter(e => e.category === category)}
     />
   ));
 
+  const onboardingProgress = [["SRE Onboarding Progress", score(scorecardData)]];
+
   return (
     <React.Fragment>
-      <h4>SRE Milestone Recommendation</h4>
-      <p>Service not yet ready for Service Preview.</p>
-      <h4>Milestone Scores</h4>
-      <ScoreTable data={milestoneScores} />
+      <ScoreTable data={onboardingProgress}/>
       {sections}
     </React.Fragment>
   );
