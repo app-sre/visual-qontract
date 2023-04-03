@@ -2,6 +2,7 @@ import React from 'react';
 import { Table, ProgressBar } from 'patternfly-react';
 import ReactMarkdown from 'react-markdown';
 import ScorecardData from '../../components/ScorecardData';
+import Definition from '../../components/Definition';
 
 const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
 const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
@@ -38,7 +39,7 @@ function ScoreTable({ data }) {
       <tbody>
         {data.map(m => (
           <tr key={m[0]}>
-            <td style={{ width: '30%' }}>{m[0]}</td>
+            <td style={{ width: '40%' }}>{m[0]}</td>
             <td>
               <ProgressBarScore now={m[1]} />
             </td>
@@ -144,9 +145,17 @@ function Scorecard({ scorecard }) {
 
   const onboardingProgress = [['SRE Onboarding Progress', score(scorecardData)]];
 
+  const acsRed = scorecardData.filter(e => e.status === 'red').length;
+  const acsYellow = scorecardData.filter(e => e.status === 'yellow').length;
+  const acsGreen = scorecardData.filter(e => e.status === 'green').length;
+
+  const acsByState = [['Green', acsGreen], ['Yellow', acsYellow], ['Red', acsRed], ['Total', scorecardData.length]];
+
   return (
     <React.Fragment>
       <ScoreTable data={onboardingProgress} />
+      <Definition items={acsByState} />
+      {acsGreen} of {scorecardData.length} requirements for SRE pager support have been met.
       {sections}
     </React.Fragment>
   );
