@@ -71,8 +71,14 @@ const EscalationPolicy = ({ app }) => {
 };
 
 // displays the list of Pipeline Runs
-const PipelineRuns = ({ saas_file, settings }) => {
-  const pipeline_name = settings[0].saasDeployJobTemplate;
+const PipelineRuns = ({ saas_file }) => {
+  let pipeline_template_name;
+  if (saas_file.pipelinesProvider.pipelineTemplates) {
+    pipeline_template_name = saas_file.pipelinesProvider.pipelineTemplates.openshiftSaasDeploy.name;
+  } else {
+    pipeline_template_name = saas_file.pipelinesProvider.defaults.pipelineTemplates.openshiftSaasDeploy.name;
+  }
+  const pipeline_name = `o-${pipeline_template_name}-${saas_file.name}`;
   const pp_ns = saas_file.pipelinesProvider.namespace;
   const pp_ns_name = pp_ns.name;
   const pp_cluster = pp_ns.cluster;
@@ -114,7 +120,7 @@ const PipelineRuns = ({ saas_file, settings }) => {
 };
 
 // displays the saas_files section
-const SaasFilesV2 = ({ saas_files, settings }) => {
+const SaasFilesV2 = ({ saas_files }) => {
   const get_saas_file = path => saas_files.filter(f => f.path === path)[0];
   let saasFilesTable;
   if (saas_files == null || saas_files.length === 0) {
@@ -158,7 +164,7 @@ const SaasFilesV2 = ({ saas_files, settings }) => {
               formatters: [headerFormat]
             },
             cell: {
-              formatters: [path => <PipelineRuns saas_file={get_saas_file(path)} settings={settings} />, cellFormat]
+              formatters: [path => <PipelineRuns saas_file={get_saas_file(path)} />, cellFormat]
             },
             property: 'path'
           }
@@ -173,7 +179,7 @@ const SaasFilesV2 = ({ saas_files, settings }) => {
   return <React.Fragment>{saasFilesTable}</React.Fragment>;
 };
 
-function Service({ service, reports, saas_files_v2, settings, scorecards }) {
+function Service({ service, reports, saas_files_v2, scorecards }) {
   function matches(r) {
     if (r.app.name === service.name) {
       return true;
@@ -400,7 +406,7 @@ function Service({ service, reports, saas_files_v2, settings, scorecards }) {
       {reportSection}
 
       <h4>Saas Files</h4>
-      {<SaasFilesV2 saas_files={matchedSaasFilesV2} settings={settings} />}
+      {<SaasFilesV2 saas_files={matchedSaasFilesV2} />}
 
       {service.childrenApps.length > 0 && (
         <React.Fragment>
