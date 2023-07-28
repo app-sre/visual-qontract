@@ -115,6 +115,18 @@ const GET_SERVICE = gql`
               consoleUrl
             }
           }
+          defaults {
+            pipelineTemplates {
+              openshiftSaasDeploy {
+                name
+              }
+            }
+          }
+          pipelineTemplates {
+            openshiftSaasDeploy {
+              name
+            }
+          }
         }
       }
       resourceTemplates {
@@ -127,9 +139,6 @@ const GET_SERVICE = gql`
           }
         }
       }
-    }
-    app_interface_settings_v1 {
-      saasDeployJobTemplate
     }
     scorecards_v2 {
       path
@@ -170,15 +179,8 @@ const ServicesPage = ({ location }) => {
           const reports = data.reports_v1;
           const scorecards = data.scorecards_v2;
           const { saas_files_v2 } = data;
-          const settings = data.app_interface_settings_v1;
           const body = (
-            <Service
-              service={service}
-              reports={reports}
-              saas_files_v2={saas_files_v2}
-              settings={settings}
-              scorecards={scorecards}
-            />
+            <Service service={service} reports={reports} saas_files_v2={saas_files_v2} scorecards={scorecards} />
           );
           return <Page title={service.name} body={body} path={service.path} />;
         }}
