@@ -27,3 +27,15 @@ $ yarn start:dev
 ```
 
 The server will then run on http://localhost:3000
+
+## Debugging
+
+For debugging start the server locally with:
+
+```sh
+$ yarn start:local
+```
+
+Add a debugging after the service is started, use `debugger`, anywhere where you want to debug. 
+
+Open the corresponding page in Chrome with the inspection window open. The debugger will stop at the `debugger` statement.

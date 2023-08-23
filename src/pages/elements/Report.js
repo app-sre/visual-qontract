@@ -799,7 +799,7 @@ function Report({ report, namespaces, saas_files, slo_documents }) {
   let ns;
   for (let i = 0; i < slo_documents.length; i++) {
     for (let j = 0; j < slo_documents[i].namespaces.length; j++) {
-      ns = slo_documents[i].namespaces[j];
+      ns = slo_documents[i].namespaces[j].namespace;
       if (ns.app.name === report.app.name) {
         slo_documents_for_report.push(slo_documents[i]);
         break;
