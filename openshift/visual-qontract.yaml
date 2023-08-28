@@ -12,6 +12,7 @@ objects:
     name: visual-qontract
     annotations:
       ignore-check.kube-linter.io/minimum-three-replicas: "The internal instance of Visual Qontract does not need 3 replicas"
+      ignore-check.kube-linter.io/unset-cpu-requirements: "no cpu limits"
   spec:
     replicas: ${{REPLICAS}}
     selector:
@@ -98,7 +99,6 @@ objects:
               cpu: ${CPU_REQUESTS}
             limits:
               memory: ${MEMORY_LIMIT}
-              cpu: ${CPU_LIMIT}
           volumeMounts:
             - name: visual-qontract-env
               mountPath: /opt/visual-qontract/build/env/
@@ -119,6 +119,7 @@ objects:
     name: visual-qontract-canary
     annotations:
       ignore-check.kube-linter.io/minimum-three-replicas: "The internal instance of Visual Qontract does not need 3 replicas"
+      ignore-check.kube-linter.io/unset-cpu-requirements: "no cpu limits"
   spec:
     replicas: ${{REPLICAS_CANARY}}
     selector:
@@ -205,7 +206,6 @@ objects:
               cpu: ${CPU_REQUESTS}
             limits:
               memory: ${MEMORY_LIMIT}
-              cpu: ${CPU_LIMIT}
           volumeMounts:
             - name: visual-qontract-env
               mountPath: /opt/visual-qontract/build/env/
@@ -251,8 +251,6 @@ parameters:
   value: 32Mi
 - name: CPU_REQUESTS
   value: 10m
-- name: CPU_LIMIT
-  value: 20m
 - name: REPLICAS
   value: '3'
 - name: REPLICAS_CANARY
