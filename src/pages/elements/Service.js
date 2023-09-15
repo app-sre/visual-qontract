@@ -365,7 +365,7 @@ function Service({ service, reports, saas_files_v2, scorecards }) {
   if (matchedScorecards.length > 0) {
     const scorecard = matchedScorecards[0];
     const scorecardLink = (
-      <Link to={{ pathname: '/scorecard', hash: scorecard.path }}>Scorecard for {service.name}</Link>
+      <Link to={{ pathname: '/scorecards', hash: scorecard.path }}>Scorecard for {service.name}</Link>
     );
     scorecardSection = scorecardLink;
   } else {
