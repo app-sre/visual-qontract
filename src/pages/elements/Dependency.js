@@ -15,11 +15,17 @@ function Dependency({ dependency }) {
             </a>
           ],
           [
+            'Monitoring URL',
+            <a href={`${dependency.monitoring.url}`} target="_blank" rel="noopener noreferrer">
+              {dependency.monitoring.url}
+            </a>
+          ],
+          [
             'Status page',
             <a href={`${dependency.statusPage}`} target="_blank" rel="noopener noreferrer">
               {dependency.statusPage}
             </a>
-          ],
+          ],          
           ['Statefulness', dependency.statefulness],
           ['Ops Model', dependency.opsModel],
           ['SLA', dependency.SLA],
