@@ -25,7 +25,7 @@ function Dependency({ dependency }) {
             <a href={`${dependency.statusPage}`} target="_blank" rel="noopener noreferrer">
               {dependency.statusPage}
             </a>
-          ],          
+          ],
           ['Statefulness', dependency.statefulness],
           ['Ops Model', dependency.opsModel],
           ['SLA', dependency.SLA],
