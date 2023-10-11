@@ -17,6 +17,9 @@ const GET_DEPENDENCY = gql`
       statusPage
       SLA
       dependencyFailureImpact
+      monitoring {
+        url
+      }
     }
   }
 `;
@@ -32,6 +35,9 @@ const GET_DEPENDENCIES = gql`
       statusPage
       SLA
       dependencyFailureImpact
+      monitoring {
+        url
+      }
     }
   }
 `;
