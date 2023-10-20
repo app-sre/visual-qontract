@@ -26,7 +26,7 @@ const booleanFormat = (t, f) => value => (value ? t : f);
 const EscalationPolicy = ({ app }) => {
   let escalationPolicyDefinition;
   if (app.escalationPolicy == null) {
-    escalationPolicyDefinition = <p style={{ 'font-style': 'italic' }}>No Escalation Policy.</p>;
+    escalationPolicyDefinition = <p style={{ fontStyle: 'italic' }}>No Escalation Policy.</p>;
   } else {
     escalationPolicyDefinition = (
       <NonEmptyDefinition
@@ -193,7 +193,7 @@ function Service({ service, reports, saas_files_v2, scorecards }) {
 
   let quayReposTable;
   if (service.quayRepos == null) {
-    quayReposTable = <p style={{ 'font-style': 'italic' }}>No quay repos.</p>;
+    quayReposTable = <p style={{ fontStyle: 'italic' }}>No quay repos.</p>;
   } else {
     const quayRepos = service.quayRepos
       .map(orgGroup =>
@@ -274,7 +274,7 @@ function Service({ service, reports, saas_files_v2, scorecards }) {
   }
   let dependenciesTable;
   if (service.dependencies == null) {
-    dependenciesTable = <p style={{ 'font-style': 'italic' }}>No dependencies.</p>;
+    dependenciesTable = <p style={{ fontStyle: 'italic' }}>No dependencies.</p>;
   } else {
     dependenciesTable = (
       <Table.PfProvider
@@ -357,7 +357,7 @@ function Service({ service, reports, saas_files_v2, scorecards }) {
       </div>
     );
   } else {
-    reportSection = <p style={{ 'font-style': 'italic' }}>No Latest Report.</p>;
+    reportSection = <p style={{ fontStyle: 'italic' }}>No Latest Report.</p>;
   }
 
   // scorecards

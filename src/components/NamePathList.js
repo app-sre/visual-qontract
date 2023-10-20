@@ -14,8 +14,8 @@ function DisplayNamePathList({ items }) {
   return (
     <ul>
       {items &&
-        items.map(item => (
-          <li>
+        items.map((item, i) => (
+          <li key={i}>
             <LinkPath item={item} />
           </li>
         ))}
