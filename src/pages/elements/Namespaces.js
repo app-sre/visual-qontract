@@ -10,7 +10,7 @@ function Namespaces({ namespaces, users }) {
   const [selected, changeSelected] = useState(options[0]);
   const [filterText, changeFilterText] = useState('');
   if (namespaces.length === 0) {
-    return <p style={{ 'font-style': 'italic' }}>No namespaces.</p>;
+    return <p style={{ fontStyle: 'italic' }}>No namespaces.</p>;
   }
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
   const cellFormat = value => <Table.Cell>{value}</Table.Cell>;

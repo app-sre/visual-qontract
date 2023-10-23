@@ -54,7 +54,7 @@ const Vulnerabilities = ({ vs }) => (
 const ReportVulnerabilities = ({ get_ns, vulnerabilities }) => {
   let reportVulnerabilitiesTable;
   if (vulnerabilities == null) {
-    reportVulnerabilitiesTable = <p style={{ 'font-style': 'italic' }}>No vulnerabilities.</p>;
+    reportVulnerabilitiesTable = <p style={{ fontStyle: 'italic' }}>No vulnerabilities.</p>;
   } else {
     for (let i = 0; i < vulnerabilities.length; i++) {
       vulnerabilities[i].ns = get_ns(vulnerabilities[i].cluster, vulnerabilities[i].namespace);
@@ -423,7 +423,7 @@ const MergeActivities = ({ merge_activities }) => {
 const PostDeployJobs = ({ get_ns, post_deploy_jobs }) => {
   let postDeployJobsTable;
   if (post_deploy_jobs == null) {
-    postDeployJobsTable = <p style={{ 'font-style': 'italic' }}>No post_deploy_jobs.</p>;
+    postDeployJobsTable = <p style={{ fontStyle: 'italic' }}>No post_deploy_jobs.</p>;
   } else {
     for (let i = 0; i < post_deploy_jobs.length; i++) {
       post_deploy_jobs[i].ns = get_ns(post_deploy_jobs[i].cluster, post_deploy_jobs[i].namespace);
@@ -514,7 +514,7 @@ const PostDeployJobs = ({ get_ns, post_deploy_jobs }) => {
 const DeploymentValidations = ({ get_ns, deployment_validations }) => {
   let deploymentValidationTable;
   if (deployment_validations == null) {
-    deploymentValidationTable = <p style={{ 'font-style': 'italic' }}>No deployment_validations.</p>;
+    deploymentValidationTable = <p style={{ fontStyle: 'italic' }}>No deployment_validations.</p>;
   } else {
     for (let i = 0; i < deployment_validations.length; i++) {
       deployment_validations[i].ns = get_ns(deployment_validations[i].cluster, deployment_validations[i].namespace);
@@ -702,7 +702,7 @@ const ServiceSLO = ({ get_ns, service_slo, slo_documents_for_report }) => {
     throw new Error(`No SLO documents found relating to SLOs`);
   }
   if (service_slo == null) {
-    ServiceSLOTable = <p style={{ 'font-style': 'italic' }}>No service_slo.</p>;
+    ServiceSLOTable = <p style={{ fontStyle: 'italic' }}>No service_slo.</p>;
   } else {
     for (let i = 0; i < service_slo.length; i++) {
       const slo_doc = get_doc_for_slo(slo_documents_for_report, service_slo[i]);
@@ -818,7 +818,7 @@ function Report({ report, namespaces, saas_files, slo_documents }) {
     promotionSection = (
       <React.Fragment>
         <h4>Promotions</h4>
-        <p style={{ 'font-style': 'italic' }}>No promotions.</p>
+        <p style={{ fontStyle: 'italic' }}>No promotions.</p>
       </React.Fragment>
     );
   }
@@ -834,7 +834,7 @@ function Report({ report, namespaces, saas_files, slo_documents }) {
     mergeSection = (
       <React.Fragment>
         <h4>Merge Activties</h4>
-        <p style={{ 'font-style': 'italic' }}>No merge_activities.</p>
+        <p style={{ fontStyle: 'italic' }}>No merge_activities.</p>
       </React.Fragment>
     );
   }
