@@ -38,7 +38,7 @@ function Cluster({ cluster, roles }) {
               {cluster.consoleUrl}
             </a>
           ],
-          [
+          cluster.kibanaUrl !== null && [
             'Kibana',
             <a href={`${cluster.kibanaUrl}`} target="_blank" rel="noopener noreferrer">
               {cluster.kibanaUrl}
