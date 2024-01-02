@@ -1,6 +1,7 @@
 FROM registry.access.redhat.com/ubi8/nodejs-18
 
 USER root
+ENV CI=1
 
 # RUN dnf -y update-minimal --security --sec-severity=Important --sec-severity=Critical && \
 #     dnf clean all
