@@ -26,3 +26,6 @@ build-test:
 
 test: build-test
 	@docker run --rm $(IMAGE_TEST)
+
+dev-docker-run: build
+	docker run --rm -p 8080:8080 -e AUTHORIZATION=blub -e API_AUTH=blub -e API_URI=https://app-interface.devshift.net -e GRAPHQL_URI=https://app-interface.devshift.net -v $(shell pwd)/public/env:/opt/visual-qontract/build/env $(IMAGE_NAME):latest

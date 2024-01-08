@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table, ProgressBar } from 'patternfly-react';
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from 'react-markdown/react-markdown.min';
 import ScorecardData from '../../components/ScorecardData';
 import Definition from '../../components/Definition';
 
