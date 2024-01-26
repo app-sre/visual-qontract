@@ -229,7 +229,7 @@ function Clusters({ clusters, apps }) {
       <h2>AppSRE Clusters</h2>
       <AppSREClustersTable clusters={appsreClusters} apps={apps} />
 
-      <h2>External and v3 Clusters</h2>
+      <h2>External Clusters</h2>
       <ExternalClustersTable clusters={externalClusters} />
     </>
   );
