@@ -161,6 +161,9 @@ const GET_SERVICES = gql`
         name
         path
       }
+      serviceOwners {
+        name
+      }
     }
   }
 `;

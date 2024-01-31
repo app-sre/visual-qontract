@@ -14,6 +14,15 @@ function Services({ services, omitParentApp }) {
     if (s.parentApp) {
       s.parentAppLink = <Link to={{ pathname: '/services', hash: s.parentApp.path }}>{s.parentApp.name}</Link>;
     }
+    if (s.serviceOwners) {
+      s.serviceOwnersItems = (
+        <ul>
+          {s.serviceOwners.map(so => (
+            <li key={so.name}>{so.name}</li>
+          ))}
+        </ul>
+      );
+    }
     return s;
   });
 
@@ -49,6 +58,16 @@ function Services({ services, omitParentApp }) {
         formatters: [onboardingStatusFormat, cellFormat]
       },
       property: 'onboardingStatus'
+    },
+    {
+      header: {
+        label: 'Service Owners',
+        formatters: [headerFormat]
+      },
+      cell: {
+        formatters: [cellFormat]
+      },
+      property: 'serviceOwnersItems'
     },
     {
       header: {
