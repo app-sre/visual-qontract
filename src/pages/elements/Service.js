@@ -92,7 +92,7 @@ const PipelineRuns = ({ saas_file }) => {
   for (const template of saas_file.resourceTemplates) {
     for (const target of template.targets.filter(t => t.namespace)) {
       long_name = `${saas_file.name}-${target.namespace.environment.name}`;
-      short_name = long_name.substring(0, 50); // max name length can be 63. leaving 12 for the timestamp - 51
+      short_name = long_name.substring(0, 56); // max name length can be 63. leaving 7 for random characters - 56
       url = `${pp_cluster_console_url}/k8s/ns/${pp_ns_name}/tekton.dev~v1~Pipeline/${pipeline_name}/Runs?name=${short_name}`;
       const tooltip =
         'to trigger a deployment, click Actions -> Start. details:<br />' +
