@@ -199,6 +199,38 @@ a:focus {
   color: white;
   margin: 0;
   margin-bottom: 20px;
+
+  cursor: pointer;
+}
+
+.badge.label-feature {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge.label-fix {
+  background-color: #6f42c1;
+  color: white;
+}
+
+.badge.label-breaking {
+  background-color: #d73a49;
+  color: white;
+}
+
+.badge.label-bug {
+  background-color: #d73a49;
+  color: white;
+}
+
+.badge.label-bugfix {
+  background-color: #d73a49;
+  color: white;
+}
+
+.badge.label-security {
+  background-color: #ffd33d;
+  color: black;
 }
 
 .onboarding-proposed {
@@ -241,3 +273,7 @@ a:focus {
   background-color: #e2ab2c;
 }
 
+ul.changelog {
+  list-style-type: circle;
+  padding-left: 10px;
+}
