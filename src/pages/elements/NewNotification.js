@@ -89,6 +89,7 @@ client
   })
   .then(result => {
     for (const service of result.data.apps_v1) {
+      const service_dependencies = service.dependencies != null ? service.dependencies : [];
       const service_owners = service.serviceOwners;
       const service_notificators = service.serviceNotifications;
       const recipients = new Set();
@@ -103,7 +104,7 @@ client
         }
       }
       service_dic[service.name] = recipients;
-      for (const dependency of service.dependencies) {
+      for (const dependency of service_dependencies) {
         if (dependency_dic.hasOwnProperty(dependency.name)) {
           dependency_dic[dependency.name].push(service.name);
         } else {
