@@ -166,6 +166,8 @@ function Namespaces({ namespaces, users }) {
       selected={selected}
       columns={tableCols}
       rows={matchedNamespaces}
+      perPageOptions={['10', '25', '50', '100', 'all']}
+      perPageOptionsSelected="10"
     />
   );
 }
