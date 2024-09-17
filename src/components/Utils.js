@@ -46,21 +46,13 @@ function highlightText(text, filter) {
   );
 }
 
-function parseMarkdownLinks(input) {
+const parseMarkdownLinks = text => {
   const regex = /\[([^\]]+)\]\(([^)]+)\)|<([^>]+)>/g;
   const parts = [];
   let lastIndex = 0;
-  let match;
+  let match = regex.exec(text);
 
-  while (true) {
-    match = regex.exec(input);
-    if (match === null) {
-      break;
-    }
-
-    // Destructure match
-    const [, text, url, simpleUrl] = match;
-
+  while (match !== null) {
     // Add text before the link
     if (match.index > lastIndex) {
       parts.push(text.slice(lastIndex, match.index));
@@ -69,29 +61,30 @@ function parseMarkdownLinks(input) {
     if (match[1] && match[2]) {
       // This is a Markdown link [text](url)
       parts.push(
-        <a href={url} key={match.index} target="_blank" rel="noopener noreferrer">
-          {text}
+        <a href={match[2]} key={`md-link-${match.index}`} target="_blank" rel="noopener noreferrer">
+          {match[1]}
         </a>
       );
     } else if (match[3]) {
       // This is a simple URL <url>
       parts.push(
-        <a href={simpleUrl} key={match.index} target="_blank" rel="noopener noreferrer">
-          {simpleUrl}
+        <a href={match[3]} key={`simple-url-${match.index}`} target="_blank" rel="noopener noreferrer">
+          {match[3]}
         </a>
       );
     }
 
     // eslint-disable-next-line prefer-destructuring
     lastIndex = regex.lastIndex;
+    match = regex.exec(text);
   }
 
   // Add the remaining text after the last link
-  if (lastIndex < input.length) {
-    parts.push(input.slice(lastIndex));
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
   }
 
   return parts;
-}
+};
 
 export { sortByName, sortByValue, sortByLabel, sortByDate, highlightText, parseMarkdownLinks };
