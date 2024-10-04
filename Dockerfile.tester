@@ -1,4 +1,5 @@
 FROM registry.access.redhat.com/ubi8/nodejs-20
+# TODO: remove this after https://issues.redhat.com/browse/APPSRE-10484
 
 USER root
 ENV CI=1
