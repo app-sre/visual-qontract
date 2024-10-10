@@ -91,6 +91,18 @@ const GET_SERVICE = gql`
         description
         onboardingStatus
       }
+      sloDocuments {
+        path
+        name
+        slos {
+          name
+          SLIType
+          SLISpecification
+          SLODetails
+          SLOTarget
+          dashboard
+        }
+      }
     }
     reports_v1 {
       path
