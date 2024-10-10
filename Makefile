@@ -29,7 +29,7 @@ test: build-test
 
 dev-docker-run: build
 	docker run --rm -p 8080:8080 \
-		-e API_URI=https://host.docker.internal \
-		-e GRAPHQL_URI=https://host.docker.internal \
+		-e API_URI=http://localhost \
+		-e GRAPHQL_URI=http://localhost \
 		-v $(shell pwd)/public/env:/opt/visual-qontract/build/env \
 		$(IMAGE_NAME):latest
