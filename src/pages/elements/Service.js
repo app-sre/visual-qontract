@@ -6,6 +6,7 @@ import Definition from '../../components/Definition';
 import NonEmptyDefinition from '../../components/NonEmptyDefinition';
 import CodeComponents from '../../components/ServiceCodeComponents';
 import EndPoints from '../../components/ServiceEndPoints';
+import SLODocuments from '../../components/ServiceSLODocuments';
 import { sortByDate } from '../../components/Utils';
 import { LinkPath, DisplayNamePathList } from '../../components/NamePathList';
 import Namespaces from './Namespaces';
@@ -397,7 +398,7 @@ function Service({ service, reports, saas_files_v2, scorecards }) {
       <h4>Service Owners</h4>
       <Definition items={serviceOwners} />
 
-      {<EscalationPolicy app={service} />}
+      <EscalationPolicy app={service} />
 
       <h4>Scorecard</h4>
       {scorecardSection}
@@ -439,6 +440,13 @@ function Service({ service, reports, saas_files_v2, scorecards }) {
         <React.Fragment>
           <h4>End Points</h4>
           <EndPoints endPoints={service.endPoints} />
+        </React.Fragment>
+      )}
+
+      {service.sloDocuments.length > 0 && (
+        <React.Fragment>
+          <h4>SLO Documents</h4>
+          <SLODocuments documents={service.sloDocuments} />
         </React.Fragment>
       )}
 
