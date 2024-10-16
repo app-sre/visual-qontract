@@ -1,16 +1,5 @@
-FROM registry.access.redhat.com/ubi8/nodejs-20@sha256:16c0a0d552562681767a7f8310513fab08ea8cca02bcad506e694b20b8cbbfd0 AS test
-
-USER root
-ENV CI=1
-
-RUN npm install --location=global yarn
-
-ADD . /opt/visual-qontract
-WORKDIR /opt/visual-qontract
-RUN yarn install && yarn run lint && yarn test 
-
-
-FROM registry.access.redhat.com/ubi8/nodejs-20@sha256:16c0a0d552562681767a7f8310513fab08ea8cca02bcad506e694b20b8cbbfd0 AS prod
+### base image
+FROM registry.access.redhat.com/ubi8/nodejs-20 AS base
 
 USER root
 
@@ -32,6 +21,16 @@ COPY deployment/nginx.conf.template /etc/nginx/nginx.conf.template
 RUN npm install --location=global yarn
 
 WORKDIR /opt/visual-qontract
+
+### test image
+FROM base AS test
+
+ENV CI=1
+
+RUN yarn install && yarn run lint && yarn test 
+
+### prod image
+FROM base AS prod
 
 RUN yarn --production --non-interactive && \
     yarn build && \

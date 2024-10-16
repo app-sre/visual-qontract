@@ -22,7 +22,7 @@ push:
 	@docker --config=$(DOCKER_CONF) push $(IMAGE_NAME):$(IMAGE_TAG)
 
 build-test:
-	@docker build -t $(IMAGE_TEST) -f Dockerfile.tester .
+	@docker build --target test -t $(IMAGE_TEST) -f Dockerfile .
 
 test: build-test
 	@docker run --rm $(IMAGE_TEST)
