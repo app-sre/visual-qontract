@@ -13,7 +13,8 @@ RUN yarn install --production --non-interactive && yarn build
 ### test image
 FROM base AS test
 
-RUN yarn lint && yarn test 
+# install dev deps as well
+RUN yarn && yarn lint && yarn test 
 
 ### prod image
 FROM registry.access.redhat.com/ubi8/nginx-124 AS prod
