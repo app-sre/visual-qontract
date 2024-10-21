@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/nodejs-20 AS test
+FROM registry.access.redhat.com/ubi8/nodejs-20@sha256:16c0a0d552562681767a7f8310513fab08ea8cca02bcad506e694b20b8cbbfd0 AS test
 
 USER root
 ENV CI=1
@@ -10,7 +10,7 @@ WORKDIR /opt/visual-qontract
 RUN yarn install && yarn run lint && yarn test 
 
 
-FROM registry.access.redhat.com/ubi8/nodejs-20 AS prod
+FROM registry.access.redhat.com/ubi8/nodejs-20@sha256:16c0a0d552562681767a7f8310513fab08ea8cca02bcad506e694b20b8cbbfd0 AS prod
 
 USER root
 
