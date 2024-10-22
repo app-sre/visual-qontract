@@ -1,14 +1,14 @@
 ### base image
-FROM registry.access.redhat.com/ubi8/nodejs-20 AS base
+FROM registry.access.redhat.com/ubi9/nodejs-20 AS base
 
 USER root
 ENV CI=1
 
-RUN npm install --local=global yarn
+RUN npm install global yarn
 
 WORKDIR /opt/visual-qontract
 COPY . .
-RUN yarn install --production --non-interactive && yarn build
+RUN yarn install --non-interactive --frozen-lockfile && yarn build
 
 ### test image
 FROM base AS test
@@ -17,7 +17,7 @@ FROM base AS test
 RUN yarn && yarn lint && yarn test 
 
 ### prod image
-FROM registry.access.redhat.com/ubi8/nginx-124 AS prod
+FROM registry.access.redhat.com/ubi9/nginx-124 AS prod
 
 COPY deployment/entrypoint.sh /
 COPY deployment/nginx.conf.template /etc/nginx/nginx.conf.template
