@@ -33,6 +33,7 @@ spec:
   - name: target-stage
     value: test
   pipelineRef:
+    # test
     resolver: git
     params:
     - name: url
