@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/nodejs-20@sha256:16c0a0d552562681767a7f8310513fab08ea8cca02bcad506e694b20b8cbbfd0
+FROM registry.access.redhat.com/ubi8/nodejs-20
 # TODO: remove this after https://issues.redhat.com/browse/APPSRE-10484
 
 USER root
