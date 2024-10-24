@@ -4,17 +4,20 @@ FROM registry.access.redhat.com/ubi9/nodejs-20 AS base
 USER root
 ENV CI=1
 
-RUN npm install global yarn
+RUN npm install --global yarn
 
 WORKDIR /opt/visual-qontract
+COPY package.json yarn.lock ./
+RUN yarn install --non-interactive --frozen-lockfile
+
 COPY . .
-RUN yarn install --non-interactive --frozen-lockfile && yarn build
+RUN yarn build
 
 ### test image
 FROM base AS test
 
 # install dev deps as well
-RUN yarn && yarn lint && yarn test 
+RUN yarn lint && yarn test 
 
 ### prod image
 FROM registry.access.redhat.com/ubi9/nginx-124 AS prod
