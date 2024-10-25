@@ -1,41 +1,30 @@
-FROM registry.access.redhat.com/ubi8/nodejs-20@sha256:16c0a0d552562681767a7f8310513fab08ea8cca02bcad506e694b20b8cbbfd0 AS test
+### base image
+FROM registry.access.redhat.com/ubi9/nodejs-20 AS base
 
 USER root
 ENV CI=1
 
-RUN npm install --location=global yarn
+RUN npm install --global yarn
 
-ADD . /opt/visual-qontract
 WORKDIR /opt/visual-qontract
-RUN yarn install && yarn run lint && yarn test 
+COPY package.json yarn.lock ./
+RUN yarn install --non-interactive --frozen-lockfile
 
+COPY . .
+RUN yarn build
 
-FROM registry.access.redhat.com/ubi8/nodejs-20@sha256:16c0a0d552562681767a7f8310513fab08ea8cca02bcad506e694b20b8cbbfd0 AS prod
+### test image
+FROM base AS test
 
-USER root
+# install dev deps as well
+RUN yarn lint && yarn test 
+
+### prod image
+FROM registry.access.redhat.com/ubi9/nginx-124 AS prod
 
 COPY deployment/entrypoint.sh /
-ADD . /opt/visual-qontract
-
-RUN dnf -y update-minimal --security --sec-severity=Important --sec-severity=Critical && \
-    dnf module enable nginx:1.20 -y && \
-    dnf install -y nginx && \
-    dnf clean all
-
-RUN chmod 777 /var/log/nginx /var/run && \
-    chmod -R 777 /var/lib/nginx && \
-    chmod 666 /etc/nginx/nginx.conf && \
-    rm -rf /var/log/nginx/*
-
 COPY deployment/nginx.conf.template /etc/nginx/nginx.conf.template
-
-RUN npm install --location=global yarn
-
-WORKDIR /opt/visual-qontract
-
-RUN yarn --production --non-interactive && \
-    yarn build && \
-    rm -rf node_modules
+COPY --from=base /opt/visual-qontract/build /opt/visual-qontract/build
 
 EXPOSE 8080
 USER 1001
