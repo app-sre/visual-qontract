@@ -33,7 +33,9 @@ function Cluster({ cluster, roles }) {
             </a>
           ],
           cluster.spec !== null && cluster.spec.product !== null && ['Product', cluster.spec.product],
-          (cluster.spec !== null && cluster.spec.hypershift !== null && ['Hypershift', String(cluster.spec.hypershift)]) || ['Hypershift', String(false)],
+          (cluster.spec !== null && cluster.spec.hypershift !== null &&
+                                    ['Hypershift', String(cluster.spec.hypershift)]) ||
+                                    ['Hypershift', String(false)],
           [
             'Console',
             <a href={`${cluster.consoleUrl}`} target="_blank" rel="noopener noreferrer">
