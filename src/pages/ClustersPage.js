@@ -12,8 +12,10 @@ const GET_CLUSTER = gql`
       path
       name
       spec {
+        product
         version
         channel
+        hypershift
       }
       description
       consoleUrl
