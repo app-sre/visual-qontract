@@ -86,6 +86,16 @@ function AppSREClustersTable({ clusters, apps }) {
         },
         {
           header: {
+            label: 'Hypershift',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [cellFormat]
+          },
+          property: 'hypershift'
+        },
+        {
+          header: {
             label: 'Channel',
             formatters: [headerFormat]
           },
@@ -205,6 +215,7 @@ function Clusters({ clusters, apps }) {
       c.channel = c.spec.channel;
       c.id = c.spec.id;
       c.external_id = c.spec.external_id;
+      c.hypershift = String(c.spec.hypershift === true);
     }
 
     c.upgrade_workloads = [];
