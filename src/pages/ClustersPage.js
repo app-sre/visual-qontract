@@ -94,6 +94,7 @@ const GET_CLUSTERS = gql`
         channel
         id
         external_id
+        hypershift
       }
       upgradePolicy {
         schedule
