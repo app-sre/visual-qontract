@@ -41,6 +41,16 @@ function CodeComponents({ components }) {
             formatters: [linkFormat(), cellFormat]
           },
           property: 'url'
+        },
+        {
+          header: {
+            label: 'Build URL',
+            formatters: [headerFormat]
+          },
+          cell: {
+            formatters: [linkFormat(), cellFormat]
+          },
+          property: 'imageBuildUrl'
         }
       ]}
     >

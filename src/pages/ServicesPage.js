@@ -72,6 +72,7 @@ const GET_SERVICE = gql`
         name
         resource
         url
+        imageBuildUrl
       }
       namespaces {
         path
