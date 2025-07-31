@@ -1,5 +1,5 @@
 ### base image
-FROM registry.access.redhat.com/ubi9/nodejs-20@sha256:a30f4d8b632eb048c294b1e1fc71c1e574e14ee89cef73101d76d561420f6504 AS base
+FROM registry.access.redhat.com/ubi9/nodejs-20@sha256:b0d1c747ebefe0d386e66e73f8003edd15968fc2b8ae000149d2a077d8f484ff AS base
 
 USER root
 ENV CI=1
@@ -20,7 +20,7 @@ FROM base AS test
 RUN yarn lint && yarn test 
 
 ### prod image
-FROM registry.access.redhat.com/ubi9/nginx-124@sha256:7acbb277f6922c47e55b5f65c39d7352e58de3dc6ecc2a7259011c88bf4d2249 AS prod
+FROM registry.access.redhat.com/ubi9/nginx-124@sha256:34a929c8e44a625520cd647b6f250a1c84e0477796ad33e25d977034c5ec0449 AS prod
 
 COPY deployment/entrypoint.sh /
 COPY deployment/nginx.conf.template /etc/nginx/nginx.conf.template
