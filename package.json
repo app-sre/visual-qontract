@@ -5,7 +5,7 @@
   "dependencies": {
     "@patternfly/react-core": "^3.16.10",
     "apollo-boost": "^0.4.1",
-    "chroma-js": "^2.1.0",
+    "chroma-js": "^3.0.0",
     "classnames": "^2.2.6",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-patternfly-react": "^0.2.3",
