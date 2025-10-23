@@ -23,7 +23,7 @@
     "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.8",
     "react-select": "^3.1.0",
-    "react-tooltip": "^4.2.21",
+    "react-tooltip": "^5.0.0",
     "recompose": "^0.30.0",
     "sass": "^1.32.8",
     "sortabular": "^1.6.0",
