@@ -8,7 +8,7 @@
     "chroma-js": "^2.1.0",
     "classnames": "^2.2.6",
     "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-patternfly-react": "^0.2.3",
+    "eslint-plugin-patternfly-react": "^5.0.0",
     "graphql": "^14.2.1",
     "lodash.orderby": "^4.6.0",
     "ncp": "^2.0.0",
