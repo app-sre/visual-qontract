@@ -1,0 +1,107 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: visual-app-interface
+  annotations:
+    ignore-check.kube-linter.io/minimum-three-replicas: "The internal instance of Visual App Interface does not need 3 replicas"
+    ignore-check.kube-linter.io/unset-cpu-requirements: "no cpu limits"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: visual-app-interface
+      deployment: visual-app-interface
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: visual-app-interface
+        deployment: visual-app-interface
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: visual-app-interface
+              topologyKey: kubernetes.io/hostname
+            weight: 90
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: visual-app-interface
+              topologyKey: topology.kubernetes.io/zone
+            weight: 100
+      serviceAccountName: visual-app-interface
+      containers:
+      - image: quay.io/redhat-services-prod/app-sre-tenant/visual-qontract-master/visual-qontract-master
+        imagePullPolicy: Always
+        name: visual-app-interface
+        env:
+        - name: GRAPHQL_URI
+          valueFrom:
+            configMapKeyRef:
+              key: graphql.uri
+              name: visual-app-interface
+        - name: AUTHORIZATION
+          valueFrom:
+            secretKeyRef:
+              key: authorization
+              name: visual-app-interface
+        - name: API_URI
+          valueFrom:
+            configMapKeyRef:
+              key: api.uri
+              name: visual-app-interface
+        - name: API_AUTH
+          valueFrom:
+            secretKeyRef:
+              key: api.auth
+              name: visual-app-interface
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 3
+          periodSeconds: 10
+          timeoutSeconds: 3
+        resources:
+          requests:
+            memory: 64Mi
+            cpu: 100m
+          limits:
+            memory: 128Mi
+        volumeMounts:
+        - name: visual-app-interface-env
+          mountPath: /opt/visual-qontract/build/env/
+          readOnly: true
+        - name: vault-secrets
+          mountPath: /mnt/secrets-store
+          readOnly: true
+      volumes:
+      - name: visual-app-interface-env
+        configMap:
+          name: visual-app-interface
+          items:
+          - key: env
+            path: env.js
+      - name: vault-secrets
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: visual-app-interface-vault-secrets
