@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- deployment.yaml
+- serviceaccount.yaml
+- service.yaml
+- role.yaml
+- rolebinding.yaml
+- configmap.yaml
+
+# Use labels instead of commonLabels - only adds to metadata, not selectors
+labels:
+- pairs:
+    app.kubernetes.io/name: visual-app-interface
+    app.kubernetes.io/part-of: app-sre

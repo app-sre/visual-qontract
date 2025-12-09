@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: visual-app-interface
+data:
+  env: |
+    window.DATA_DIR_URL = '';
+    window.DOCS_BASE_URL = '';
+    window.SCHEMAS_DIR = '';https://github.com/app-sre/qontract-schemas';
+    window.GF_ROOT_URL = '';https://grafana.app-sre.devshift.net';
+    window.QONTRACT_API_URL = '';https://visual-app-interface.devshift.net/api';
+    window.ACS_URL = '';
+  graphql.uri: ''
+  api.uri: ''

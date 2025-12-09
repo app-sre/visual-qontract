@@ -1,0 +1,11 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: visual-app-interface
+subjects:
+- kind: ServiceAccount
+  name: visual-app-interface
+roleRef:
+  kind: Role
+  name: visual-app-interface
+  apiGroup: rbac.authorization.k8s.io
