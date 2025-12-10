@@ -4,11 +4,12 @@ metadata:
   name: visual-app-interface
 data:
   env: |
-    window.DATA_DIR_URL = '';
-    window.DOCS_BASE_URL = '';
-    window.SCHEMAS_DIR = '';https://github.com/app-sre/qontract-schemas';
-    window.GF_ROOT_URL = '';https://grafana.app-sre.devshift.net';
-    window.QONTRACT_API_URL = '';https://visual-app-interface.devshift.net/api';
-    window.ACS_URL = '';
-  graphql.uri: ''
-  api.uri: ''
+    window.DATA_DIR_URL = 'PLACEHOLDER_OVERRIDE_IN_OVERLAY';
+    window.DOCS_BASE_URL = 'PLACEHOLDER_OVERRIDE_IN_OVERLAY';
+    window.SCHEMAS_DIR = 'PLACEHOLDER_OVERRIDE_IN_OVERLAY';
+    window.GF_ROOT_URL = 'PLACEHOLDER_OVERRIDE_IN_OVERLAY';
+    window.QONTRACT_API_URL = 'PLACEHOLDER_OVERRIDE_IN_OVERLAY';
+    window.ACS_URL = 'PLACEHOLDER_OVERRIDE_IN_OVERLAY';
+  # These values must be overridden in environment overlays (e.g., app-sre-cd/visual-app-interface/overlays/*/configmap-patch.yaml)
+  graphql.uri: 'PLACEHOLDER_OVERRIDE_IN_OVERLAY'
+  api.uri: 'PLACEHOLDER_OVERRIDE_IN_OVERLAY'
