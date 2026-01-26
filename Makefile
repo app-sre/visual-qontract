@@ -12,7 +12,7 @@ else
 endif
 
 run:
-	yarn start:dev
+	npm run start:dev
 
 build:
 	@docker build -t $(IMAGE_NAME):latest .

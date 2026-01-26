@@ -52,7 +52,6 @@ const GET_USERS = gql`
       path
       name
       org_username
-      slack_username
     }
   }
 `;
