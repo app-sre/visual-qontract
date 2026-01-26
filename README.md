@@ -17,9 +17,9 @@ The visual-qontract UI will be reachable on http://localhost:8080
 
 ```sh
 $ cp public/env/env.js.example public/env/env.js
-$ yarn
-$ yarn build
-$ yarn start:dev
+$ npm install
+$ npm run build
+$ npm run start:dev
 ```
 
 The server will then run on http://localhost:3000
@@ -29,7 +29,7 @@ The server will then run on http://localhost:3000
 For debugging start the server locally with:
 
 ```sh
-$ yarn start:local
+$ npm run start:local
 ```
 
 Add a debugging after the service is started, use `debugger`, anywhere where you want to debug. 
