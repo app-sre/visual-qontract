@@ -1,0 +1,269 @@
+import React, { useState, useMemo } from 'react';
+import { useQuery } from '@apollo/client/react';
+import { gql } from '@apollo/client';
+import { Link } from 'react-router-dom';
+import {
+  Title,
+  Card,
+  CardBody,
+  TextInput,
+  Toolbar,
+  ToolbarContent,
+  ToolbarItem,
+  Label,
+  Spinner,
+  Alert,
+  Pagination,
+  PaginationVariant,
+  Button
+} from '@patternfly/react-core';
+import {
+  Table,
+  Thead,
+  Tr,
+  Th,
+  Tbody,
+  Td
+} from '@patternfly/react-table';
+
+const GET_SERVICES = gql`
+  query Apps {
+    apps_v1 {
+      path
+      name
+      description
+      onboardingStatus
+      parentApp {
+        name
+        path
+      }
+      serviceOwners {
+        name
+      }
+    }
+  }
+`;
+
+interface Service {
+  path: string;
+  name: string;
+  description: string;
+  onboardingStatus: string;
+  parentApp?: {
+    name: string;
+    path: string;
+  };
+  serviceOwners: Array<{
+    name: string;
+  }>;
+}
+
+interface AppsQueryData {
+  apps_v1: Service[];
+}
+
+const Services: React.FC = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(20);
+
+  const { loading, error, data } = useQuery<AppsQueryData>(GET_SERVICES);
+
+  const getStatusLabelColor = (status: string) => {
+    switch (status) {
+      case 'Onboarded':
+        return 'green';
+      case 'InProgress':
+        return 'yellow';
+      case 'Proposed':
+        return 'grey';
+      case 'BestEffort':
+        return 'teal';
+      case 'TransitionPeriod':
+        return 'red';
+      default:
+        return 'grey';
+    }
+  };
+
+  const filteredServices = useMemo(() => {
+    if (!data?.apps_v1) return [];
+    
+    return data.apps_v1.filter((service: Service) =>
+      service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      service.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      service.parentApp?.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [data, searchTerm]);
+
+  const paginatedServices = useMemo(() => {
+    const startIndex = (page - 1) * perPage;
+    const endIndex = startIndex + perPage;
+    return filteredServices.slice(startIndex, endIndex);
+  }, [filteredServices, page, perPage]);
+
+
+  const onSetPage = (_event: React.MouseEvent | React.KeyboardEvent | MouseEvent, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const onPerPageSelect = (
+    _event: React.MouseEvent | React.KeyboardEvent | MouseEvent,
+    newPerPage: number,
+    newPage: number
+  ) => {
+    setPerPage(newPerPage);
+    setPage(newPage);
+  };
+
+  if (loading) {
+    return (
+      <div>
+        <Title headingLevel="h1" size="2xl" style={{ marginBottom: '2rem' }}>
+          Services
+        </Title>
+        <div style={{ textAlign: 'center', padding: '2rem' }}>
+          <Spinner size="lg" />
+          <p style={{ marginTop: '1rem' }}>Loading services...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div>
+        <Title headingLevel="h1" size="2xl" style={{ marginBottom: '2rem' }}>
+          Services
+        </Title>
+        <Alert variant="danger" title="Error loading services">
+          {error.message}
+        </Alert>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <Title headingLevel="h1" size="2xl" style={{ marginBottom: '2rem' }}>
+        Services
+      </Title>
+      
+      <Card>
+        <CardBody>
+          <Toolbar>
+            <ToolbarContent>
+              <ToolbarItem>
+                <TextInput
+                  name="search"
+                  id="search"
+                  type="search"
+                  aria-label="Search services"
+                  placeholder="Search by service name, description, or parent app..."
+                  value={searchTerm}
+                  onChange={(_event, value) => {
+                    setSearchTerm(value);
+                    setPage(1); // Reset to first page when searching
+                  }}
+                />
+              </ToolbarItem>
+              <ToolbarItem align={{ default: 'alignEnd' }}>
+                <span style={{ color: 'var(--pf-v6-global--Color--200)' }}>
+                  {filteredServices.length} service{filteredServices.length !== 1 ? 's' : ''} found
+                </span>
+              </ToolbarItem>
+            </ToolbarContent>
+          </Toolbar>
+
+          <Table aria-label="Services table">
+            <Thead>
+              <Tr>
+                <Th>Service Name</Th>
+                <Th>Onboarding Status</Th>
+                <Th>Parent App</Th>
+                <Th>Service Owners</Th>
+                <Th>Description</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {paginatedServices.map((service: Service) => (
+                <Tr key={service.path}>
+                  <Td dataLabel="Service Name">
+                    <Link 
+                      to={`/service/${encodeURIComponent(service.path)}`}
+                      style={{ textDecoration: 'none' }}
+                    >
+                      <Button
+                        variant="link"
+                        style={{ padding: 0, fontSize: 'inherit', fontWeight: 'bold' }}
+                      >
+                        {service.name}
+                      </Button>
+                    </Link>
+                  </Td>
+                  <Td dataLabel="Onboarding Status">
+                    <Label color={getStatusLabelColor(service.onboardingStatus)}>
+                      {service.onboardingStatus}
+                    </Label>
+                  </Td>
+                  <Td dataLabel="Parent App">
+                    {service.parentApp ? (
+                      <Link
+                        to={`/service/${encodeURIComponent(service.parentApp.path)}`}
+                        style={{ textDecoration: 'none' }}
+                      >
+                        <Button
+                          variant="link"
+                          style={{ padding: 0, fontSize: 'inherit' }}
+                        >
+                          {service.parentApp.name}
+                        </Button>
+                      </Link>
+                    ) : (
+                      '-'
+                    )}
+                  </Td>
+                  <Td dataLabel="Service Owners">
+                    {service.serviceOwners.length > 0 
+                      ? service.serviceOwners.map(owner => owner.name).join(', ')
+                      : '-'
+                    }
+                  </Td>
+                  <Td dataLabel="Description">
+                    {service.description || '-'}
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+
+          {filteredServices.length === 0 && searchTerm && (
+            <div style={{ textAlign: 'center', padding: '2rem' }}>
+              <p>No services found matching "{searchTerm}"</p>
+            </div>
+          )}
+
+          {filteredServices.length > perPage && (
+            <Pagination
+              variant={PaginationVariant.bottom}
+              itemCount={filteredServices.length}
+              perPage={perPage}
+              page={page}
+              onSetPage={onSetPage}
+              onPerPageSelect={onPerPageSelect}
+              perPageOptions={[
+                { title: '10', value: 10 },
+                { title: '20', value: 20 },
+                { title: '50', value: 50 },
+                { title: '100', value: 100 }
+              ]}
+              style={{ marginTop: '1rem' }}
+            />
+          )}
+        </CardBody>
+      </Card>
+    </div>
+  );
+};
+
+export default Services;

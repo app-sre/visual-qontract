@@ -1,12 +1,4 @@
-.dockerignore
+.env*
 .gitignore
-.env.*
-!.env.production
-build
-coverage
-Dockerfile
-Dockerfile.tester
-node_modules
-public/env/env.js
-.docker
-
+.git
+.claude

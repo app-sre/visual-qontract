@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: visual-app-interface
+  labels:
+    app: visual-app-interface
+    component: frontend
+spec:
+  selector:
+    app: visual-app-interface
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
+  type: ClusterIP

@@ -1,36 +1,50 @@
-.PHONY: run build push
+.PHONY: help build up down logs shell clean setup
 
-IMAGE_NAME := quay.io/app-sre/visual-qontract
-IMAGE_TAG := $(shell git rev-parse --short=7 HEAD)
-IMAGE_TEST := visual-qontract-test
-GQL_API := http://localhost:4000
+# Default target
+help: ## Show this help message
+	@echo "Visual App-Interface - Podman Compose Commands"
+	@echo "=============================================="
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
-ifneq (,$(wildcard $(CURDIR)/.docker))
-	DOCKER_CONF := $(CURDIR)/.docker
-else
-	DOCKER_CONF := $(HOME)/.docker
-endif
+setup: ## Setup environment file from example
+	@if [ ! -f .env ]; then \
+		cp env.example .env; \
+		echo "Created .env file from env.example"; \
+		echo "Please edit .env file with your configuration"; \
+	else \
+		echo ".env file already exists"; \
+	fi
 
-run:
-	npm run start:dev
+build: ## Build the Podman image
+	podman-compose build
 
-build:
-	@docker build -t $(IMAGE_NAME):latest .
-	@docker tag $(IMAGE_NAME):latest $(IMAGE_NAME):$(IMAGE_TAG)
+up: ## Start the application in detached mode
+	podman-compose up -d
 
-push:
-	@docker --config=$(DOCKER_CONF) push $(IMAGE_NAME):latest
-	@docker --config=$(DOCKER_CONF) push $(IMAGE_NAME):$(IMAGE_TAG)
+up-build: ## Build and start the application
+	podman-compose up -d --build
 
-build-test:
-	@docker build --target test -t $(IMAGE_TEST) -f Dockerfile .
+down: ## Stop and remove containers
+	podman-compose down
 
-test: build-test
-	@docker run --rm $(IMAGE_TEST)
+logs: ## Show application logs
+	podman-compose logs -f visual-app-interface
 
-dev-docker-run: build
-	docker run --rm -p 8080:8080 \
-		-e API_URI=http://localhost \
-		-e GRAPHQL_URI=$(GQL_API) \
-		-v $(shell pwd)/public/env:/opt/visual-qontract/build/env \
-		$(IMAGE_NAME):latest
+shell: ## Open shell in running container
+	podman-compose exec visual-app-interface /bin/bash
+
+restart: ## Restart the application
+	podman-compose restart visual-app-interface
+
+status: ## Show container status
+	podman-compose ps
+
+clean: ## Remove containers, networks, and images
+	podman-compose down --rmi all --volumes --remove-orphans
+
+dev: ## Start in development mode with logs
+	podman-compose up --build
+
+test-connection: ## Test if the application is responding
+	@echo "Testing connection to http://127.0.0.1:8080..."
+	@curl -s -o /dev/null -w "HTTP Status: %{http_code}\n" http://127.0.0.1:8080 || echo "Connection failed"
