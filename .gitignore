@@ -4,8 +4,8 @@
 public/env/env.js
 public/env/env.js.bak
 
-# css
-src/**/*.css
+# css - CSS source files are now checked in (PatternFly v6 uses CSS, not SASS)
+# Only ignore generated CSS map files
 src/**/*.css.map
 
 # IDE - VSCode
