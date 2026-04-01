@@ -9,7 +9,7 @@ RUN npm install -g pnpm
 
 WORKDIR /opt/visual-qontract
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --prod --frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
 COPY . .
 RUN pnpm run build
@@ -17,8 +17,7 @@ RUN pnpm run build
 ### test image
 FROM base AS test
 
-# install dev deps as well
-RUN pnpm install --frozen-lockfile
+# Run linting and tests
 RUN pnpm run lint && pnpm test -- --coverage --ci --watchAll=false
 
 ### prod image
