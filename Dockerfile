@@ -31,13 +31,8 @@ COPY deployment/nginx.conf.template /etc/nginx/nginx.conf.template
 # Copy built application
 COPY --from=base /opt/visual-qontract/build /opt/visual-qontract/build
 
-# Install required packages for runtime configuration
-USER root
-RUN microdnf update -y && \
-    microdnf install -y findutils && \
-    microdnf clean all
-
 # Create necessary directories and fix permissions
+USER root
 RUN mkdir -p /var/cache/nginx /var/log/nginx /var/run && \
     chown -R 1001:1001 /opt/visual-qontract/build \
     /var/cache/nginx \
