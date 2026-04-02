@@ -8,7 +8,7 @@ help: ## Show this help message
 
 setup: ## Setup environment file from example
 	@if [ ! -f .env ]; then \
-		cp env.example .env; \
+		cp .env.example .env; \
 		echo "Created .env file from env.example"; \
 		echo "Please edit .env file with your configuration"; \
 	else \
