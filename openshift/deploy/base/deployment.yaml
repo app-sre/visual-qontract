@@ -95,7 +95,7 @@ spec:
       volumes:
       - name: visual-app-interface-env
         configMap:
-          name: visual-app-interface
+          name: visual-qontract
           items:
           - key: env
             path: env-config.js
