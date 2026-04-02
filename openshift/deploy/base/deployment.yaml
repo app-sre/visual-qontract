@@ -87,7 +87,7 @@ spec:
             memory: 128Mi
         volumeMounts:
         - name: visual-app-interface-env
-          mountPath: /opt/visual-qontract/build/env/
+          mountPath: /opt/visual-qontract/build/
           readOnly: true
         - name: vault-secrets
           mountPath: /mnt/secrets-store
@@ -98,7 +98,7 @@ spec:
           name: visual-app-interface
           items:
           - key: env
-            path: env.js
+            path: env-config.js
       - name: vault-secrets
         csi:
           driver: secrets-store.csi.k8s.io
