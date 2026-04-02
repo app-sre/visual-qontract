@@ -16,34 +16,34 @@ setup: ## Setup environment file from example
 	fi
 
 build: ## Build the Podman image
-	podman-compose build
+	podman compose build
 
 up: ## Start the application in detached mode
-	podman-compose up -d
+	podman compose up -d
 
 up-build: ## Build and start the application
-	podman-compose up -d --build
+	podman compose up -d --build
 
 down: ## Stop and remove containers
-	podman-compose down
+	podman compose down
 
 logs: ## Show application logs
-	podman-compose logs -f visual-app-interface
+	podman compose logs -f visual-app-interface
 
 shell: ## Open shell in running container
-	podman-compose exec visual-app-interface /bin/bash
+	podman compose exec visual-app-interface /bin/bash
 
 restart: ## Restart the application
-	podman-compose restart visual-app-interface
+	podman compose restart visual-app-interface
 
 status: ## Show container status
-	podman-compose ps
+	podman compose ps
 
 clean: ## Remove containers, networks, and images
-	podman-compose down --rmi all --volumes --remove-orphans
+	podman compose down --rmi all --volumes --remove-orphans
 
 dev: ## Start in development mode with logs
-	podman-compose up --build
+	podman compose up --build
 
 test-connection: ## Test if the application is responding
 	@echo "Testing connection to http://127.0.0.1:8080..."
