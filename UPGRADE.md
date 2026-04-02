@@ -15,7 +15,7 @@ This document describes the major upgrade of visual-qontract from PatternFly 3 t
 | **React Router** | 5.0.0 | 7.9.0 |
 | **GraphQL Client** | apollo-boost 0.4.1 + react-apollo 2.5.3 | @apollo/client 4.0.5 |
 | **Language** | JavaScript | TypeScript 4.9.5 |
-| **Package Manager** | Yarn Classic | pnpm (or npm) |
+| **Package Manager** | Yarn Classic | npm |
 | **Build Tools** | react-scripts 2.1.8 | Custom webpack 5 + modern tooling |
 
 ## What Was Upgraded
@@ -190,7 +190,7 @@ src/
 2. **New Component APIs**: PatternFly components have different props
 3. **GraphQL Hooks**: Use `useQuery` instead of `<Query>` component
 4. **Router Hooks**: Use hooks instead of `withRouter` HOC
-5. **Package Manager**: Prefer pnpm (or use npm with `--legacy-peer-deps`)
+5. **Package Manager**: Uses npm (with `--legacy-peer-deps` flag for React 19)
 
 ## Migration Guide
 
@@ -200,23 +200,16 @@ src/
 # Clone and navigate to repo
 cd visual-qontract
 
-# Install dependencies (choose one)
-pnpm install --frozen-lockfile
-# OR
+# Install dependencies
 npm install --legacy-peer-deps
 
 # Start development server
-pnpm start
-# OR
 npm start
 ```
 
 ### Building for Production
 
 ```bash
-# Build the application
-pnpm run build
-# OR
 npm run build
 
 # Build artifacts will be in build/
@@ -310,10 +303,10 @@ If issues are encountered:
 
 ```bash
 # Update all dependencies
-pnpm update
+npm update
 
 # Update specific package
-pnpm update @patternfly/react-core
+npm update @patternfly/react-core
 ```
 
 ### Adding New Pages
@@ -327,7 +320,7 @@ pnpm update @patternfly/react-core
 #### Build fails with TypeScript errors
 - Check `tsconfig.json` configuration
 - Ensure all files have proper type annotations
-- Run `pnpm run lint` to see all errors
+- Run `npm run lint` to see all errors
 
 #### GraphQL queries fail
 - Verify `REACT_APP_GRAPHQL_ENDPOINT` is set correctly
