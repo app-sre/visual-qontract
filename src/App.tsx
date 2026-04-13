@@ -19,6 +19,7 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { apolloClient } from './lib/apollo';
 import Navigation from './components/Navigation';
 import ThemeSwitch from './components/ThemeSwitch';
+import ErrorBoundary from './components/ErrorBoundary';
 import Home from './pages/Home';
 import Services from './pages/Services';
 import Service from './pages/Service';
@@ -124,40 +125,42 @@ function App() {
             onPageResize={() => {}}
           >
             <PageSection id="main-content">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/services" element={<Services />} />
-                <Route path="/service/:servicePath" element={<Service />} />
-                <Route path="/clusters" element={<Clusters />} />
-                <Route path="/cluster/:path" element={<Cluster />} />
-                <Route path="/namespaces" element={<Namespaces />} />
-                <Route path="/namespace/:namespacePath" element={<Namespace />} />
-                <Route path="/roles" element={<Roles />} />
-                <Route path="/role/:path" element={<Role />} />
-                <Route path="/users" element={<Users />} />
-                <Route path="/user/:path" element={<User />} />
-                <Route path="/permissions" element={<Permissions />} />
-                <Route path="/permission/:path" element={<Permission />} />
-                <Route path="/aws-accounts" element={<AWSAccounts />} />
-                <Route path="/aws-account/:path" element={<AWSAccount />} />
-                <Route path="/aws-groups" element={<AWSGroups />} />
-                <Route path="/aws-group/:path" element={<AWSGroup />} />
-                <Route path="/integrations" element={<Integrations />} />
-                <Route path="/integration/:path" element={<Integration />} />
-                <Route path="/github-orgs" element={<GitHubOrgs />} />
-                <Route path="/github-org/:path" element={<GitHubOrg />} />
-                <Route path="/quay-orgs" element={<QuayOrgs />} />
-                <Route path="/quay-org/:path" element={<QuayOrg />} />
-                <Route path="/jenkins-instances" element={<JenkinsInstances />} />
-                <Route path="/jenkins-instance/:path" element={<JenkinsInstance />} />
-                <Route path="/dependencies" element={<Dependencies />} />
-                <Route path="/dependency/:path" element={<Dependency />} />
-                <Route path="/notifications" element={<Notifications />} />
-                <Route path="/notification/:path" element={<Notification />} />
-                <Route path="/scorecards" element={<ScoreCards />} />
-                <Route path="/scorecard/:path" element={<ScoreCard />} />
-                <Route path="/status" element={<Status />} />
-              </Routes>
+              <ErrorBoundary>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/services" element={<Services />} />
+                  <Route path="/service/:servicePath" element={<Service />} />
+                  <Route path="/clusters" element={<Clusters />} />
+                  <Route path="/cluster/:path" element={<Cluster />} />
+                  <Route path="/namespaces" element={<Namespaces />} />
+                  <Route path="/namespace/:namespacePath" element={<Namespace />} />
+                  <Route path="/roles" element={<Roles />} />
+                  <Route path="/role/:path" element={<Role />} />
+                  <Route path="/users" element={<Users />} />
+                  <Route path="/user/:path" element={<User />} />
+                  <Route path="/permissions" element={<Permissions />} />
+                  <Route path="/permission/:path" element={<Permission />} />
+                  <Route path="/aws-accounts" element={<AWSAccounts />} />
+                  <Route path="/aws-account/:path" element={<AWSAccount />} />
+                  <Route path="/aws-groups" element={<AWSGroups />} />
+                  <Route path="/aws-group/:path" element={<AWSGroup />} />
+                  <Route path="/integrations" element={<Integrations />} />
+                  <Route path="/integration/:path" element={<Integration />} />
+                  <Route path="/github-orgs" element={<GitHubOrgs />} />
+                  <Route path="/github-org/:path" element={<GitHubOrg />} />
+                  <Route path="/quay-orgs" element={<QuayOrgs />} />
+                  <Route path="/quay-org/:path" element={<QuayOrg />} />
+                  <Route path="/jenkins-instances" element={<JenkinsInstances />} />
+                  <Route path="/jenkins-instance/:path" element={<JenkinsInstance />} />
+                  <Route path="/dependencies" element={<Dependencies />} />
+                  <Route path="/dependency/:path" element={<Dependency />} />
+                  <Route path="/notifications" element={<Notifications />} />
+                  <Route path="/notification/:path" element={<Notification />} />
+                  <Route path="/scorecards" element={<ScoreCards />} />
+                  <Route path="/scorecard/:path" element={<ScoreCard />} />
+                  <Route path="/status" element={<Status />} />
+                </Routes>
+              </ErrorBoundary>
             </PageSection>
           </Page>
         </Router>
