@@ -10,7 +10,6 @@ import {
   Grid,
   GridItem,
   Label,
-  Spinner,
   Alert,
   DescriptionList,
   DescriptionListGroup,
@@ -35,6 +34,9 @@ import {
   Td
 } from '@patternfly/react-table';
 import { ExternalLinkAltIcon, ArrowLeftIcon } from '@patternfly/react-icons';
+import LoadingState from '../components/LoadingState';
+import ErrorState from '../components/ErrorState';
+import { getDataDirUrl } from '../utils/env';
 
 const GET_SERVICE = gql`
   query App($path: String) {
@@ -383,14 +385,7 @@ const Service: React.FC = () => {
   }, [service?.namespaces, namespaceSearchTerm]);
 
   if (loading) {
-    return (
-      <div>
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
-          <Spinner size="lg" />
-          <p style={{ marginTop: '1rem' }}>Loading service details...</p>
-        </div>
-      </div>
-    );
+    return <LoadingState message="Loading service details..." />;
   }
 
   if (error) {
@@ -402,9 +397,7 @@ const Service: React.FC = () => {
           </BreadcrumbItem>
           <BreadcrumbItem>Service Details</BreadcrumbItem>
         </Breadcrumb>
-        <Alert variant="danger" title="Error loading service">
-          {error.message}
-        </Alert>
+        <ErrorState title="Error loading service" error={error} />
       </div>
     );
   }
@@ -468,7 +461,7 @@ const Service: React.FC = () => {
                     <Button
                       variant="link"
                       component="a"
-                      href={`${process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data'}${service.path}`}
+                      href={`${getDataDirUrl()}${service.path}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       icon={<ExternalLinkAltIcon />}
@@ -529,7 +522,7 @@ const Service: React.FC = () => {
                                       • <Button
                                           variant="link"
                                           component="a"
-                                          href={`${process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data'}${board.path}`}
+                                          href={`${getDataDirUrl()}${board.path}`}
                                           target="_blank"
                                           rel="noopener noreferrer"
                                           style={{ padding: 0, fontSize: 'inherit' }}
@@ -545,7 +538,7 @@ const Service: React.FC = () => {
                                   📟 PagerDuty: <Button
                                     variant="link"
                                     component="a"
-                                    href={`${process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data'}${service.escalationPolicy.channels.pagerduty.path}`}
+                                    href={`${getDataDirUrl()}${service.escalationPolicy.channels.pagerduty.path}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     style={{ padding: 0, fontSize: 'inherit' }}
@@ -562,7 +555,7 @@ const Service: React.FC = () => {
                                       • <Button
                                           variant="link"
                                           component="a"
-                                          href={`${process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data'}${group.path}`}
+                                          href={`${getDataDirUrl()}${group.path}`}
                                           target="_blank"
                                           rel="noopener noreferrer"
                                           style={{ padding: 0, fontSize: 'inherit' }}
@@ -697,7 +690,7 @@ const Service: React.FC = () => {
                             <Button
                               variant="link"
                               component="a"
-                              href={`${process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data'}${saasFile.path}`}
+                              href={`${getDataDirUrl()}${saasFile.path}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               icon={<ExternalLinkAltIcon />}

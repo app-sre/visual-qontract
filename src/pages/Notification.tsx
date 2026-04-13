@@ -10,7 +10,6 @@ import {
   CardBody,
   Breadcrumb,
   BreadcrumbItem,
-  Spinner,
   Alert,
   Button,
   List,
@@ -18,6 +17,9 @@ import {
   Label
 } from '@patternfly/react-core';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
+import LoadingState from '../components/LoadingState';
+import ErrorState from '../components/ErrorState';
+import { getDataDirUrl } from '../utils/env';
 
 const GET_NOTIFICATION = gql`
   query Notification($path: String) {
@@ -66,36 +68,11 @@ const Notification: React.FC = () => {
   });
 
   if (loading) {
-    return (
-      <div>
-        <Breadcrumb style={{ marginBottom: '1rem' }}>
-          <BreadcrumbItem component={Link} to="/notifications">
-            Notifications
-          </BreadcrumbItem>
-          <BreadcrumbItem>Loading...</BreadcrumbItem>
-        </Breadcrumb>
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
-          <Spinner size="lg" />
-          <p style={{ marginTop: '1rem' }}>Loading notification...</p>
-        </div>
-      </div>
-    );
+    return <LoadingState message="Loading notification..." />;
   }
 
   if (error) {
-    return (
-      <div>
-        <Breadcrumb style={{ marginBottom: '1rem' }}>
-          <BreadcrumbItem component={Link} to="/notifications">
-            Notifications
-          </BreadcrumbItem>
-          <BreadcrumbItem>Error</BreadcrumbItem>
-        </Breadcrumb>
-        <Alert variant="danger" title="Error loading notification">
-          {error.message}
-        </Alert>
-      </div>
-    );
+    return <ErrorState title="Error loading notification" error={error} />;
   }
 
   if (!data?.app_interface_emails_v1?.length) {
@@ -170,7 +147,7 @@ const Notification: React.FC = () => {
                 <Button
                   variant="link"
                   component="a"
-                  href={`${process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data'}${notification.path}`}
+                  href={`${getDataDirUrl()}${notification.path}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   icon={<ExternalLinkAltIcon />}

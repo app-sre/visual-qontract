@@ -10,13 +10,15 @@ import {
   CardBody,
   Breadcrumb,
   BreadcrumbItem,
-  Spinner,
   Alert,
   Button,
   List,
   ListItem
 } from '@patternfly/react-core';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
+import LoadingState from '../components/LoadingState';
+import ErrorState from '../components/ErrorState';
+import { getDataDirUrl } from '../utils/env';
 
 const GET_AWSGROUP = gql`
   query AWSGroup($path: String) {
@@ -59,36 +61,11 @@ const AWSGroup: React.FC = () => {
   });
 
   if (loading) {
-    return (
-      <div>
-        <Breadcrumb style={{ marginBottom: '1rem' }}>
-          <BreadcrumbItem component={Link} to="/aws-groups">
-            AWS Groups
-          </BreadcrumbItem>
-          <BreadcrumbItem>Loading...</BreadcrumbItem>
-        </Breadcrumb>
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
-          <Spinner size="lg" />
-          <p style={{ marginTop: '1rem' }}>Loading AWS group...</p>
-        </div>
-      </div>
-    );
+    return <LoadingState message="Loading AWS group..." />;
   }
 
   if (error) {
-    return (
-      <div>
-        <Breadcrumb style={{ marginBottom: '1rem' }}>
-          <BreadcrumbItem component={Link} to="/aws-groups">
-            AWS Groups
-          </BreadcrumbItem>
-          <BreadcrumbItem>Error</BreadcrumbItem>
-        </Breadcrumb>
-        <Alert variant="danger" title="Error loading AWS group">
-          {error.message}
-        </Alert>
-      </div>
-    );
+    return <ErrorState title="Error loading AWS group" error={error} />;
   }
 
   if (!data?.awsgroups_v1?.length) {
@@ -151,7 +128,7 @@ const AWSGroup: React.FC = () => {
                 <Button
                   variant="link"
                   component="a"
-                  href={`${process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data'}${group.path}`}
+                  href={`${getDataDirUrl()}${group.path}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   icon={<ExternalLinkAltIcon />}
@@ -194,7 +171,7 @@ const AWSGroup: React.FC = () => {
                 <Button
                   variant="link"
                   component="a"
-                  href={`${process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data'}${group.account.path}`}
+                  href={`${getDataDirUrl()}${group.account.path}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   icon={<ExternalLinkAltIcon />}

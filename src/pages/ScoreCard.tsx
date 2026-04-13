@@ -10,7 +10,6 @@ import {
   CardBody,
   Breadcrumb,
   BreadcrumbItem,
-  Spinner,
   Alert,
   Button,
   Label
@@ -24,6 +23,9 @@ import {
   Td
 } from '@patternfly/react-table';
 import { ExternalLinkAltIcon, CheckCircleIcon, ExclamationCircleIcon, QuestionCircleIcon } from '@patternfly/react-icons';
+import LoadingState from '../components/LoadingState';
+import ErrorState from '../components/ErrorState';
+import { getDataDirUrl } from '../utils/env';
 
 const GET_SCORECARD = gql`
   query Scorecard($path: String) {
@@ -92,36 +94,11 @@ const ScoreCard: React.FC = () => {
   };
 
   if (loading) {
-    return (
-      <div>
-        <Breadcrumb style={{ marginBottom: '1rem' }}>
-          <BreadcrumbItem component={Link} to="/scorecards">
-            Score Cards
-          </BreadcrumbItem>
-          <BreadcrumbItem>Loading...</BreadcrumbItem>
-        </Breadcrumb>
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
-          <Spinner size="lg" />
-          <p style={{ marginTop: '1rem' }}>Loading score card...</p>
-        </div>
-      </div>
-    );
+    return <LoadingState message="Loading score card..." />;
   }
 
   if (error) {
-    return (
-      <div>
-        <Breadcrumb style={{ marginBottom: '1rem' }}>
-          <BreadcrumbItem component={Link} to="/scorecards">
-            Score Cards
-          </BreadcrumbItem>
-          <BreadcrumbItem>Error</BreadcrumbItem>
-        </Breadcrumb>
-        <Alert variant="danger" title="Error loading score card">
-          {error.message}
-        </Alert>
-      </div>
-    );
+    return <ErrorState title="Error loading score card" error={error} />;
   }
 
   if (!data?.scorecards_v2?.length) {
@@ -179,7 +156,7 @@ const ScoreCard: React.FC = () => {
                 <Button
                   variant="link"
                   component="a"
-                  href={`${process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data'}${scorecard.path}`}
+                  href={`${getDataDirUrl()}${scorecard.path}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   icon={<ExternalLinkAltIcon />}

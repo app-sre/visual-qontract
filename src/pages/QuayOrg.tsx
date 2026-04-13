@@ -10,13 +10,15 @@ import {
   CardBody,
   Breadcrumb,
   BreadcrumbItem,
-  Spinner,
   Alert,
   Button,
   List,
   ListItem
 } from '@patternfly/react-core';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
+import LoadingState from '../components/LoadingState';
+import ErrorState from '../components/ErrorState';
+import { getDataDirUrl } from '../utils/env';
 
 const GET_QUAYORG = gql`
   query QuayOrg($path: String) {
@@ -47,36 +49,11 @@ const QuayOrg: React.FC = () => {
   });
 
   if (loading) {
-    return (
-      <div>
-        <Breadcrumb style={{ marginBottom: '1rem' }}>
-          <BreadcrumbItem component={Link} to="/quay-orgs">
-            Quay Organizations
-          </BreadcrumbItem>
-          <BreadcrumbItem>Loading...</BreadcrumbItem>
-        </Breadcrumb>
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
-          <Spinner size="lg" />
-          <p style={{ marginTop: '1rem' }}>Loading Quay organization...</p>
-        </div>
-      </div>
-    );
+    return <LoadingState message="Loading Quay organization..." />;
   }
 
   if (error) {
-    return (
-      <div>
-        <Breadcrumb style={{ marginBottom: '1rem' }}>
-          <BreadcrumbItem component={Link} to="/quay-orgs">
-            Quay Organizations
-          </BreadcrumbItem>
-          <BreadcrumbItem>Error</BreadcrumbItem>
-        </Breadcrumb>
-        <Alert variant="danger" title="Error loading Quay organization">
-          {error.message}
-        </Alert>
-      </div>
-    );
+    return <ErrorState title="Error loading Quay organization" error={error} />;
   }
 
   if (!data?.quay_orgs_v1?.length) {
@@ -139,7 +116,7 @@ const QuayOrg: React.FC = () => {
                 <Button
                   variant="link"
                   component="a"
-                  href={`${process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data'}${org.path}`}
+                  href={`${getDataDirUrl()}${org.path}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   icon={<ExternalLinkAltIcon />}

@@ -8,7 +8,6 @@ import {
   Card,
   CardTitle,
   CardBody,
-  Spinner,
   Alert,
   Button,
   DescriptionList,
@@ -19,6 +18,9 @@ import {
   BreadcrumbItem
 } from '@patternfly/react-core';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
+import LoadingState from '../components/LoadingState';
+import ErrorState from '../components/ErrorState';
+import { getDataDirUrl } from '../utils/env';
 
 const GET_AWSACCOUNT = gql`
   query AWSAccount($path: String) {
@@ -50,12 +52,7 @@ const AWSAccount: React.FC = () => {
   });
 
   if (loading) {
-    return (
-      <div style={{ textAlign: 'center', padding: '2rem' }}>
-        <Spinner size="lg" />
-        <p style={{ marginTop: '1rem' }}>Loading AWS account details...</p>
-      </div>
-    );
+    return <LoadingState message="Loading AWS account details..." />;
   }
 
   if (error) {
@@ -67,9 +64,7 @@ const AWSAccount: React.FC = () => {
           </BreadcrumbItem>
           <BreadcrumbItem>AWS Account Details</BreadcrumbItem>
         </Breadcrumb>
-        <Alert variant="danger" title="Error loading AWS account">
-          {error.message}
-        </Alert>
+        <ErrorState title="Error loading AWS account" error={error} />
       </div>
     );
   }
@@ -131,7 +126,7 @@ const AWSAccount: React.FC = () => {
                   <Button
                     variant="link"
                     component="a"
-                    href={`${process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data'}${account.path}`}
+                    href={`${getDataDirUrl()}${account.path}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     icon={<ExternalLinkAltIcon />}

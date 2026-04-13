@@ -8,7 +8,6 @@ import {
   Card,
   CardTitle,
   CardBody,
-  Spinner,
   Alert,
   Button,
   DescriptionList,
@@ -28,6 +27,9 @@ import {
 } from '@patternfly/react-table';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import UsersTable from '../components/UsersTable';
+import LoadingState from '../components/LoadingState';
+import ErrorState from '../components/ErrorState';
+import { getDataDirUrl } from '../utils/env';
 
 const GET_ROLE = gql`
   query Role($path: String) {
@@ -123,12 +125,7 @@ const Role: React.FC = () => {
   });
 
   if (loading) {
-    return (
-      <div style={{ textAlign: 'center', padding: '2rem' }}>
-        <Spinner size="lg" />
-        <p style={{ marginTop: '1rem' }}>Loading role details...</p>
-      </div>
-    );
+    return <LoadingState message="Loading role details..." />;
   }
 
   if (error) {
@@ -140,9 +137,7 @@ const Role: React.FC = () => {
           </BreadcrumbItem>
           <BreadcrumbItem>Role Details</BreadcrumbItem>
         </Breadcrumb>
-        <Alert variant="danger" title="Error loading role">
-          {error.message}
-        </Alert>
+        <ErrorState title="Error loading role" error={error} />
       </div>
     );
   }
@@ -204,7 +199,7 @@ const Role: React.FC = () => {
                   <Button
                     variant="link"
                     component="a"
-                    href={`${process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data'}${role.path}`}
+                    href={`${getDataDirUrl()}${role.path}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     icon={<ExternalLinkAltIcon />}
@@ -243,7 +238,7 @@ const Role: React.FC = () => {
                         <Button
                           variant="link"
                           component="a"
-                          href={`${process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data'}${permission.path}`}
+                          href={`${getDataDirUrl()}${permission.path}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           icon={<ExternalLinkAltIcon />}
@@ -379,7 +374,7 @@ const Role: React.FC = () => {
                         <Button
                           variant="link"
                           component="a"
-                          href={`${process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data'}${bot.path}`}
+                          href={`${getDataDirUrl()}${bot.path}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           icon={<ExternalLinkAltIcon />}

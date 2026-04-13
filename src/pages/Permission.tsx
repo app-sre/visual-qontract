@@ -8,7 +8,6 @@ import {
   Card,
   CardTitle,
   CardBody,
-  Spinner,
   Alert,
   Button,
   DescriptionList,
@@ -27,6 +26,9 @@ import {
   Td
 } from '@patternfly/react-table';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
+import LoadingState from '../components/LoadingState';
+import ErrorState from '../components/ErrorState';
+import { getDataDirUrl } from '../utils/env';
 
 const GET_PERMISSION = gql`
   query Permission($path: String) {
@@ -80,12 +82,7 @@ const Permission: React.FC = () => {
   });
 
   if (loading) {
-    return (
-      <div style={{ textAlign: 'center', padding: '2rem' }}>
-        <Spinner size="lg" />
-        <p style={{ marginTop: '1rem' }}>Loading permission details...</p>
-      </div>
-    );
+    return <LoadingState message="Loading permission details..." />;
   }
 
   if (error) {
@@ -97,9 +94,7 @@ const Permission: React.FC = () => {
           </BreadcrumbItem>
           <BreadcrumbItem>Permission Details</BreadcrumbItem>
         </Breadcrumb>
-        <Alert variant="danger" title="Error loading permission">
-          {error.message}
-        </Alert>
+        <ErrorState title="Error loading permission" error={error} />
       </div>
     );
   }
@@ -166,7 +161,7 @@ const Permission: React.FC = () => {
                   <Button
                     variant="link"
                     component="a"
-                    href={`${process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data'}${permission.path}`}
+                    href={`${getDataDirUrl()}${permission.path}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     icon={<ExternalLinkAltIcon />}

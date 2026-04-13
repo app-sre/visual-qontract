@@ -196,7 +196,6 @@ const Clusters: React.FC = () => {
 
   // Independent pagination for External clusters
   const {
-    searchTerm: searchTermExt,
     setSearchTerm: setSearchTermExt,
     page: pageExt,
     perPage: perPageExt,

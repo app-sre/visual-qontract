@@ -10,13 +10,15 @@ import {
   CardBody,
   Breadcrumb,
   BreadcrumbItem,
-  Spinner,
   Alert,
   Button,
   List,
   ListItem
 } from '@patternfly/react-core';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
+import LoadingState from '../components/LoadingState';
+import ErrorState from '../components/ErrorState';
+import { getDataDirUrl } from '../utils/env';
 
 const GET_GITHUBORG = gql`
   query GitHubOrg($path: String) {
@@ -49,36 +51,11 @@ const GitHubOrg: React.FC = () => {
   });
 
   if (loading) {
-    return (
-      <div>
-        <Breadcrumb style={{ marginBottom: '1rem' }}>
-          <BreadcrumbItem component={Link} to="/github-orgs">
-            GitHub Organizations
-          </BreadcrumbItem>
-          <BreadcrumbItem>Loading...</BreadcrumbItem>
-        </Breadcrumb>
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
-          <Spinner size="lg" />
-          <p style={{ marginTop: '1rem' }}>Loading GitHub organization...</p>
-        </div>
-      </div>
-    );
+    return <LoadingState message="Loading GitHub organization..." />;
   }
 
   if (error) {
-    return (
-      <div>
-        <Breadcrumb style={{ marginBottom: '1rem' }}>
-          <BreadcrumbItem component={Link} to="/github-orgs">
-            GitHub Organizations
-          </BreadcrumbItem>
-          <BreadcrumbItem>Error</BreadcrumbItem>
-        </Breadcrumb>
-        <Alert variant="danger" title="Error loading GitHub organization">
-          {error.message}
-        </Alert>
-      </div>
-    );
+    return <ErrorState title="Error loading GitHub organization" error={error} />;
   }
 
   if (!data?.githuborg_v1?.length) {
@@ -158,7 +135,7 @@ const GitHubOrg: React.FC = () => {
                 <Button
                   variant="link"
                   component="a"
-                  href={`${process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data'}${org.path}`}
+                  href={`${getDataDirUrl()}${org.path}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   icon={<ExternalLinkAltIcon />}

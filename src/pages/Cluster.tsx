@@ -8,7 +8,6 @@ import {
   Card,
   CardTitle,
   CardBody,
-  Spinner,
   Alert,
   Button,
   DescriptionList,
@@ -30,6 +29,9 @@ import {
 } from '@patternfly/react-table';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import GrafanaUrl from '../components/GrafanaUrl';
+import LoadingState from '../components/LoadingState';
+import ErrorState from '../components/ErrorState';
+import { getDataDirUrl } from '../utils/env';
 
 const GET_CLUSTER = gql`
   query Cluster($path: String) {
@@ -159,12 +161,7 @@ const Cluster: React.FC = () => {
   });
 
   if (loading) {
-    return (
-      <div style={{ textAlign: 'center', padding: '2rem' }}>
-        <Spinner size="lg" />
-        <p style={{ marginTop: '1rem' }}>Loading cluster details...</p>
-      </div>
-    );
+    return <LoadingState message="Loading cluster details..." />;
   }
 
   if (error) {
@@ -176,9 +173,7 @@ const Cluster: React.FC = () => {
           </BreadcrumbItem>
           <BreadcrumbItem>Cluster Details</BreadcrumbItem>
         </Breadcrumb>
-        <Alert variant="danger" title="Error loading cluster">
-          {error.message}
-        </Alert>
+        <ErrorState title="Error loading cluster" error={error} />
       </div>
     );
   }
@@ -246,7 +241,7 @@ const Cluster: React.FC = () => {
                       <Button
                         variant="link"
                         component="a"
-                        href={`${process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data'}${cluster.path}`}
+                        href={`${getDataDirUrl()}${cluster.path}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         icon={<ExternalLinkAltIcon />}
