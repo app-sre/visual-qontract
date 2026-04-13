@@ -3,8 +3,7 @@ import {
   EmptyState,
   EmptyStateBody,
   EmptyStateFooter,
-  EmptyStateHeader,
-  EmptyStateIcon,
+  EmptyStateActions,
   Button,
 } from '@patternfly/react-core';
 import { ExclamationCircleIcon } from '@patternfly/react-icons';
@@ -35,22 +34,26 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
   render() {
     if (this.state.hasError) {
       return (
-        <EmptyState>
-          <EmptyStateHeader
-            titleText="Something went wrong"
-            icon={<EmptyStateIcon icon={ExclamationCircleIcon} />}
-            headingLevel="h1"
-          />
+        <EmptyState
+          titleText="Something went wrong"
+          icon={ExclamationCircleIcon}
+          headingLevel="h1"
+          status="danger"
+        >
           <EmptyStateBody>
             {this.state.error?.message || 'An unexpected error occurred while rendering this page.'}
           </EmptyStateBody>
           <EmptyStateFooter>
-            <Button variant="primary" onClick={() => window.location.reload()}>
-              Reload page
-            </Button>
-            <Button variant="link" onClick={() => window.history.back()}>
-              Go back
-            </Button>
+            <EmptyStateActions>
+              <Button variant="primary" onClick={() => window.location.reload()}>
+                Reload page
+              </Button>
+            </EmptyStateActions>
+            <EmptyStateActions>
+              <Button variant="link" onClick={() => window.history.back()}>
+                Go back
+              </Button>
+            </EmptyStateActions>
           </EmptyStateFooter>
         </EmptyState>
       );
