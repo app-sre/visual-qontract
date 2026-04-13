@@ -74,7 +74,7 @@ function App() {
   }, []);
 
   const onSidebarToggle = () => {
-    setIsSidebarOpen(!isSidebarOpen);
+    setIsSidebarOpen(prev => !prev);
   };
 
   const Header = (
