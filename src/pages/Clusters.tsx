@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
 import { Link } from 'react-router-dom';
@@ -133,10 +133,6 @@ interface ClustersData {
 
 
 const Clusters: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(20);
-
   const { loading, error, data } = useQuery<ClustersData>(GET_CLUSTERS);
 
   // Get apps per cluster with improved logic
@@ -170,49 +166,56 @@ const Clusters: React.FC = () => {
     return clusters;
   }, [data]);
 
+  // Split clusters into OpenShift and External
   const { openShiftClusters, externalClusters } = useMemo(() => {
     if (!clustersWithApps.length) return { openShiftClusters: [], externalClusters: [] };
 
     const openShift = clustersWithApps.filter(cluster => cluster.spec);
     const external = clustersWithApps.filter(cluster => !cluster.spec);
 
-    return {
-      openShiftClusters: openShift.filter((cluster) =>
-        cluster.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        cluster.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        cluster.spec?.version?.toLowerCase().includes(searchTerm.toLowerCase())
-      ),
-      externalClusters: external.filter((cluster) =>
-        cluster.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        cluster.description?.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    };
-  }, [clustersWithApps, searchTerm]);
+    return { openShiftClusters: openShift, externalClusters: external };
+  }, [clustersWithApps]);
 
-  const paginatedOpenShiftClusters = useMemo(() => {
-    const startIndex = (page - 1) * perPage;
-    const endIndex = startIndex + perPage;
-    return openShiftClusters.slice(startIndex, endIndex);
-  }, [openShiftClusters, page, perPage]);
+  // Independent pagination for OpenShift clusters
+  const {
+    searchTerm: searchTermOS,
+    setSearchTerm: setSearchTermOS,
+    page: pageOS,
+    perPage: perPageOS,
+    filteredItems: filteredOpenShiftClusters,
+    paginatedItems: paginatedOpenShiftClusters,
+    onSetPage: onSetPageOS,
+    onPerPageSelect: onPerPageSelectOS,
+  } = useFilteredPagination({
+    items: openShiftClusters,
+    filterFn: (cluster, term) =>
+      cluster.name.toLowerCase().includes(term.toLowerCase()) ||
+      (cluster.description?.toLowerCase().includes(term.toLowerCase()) ?? false) ||
+      (cluster.spec?.version?.toLowerCase().includes(term.toLowerCase()) ?? false),
+  });
 
-  const paginatedExternalClusters = useMemo(() => {
-    const startIndex = (page - 1) * perPage;
-    const endIndex = startIndex + perPage;
-    return externalClusters.slice(startIndex, endIndex);
-  }, [externalClusters, page, perPage]);
+  // Independent pagination for External clusters
+  const {
+    searchTerm: searchTermExt,
+    setSearchTerm: setSearchTermExt,
+    page: pageExt,
+    perPage: perPageExt,
+    filteredItems: filteredExternalClusters,
+    paginatedItems: paginatedExternalClusters,
+    onSetPage: onSetPageExt,
+    onPerPageSelect: onPerPageSelectExt,
+  } = useFilteredPagination({
+    items: externalClusters,
+    filterFn: (cluster, term) =>
+      cluster.name.toLowerCase().includes(term.toLowerCase()) ||
+      (cluster.description?.toLowerCase().includes(term.toLowerCase()) ?? false),
+  });
 
-
-  const onSetPage = (_event: React.MouseEvent | React.KeyboardEvent | MouseEvent, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const onPerPageSelect = (
-    _event: React.MouseEvent | React.KeyboardEvent | MouseEvent,
-    newPerPage: number,
-    newPage: number
-  ) => {
-    setPerPage(newPerPage);
-    setPage(newPage);
+  // Shared search term - update both when changed
+  const searchTerm = searchTermOS;
+  const setSearchTerm = (value: string) => {
+    setSearchTermOS(value);
+    setSearchTermExt(value);
   };
 
   if (loading) {
@@ -248,8 +251,8 @@ const Clusters: React.FC = () => {
                 </ToolbarItem>
                 <ToolbarItem align={{ default: 'alignEnd' }}>
                   <span style={{ color: 'var(--pf-v6-global--Color--200)' }}>
-                    {openShiftClusters.length + externalClusters.length} cluster{(openShiftClusters.length + externalClusters.length) !== 1 ? 's' : ''} found
-                    ({openShiftClusters.length} OpenShift, {externalClusters.length} External)
+                    {filteredOpenShiftClusters.length + filteredExternalClusters.length} cluster{(filteredOpenShiftClusters.length + filteredExternalClusters.length) !== 1 ? 's' : ''} found
+                    ({filteredOpenShiftClusters.length} OpenShift, {filteredExternalClusters.length} External)
                   </span>
                 </ToolbarItem>
               </ToolbarContent>
@@ -429,20 +432,20 @@ const Clusters: React.FC = () => {
             </Tbody>
           </Table>
 
-            {openShiftClusters.length === 0 && searchTerm && (
+            {filteredOpenShiftClusters.length === 0 && searchTerm && (
               <div style={{ textAlign: 'center', padding: '2rem' }}>
                 <p>No OpenShift clusters found matching "{searchTerm}"</p>
               </div>
             )}
 
-            {openShiftClusters.length > perPage && (
+            {filteredOpenShiftClusters.length > perPageOS && (
               <Pagination
-                itemCount={openShiftClusters.length}
-                perPage={perPage}
-                page={page}
-                onSetPage={onSetPage}
+                itemCount={filteredOpenShiftClusters.length}
+                perPage={perPageOS}
+                page={pageOS}
+                onSetPage={onSetPageOS}
                 widgetId="openshift-clusters-pagination"
-                onPerPageSelect={onPerPageSelect}
+                onPerPageSelect={onPerPageSelectOS}
                 style={{ marginTop: '1rem' }}
               />
             )}
@@ -450,7 +453,7 @@ const Clusters: React.FC = () => {
         </Card>
 
         {/* External Clusters */}
-        {externalClusters.length > 0 && (
+        {filteredExternalClusters.length > 0 && (
           <Card>
             <CardTitle>External Clusters</CardTitle>
             <CardBody>
@@ -583,20 +586,20 @@ const Clusters: React.FC = () => {
                 </Tbody>
               </Table>
 
-              {externalClusters.length === 0 && searchTerm && (
+              {filteredExternalClusters.length === 0 && searchTerm && (
                 <div style={{ textAlign: 'center', padding: '2rem' }}>
                   <p>No external clusters found matching "{searchTerm}"</p>
                 </div>
               )}
 
-              {externalClusters.length > perPage && (
+              {filteredExternalClusters.length > perPageExt && (
                 <Pagination
-                  itemCount={externalClusters.length}
-                  perPage={perPage}
-                  page={page}
-                  onSetPage={onSetPage}
+                  itemCount={filteredExternalClusters.length}
+                  perPage={perPageExt}
+                  page={pageExt}
+                  onSetPage={onSetPageExt}
                   widgetId="external-clusters-pagination"
-                  onPerPageSelect={onPerPageSelect}
+                  onPerPageSelect={onPerPageSelectExt}
                   style={{ marginTop: '1rem' }}
                 />
               )}
