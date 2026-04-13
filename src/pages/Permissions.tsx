@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
 import { Link } from 'react-router-dom';
@@ -10,8 +10,6 @@ import {
   Toolbar,
   ToolbarContent,
   ToolbarItem,
-  Spinner,
-  Alert,
   Pagination,
   PaginationVariant,
   Button
@@ -25,6 +23,10 @@ import {
   Td
 } from '@patternfly/react-table';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
+import { useFilteredPagination } from '../hooks/useFilteredPagination';
+import LoadingState from '../components/LoadingState';
+import ErrorState from '../components/ErrorState';
+import { getDataDirUrl } from '../utils/env';
 
 const GET_PERMISSIONS = gql`
   query Permissions {
@@ -49,40 +51,25 @@ interface PermissionsQueryData {
 }
 
 const Permissions: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(20);
-
   const { loading, error, data } = useQuery<PermissionsQueryData>(GET_PERMISSIONS);
 
-  const filteredPermissions = useMemo(() => {
-    if (!data?.permissions_v1) return [];
-
-    return data.permissions_v1.filter((permission: Permission) =>
-      permission.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      permission.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      permission.service?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [data, searchTerm]);
-
-  const paginatedPermissions = useMemo(() => {
-    const startIndex = (page - 1) * perPage;
-    const endIndex = startIndex + perPage;
-    return filteredPermissions.slice(startIndex, endIndex);
-  }, [filteredPermissions, page, perPage]);
-
-  const onSetPage = (_event: React.MouseEvent | React.KeyboardEvent | MouseEvent, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const onPerPageSelect = (
-    _event: React.MouseEvent | React.KeyboardEvent | MouseEvent,
-    newPerPage: number,
-    newPage: number
-  ) => {
-    setPerPage(newPerPage);
-    setPage(newPage);
-  };
+  const {
+    searchTerm,
+    setSearchTerm,
+    page,
+    setPage,
+    perPage,
+    filteredItems: filteredPermissions,
+    paginatedItems: paginatedPermissions,
+    onSetPage,
+    onPerPageSelect,
+  } = useFilteredPagination({
+    items: data?.permissions_v1 || [],
+    filterFn: (permission, term) =>
+      permission.name.toLowerCase().includes(term.toLowerCase()) ||
+      (permission.description?.toLowerCase().includes(term.toLowerCase()) ?? false) ||
+      (permission.service?.toLowerCase().includes(term.toLowerCase()) ?? false),
+  });
 
   if (loading) {
     return (
@@ -90,10 +77,7 @@ const Permissions: React.FC = () => {
         <Title headingLevel="h1" size="2xl" style={{ marginBottom: '2rem' }}>
           Permissions
         </Title>
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
-          <Spinner size="lg" />
-          <p style={{ marginTop: '1rem' }}>Loading permissions...</p>
-        </div>
+        <LoadingState message="Loading permissions..." />
       </div>
     );
   }
@@ -104,9 +88,7 @@ const Permissions: React.FC = () => {
         <Title headingLevel="h1" size="2xl" style={{ marginBottom: '2rem' }}>
           Permissions
         </Title>
-        <Alert variant="danger" title="Error loading permissions">
-          {error.message}
-        </Alert>
+        <ErrorState title="Error loading permissions" error={error} />
       </div>
     );
   }
@@ -178,7 +160,7 @@ const Permissions: React.FC = () => {
                     <Button
                       variant="link"
                       component="a"
-                      href={`${process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data'}${permission.path}`}
+                      href={`${getDataDirUrl()}${permission.path}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       icon={<ExternalLinkAltIcon />}

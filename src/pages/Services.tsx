@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
 import { Link } from 'react-router-dom';
@@ -11,8 +11,6 @@ import {
   ToolbarContent,
   ToolbarItem,
   Label,
-  Spinner,
-  Alert,
   Pagination,
   PaginationVariant,
   Button
@@ -25,6 +23,9 @@ import {
   Tbody,
   Td
 } from '@patternfly/react-table';
+import { useFilteredPagination } from '../hooks/useFilteredPagination';
+import LoadingState from '../components/LoadingState';
+import ErrorState from '../components/ErrorState';
 
 const GET_SERVICES = gql`
   query Apps {
@@ -63,10 +64,6 @@ interface AppsQueryData {
 }
 
 const Services: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(20);
-
   const { loading, error, data } = useQuery<AppsQueryData>(GET_SERVICES);
 
   const getStatusLabelColor = (status: string) => {
@@ -86,35 +83,23 @@ const Services: React.FC = () => {
     }
   };
 
-  const filteredServices = useMemo(() => {
-    if (!data?.apps_v1) return [];
-    
-    return data.apps_v1.filter((service: Service) =>
-      service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      service.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      service.parentApp?.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [data, searchTerm]);
-
-  const paginatedServices = useMemo(() => {
-    const startIndex = (page - 1) * perPage;
-    const endIndex = startIndex + perPage;
-    return filteredServices.slice(startIndex, endIndex);
-  }, [filteredServices, page, perPage]);
-
-
-  const onSetPage = (_event: React.MouseEvent | React.KeyboardEvent | MouseEvent, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const onPerPageSelect = (
-    _event: React.MouseEvent | React.KeyboardEvent | MouseEvent,
-    newPerPage: number,
-    newPage: number
-  ) => {
-    setPerPage(newPerPage);
-    setPage(newPage);
-  };
+  const {
+    searchTerm,
+    setSearchTerm,
+    page,
+    setPage,
+    perPage,
+    filteredItems: filteredServices,
+    paginatedItems: paginatedServices,
+    onSetPage,
+    onPerPageSelect,
+  } = useFilteredPagination({
+    items: data?.apps_v1 || [],
+    filterFn: (service, term) =>
+      service.name.toLowerCase().includes(term.toLowerCase()) ||
+      (service.description?.toLowerCase().includes(term.toLowerCase()) ?? false) ||
+      (service.parentApp?.name.toLowerCase().includes(term.toLowerCase()) ?? false),
+  });
 
   if (loading) {
     return (
@@ -122,10 +107,7 @@ const Services: React.FC = () => {
         <Title headingLevel="h1" size="2xl" style={{ marginBottom: '2rem' }}>
           Services
         </Title>
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
-          <Spinner size="lg" />
-          <p style={{ marginTop: '1rem' }}>Loading services...</p>
-        </div>
+        <LoadingState message="Loading services..." />
       </div>
     );
   }
@@ -136,9 +118,7 @@ const Services: React.FC = () => {
         <Title headingLevel="h1" size="2xl" style={{ marginBottom: '2rem' }}>
           Services
         </Title>
-        <Alert variant="danger" title="Error loading services">
-          {error.message}
-        </Alert>
+        <ErrorState title="Error loading services" error={error} />
       </div>
     );
   }

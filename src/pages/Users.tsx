@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
 import {
@@ -9,12 +9,13 @@ import {
   Toolbar,
   ToolbarContent,
   ToolbarItem,
-  Spinner,
-  Alert,
   Pagination,
   PaginationVariant
 } from '@patternfly/react-core';
 import UsersTable from '../components/UsersTable';
+import { useFilteredPagination } from '../hooks/useFilteredPagination';
+import LoadingState from '../components/LoadingState';
+import ErrorState from '../components/ErrorState';
 
 const GET_USERS = gql`
   query Users {
@@ -43,41 +44,26 @@ interface UsersQueryData {
 }
 
 const Users: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(20);
-
   const { loading, error, data } = useQuery<UsersQueryData>(GET_USERS);
 
-  const filteredUsers = useMemo(() => {
-    if (!data?.users_v1) return [];
-
-    return data.users_v1.filter((user: User) =>
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.org_username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.github_username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.quay_username?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [data, searchTerm]);
-
-  const paginatedUsers = useMemo(() => {
-    const startIndex = (page - 1) * perPage;
-    const endIndex = startIndex + perPage;
-    return filteredUsers.slice(startIndex, endIndex);
-  }, [filteredUsers, page, perPage]);
-
-  const onSetPage = (_event: React.MouseEvent | React.KeyboardEvent | MouseEvent, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const onPerPageSelect = (
-    _event: React.MouseEvent | React.KeyboardEvent | MouseEvent,
-    newPerPage: number,
-    newPage: number
-  ) => {
-    setPerPage(newPerPage);
-    setPage(newPage);
-  };
+  const {
+    searchTerm,
+    setSearchTerm,
+    page,
+    setPage,
+    perPage,
+    filteredItems: filteredUsers,
+    paginatedItems: paginatedUsers,
+    onSetPage,
+    onPerPageSelect,
+  } = useFilteredPagination({
+    items: data?.users_v1 || [],
+    filterFn: (user, term) =>
+      user.name.toLowerCase().includes(term.toLowerCase()) ||
+      (user.org_username?.toLowerCase().includes(term.toLowerCase()) ?? false) ||
+      (user.github_username?.toLowerCase().includes(term.toLowerCase()) ?? false) ||
+      (user.quay_username?.toLowerCase().includes(term.toLowerCase()) ?? false),
+  });
 
   if (loading) {
     return (
@@ -85,10 +71,7 @@ const Users: React.FC = () => {
         <Title headingLevel="h1" size="2xl" style={{ marginBottom: '2rem' }}>
           Users
         </Title>
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
-          <Spinner size="lg" />
-          <p style={{ marginTop: '1rem' }}>Loading users...</p>
-        </div>
+        <LoadingState message="Loading users..." />
       </div>
     );
   }
@@ -99,9 +82,7 @@ const Users: React.FC = () => {
         <Title headingLevel="h1" size="2xl" style={{ marginBottom: '2rem' }}>
           Users
         </Title>
-        <Alert variant="danger" title="Error loading users">
-          {error.message}
-        </Alert>
+        <ErrorState title="Error loading users" error={error} />
       </div>
     );
   }

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
 import { Link } from 'react-router-dom';
@@ -10,8 +10,6 @@ import {
   Toolbar,
   ToolbarContent,
   ToolbarItem,
-  Spinner,
-  Alert,
   Pagination,
   PaginationVariant,
   Button
@@ -25,6 +23,10 @@ import {
   Td
 } from '@patternfly/react-table';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
+import { useFilteredPagination } from '../hooks/useFilteredPagination';
+import LoadingState from '../components/LoadingState';
+import ErrorState from '../components/ErrorState';
+import { getDataDirUrl } from '../utils/env';
 
 const GET_AWSGROUPS = gql`
   query AWSGroups {
@@ -55,40 +57,25 @@ interface AWSGroupsData {
 }
 
 const AWSGroups: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(20);
-
   const { loading, error, data } = useQuery<AWSGroupsData>(GET_AWSGROUPS);
 
-  const filteredAWSGroups = useMemo(() => {
-    if (!data?.awsgroups_v1) return [];
-
-    return data.awsgroups_v1.filter((group: AWSGroup) =>
-      group.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      group.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      group.account.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [data, searchTerm]);
-
-  const paginatedAWSGroups = useMemo(() => {
-    const startIndex = (page - 1) * perPage;
-    const endIndex = startIndex + perPage;
-    return filteredAWSGroups.slice(startIndex, endIndex);
-  }, [filteredAWSGroups, page, perPage]);
-
-  const onSetPage = (_event: React.MouseEvent | React.KeyboardEvent | MouseEvent, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const onPerPageSelect = (
-    _event: React.MouseEvent | React.KeyboardEvent | MouseEvent,
-    newPerPage: number,
-    newPage: number
-  ) => {
-    setPerPage(newPerPage);
-    setPage(newPage);
-  };
+  const {
+    searchTerm,
+    setSearchTerm,
+    page,
+    setPage,
+    perPage,
+    filteredItems: filteredAWSGroups,
+    paginatedItems: paginatedAWSGroups,
+    onSetPage,
+    onPerPageSelect,
+  } = useFilteredPagination({
+    items: data?.awsgroups_v1 || [],
+    filterFn: (group, term) =>
+      group.name.toLowerCase().includes(term.toLowerCase()) ||
+      (group.description?.toLowerCase().includes(term.toLowerCase()) ?? false) ||
+      group.account.name.toLowerCase().includes(term.toLowerCase()),
+  });
 
   if (loading) {
     return (
@@ -96,10 +83,7 @@ const AWSGroups: React.FC = () => {
         <Title headingLevel="h1" size="2xl" style={{ marginBottom: '2rem' }}>
           AWS Groups
         </Title>
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
-          <Spinner size="lg" />
-          <p style={{ marginTop: '1rem' }}>Loading AWS groups...</p>
-        </div>
+        <LoadingState message="Loading AWS groups..." />
       </div>
     );
   }
@@ -110,9 +94,7 @@ const AWSGroups: React.FC = () => {
         <Title headingLevel="h1" size="2xl" style={{ marginBottom: '2rem' }}>
           AWS Groups
         </Title>
-        <Alert variant="danger" title="Error loading AWS groups">
-          {error.message}
-        </Alert>
+        <ErrorState title="Error loading AWS groups" error={error} />
       </div>
     );
   }
@@ -185,7 +167,7 @@ const AWSGroups: React.FC = () => {
                     <Button
                       variant="link"
                       component="a"
-                      href={`${process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data'}${group.path}`}
+                      href={`${getDataDirUrl()}${group.path}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       icon={<ExternalLinkAltIcon />}

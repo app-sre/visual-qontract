@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
 import { Link } from 'react-router-dom';
@@ -10,8 +10,6 @@ import {
   Toolbar,
   ToolbarContent,
   ToolbarItem,
-  Spinner,
-  Alert,
   Pagination,
   PaginationVariant,
   Button
@@ -25,6 +23,10 @@ import {
   Td
 } from '@patternfly/react-table';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
+import { useFilteredPagination } from '../hooks/useFilteredPagination';
+import LoadingState from '../components/LoadingState';
+import ErrorState from '../components/ErrorState';
+import { getDataDirUrl } from '../utils/env';
 
 const GET_SCORECARDS = gql`
   query Scorecards {
@@ -53,39 +55,24 @@ interface ScoreCardsData {
 }
 
 const ScoreCards: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(20);
-
   const { loading, error, data } = useQuery<ScoreCardsData>(GET_SCORECARDS);
 
-  const filteredScoreCards = useMemo(() => {
-    if (!data?.scorecards_v2) return [];
-
-    return data.scorecards_v2.filter((scorecard: ScoreCard) =>
-      scorecard.app.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      scorecard.path.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [data, searchTerm]);
-
-  const paginatedScoreCards = useMemo(() => {
-    const startIndex = (page - 1) * perPage;
-    const endIndex = startIndex + perPage;
-    return filteredScoreCards.slice(startIndex, endIndex);
-  }, [filteredScoreCards, page, perPage]);
-
-  const onSetPage = (_event: React.MouseEvent | React.KeyboardEvent | MouseEvent, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const onPerPageSelect = (
-    _event: React.MouseEvent | React.KeyboardEvent | MouseEvent,
-    newPerPage: number,
-    newPage: number
-  ) => {
-    setPerPage(newPerPage);
-    setPage(newPage);
-  };
+  const {
+    searchTerm,
+    setSearchTerm,
+    page,
+    setPage,
+    perPage,
+    filteredItems: filteredScoreCards,
+    paginatedItems: paginatedScoreCards,
+    onSetPage,
+    onPerPageSelect,
+  } = useFilteredPagination({
+    items: data?.scorecards_v2 || [],
+    filterFn: (scorecard, term) =>
+      scorecard.app.name.toLowerCase().includes(term.toLowerCase()) ||
+      scorecard.path.toLowerCase().includes(term.toLowerCase()),
+  });
 
   if (loading) {
     return (
@@ -93,10 +80,7 @@ const ScoreCards: React.FC = () => {
         <Title headingLevel="h1" size="2xl" style={{ marginBottom: '2rem' }}>
           Score Cards
         </Title>
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
-          <Spinner size="lg" />
-          <p style={{ marginTop: '1rem' }}>Loading score cards...</p>
-        </div>
+        <LoadingState message="Loading score cards..." />
       </div>
     );
   }
@@ -107,9 +91,7 @@ const ScoreCards: React.FC = () => {
         <Title headingLevel="h1" size="2xl" style={{ marginBottom: '2rem' }}>
           Score Cards
         </Title>
-        <Alert variant="danger" title="Error loading score cards">
-          {error.message}
-        </Alert>
+        <ErrorState title="Error loading score cards" error={error} />
       </div>
     );
   }
@@ -171,7 +153,7 @@ const ScoreCards: React.FC = () => {
                     <Button
                       variant="link"
                       component="a"
-                      href={`${process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data'}${scorecard.app.path}`}
+                      href={`${getDataDirUrl()}${scorecard.app.path}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       icon={<ExternalLinkAltIcon />}
@@ -185,7 +167,7 @@ const ScoreCards: React.FC = () => {
                     <Button
                       variant="link"
                       component="a"
-                      href={`${process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data'}${scorecard.path}`}
+                      href={`${getDataDirUrl()}${scorecard.path}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       icon={<ExternalLinkAltIcon />}

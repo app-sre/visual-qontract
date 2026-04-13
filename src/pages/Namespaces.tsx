@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
 import { Link } from 'react-router-dom';
@@ -10,8 +10,6 @@ import {
   Toolbar,
   ToolbarContent,
   ToolbarItem,
-  Spinner,
-  Alert,
   Pagination,
   PaginationVariant,
   Button
@@ -26,6 +24,10 @@ import {
 } from '@patternfly/react-table';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import GrafanaUrl from '../components/GrafanaUrl';
+import { useFilteredPagination } from '../hooks/useFilteredPagination';
+import LoadingState from '../components/LoadingState';
+import ErrorState from '../components/ErrorState';
+import { getDataDirUrl } from '../utils/env';
 
 const GET_NAMESPACES = gql`
   query Namespaces {
@@ -64,42 +66,26 @@ interface NamespacesQueryData {
 }
 
 const Namespaces: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(20);
-
-
   const { loading, error, data } = useQuery<NamespacesQueryData>(GET_NAMESPACES);
 
-  const filteredNamespaces = useMemo(() => {
-    if (!data?.namespaces_v1) return [];
-
-    return data.namespaces_v1.filter((namespace: Namespace) =>
-      namespace.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      namespace.app.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      namespace.cluster.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      namespace.description?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [data, searchTerm]);
-
-  const paginatedNamespaces = useMemo(() => {
-    const startIndex = (page - 1) * perPage;
-    const endIndex = startIndex + perPage;
-    return filteredNamespaces.slice(startIndex, endIndex);
-  }, [filteredNamespaces, page, perPage]);
-
-  const onSetPage = (_event: React.MouseEvent | React.KeyboardEvent | MouseEvent, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const onPerPageSelect = (
-    _event: React.MouseEvent | React.KeyboardEvent | MouseEvent,
-    newPerPage: number,
-    newPage: number
-  ) => {
-    setPerPage(newPerPage);
-    setPage(newPage);
-  };
+  const {
+    searchTerm,
+    setSearchTerm,
+    page,
+    setPage,
+    perPage,
+    filteredItems: filteredNamespaces,
+    paginatedItems: paginatedNamespaces,
+    onSetPage,
+    onPerPageSelect,
+  } = useFilteredPagination({
+    items: data?.namespaces_v1 || [],
+    filterFn: (namespace, term) =>
+      namespace.name.toLowerCase().includes(term.toLowerCase()) ||
+      namespace.app.name.toLowerCase().includes(term.toLowerCase()) ||
+      namespace.cluster.name.toLowerCase().includes(term.toLowerCase()) ||
+      (namespace.description?.toLowerCase().includes(term.toLowerCase()) ?? false),
+  });
 
   if (loading) {
     return (
@@ -107,10 +93,7 @@ const Namespaces: React.FC = () => {
         <Title headingLevel="h1" size="2xl" style={{ marginBottom: '2rem' }}>
           Namespaces
         </Title>
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
-          <Spinner size="lg" />
-          <p style={{ marginTop: '1rem' }}>Loading namespaces...</p>
-        </div>
+        <LoadingState message="Loading namespaces..." />
       </div>
     );
   }
@@ -121,9 +104,7 @@ const Namespaces: React.FC = () => {
         <Title headingLevel="h1" size="2xl" style={{ marginBottom: '2rem' }}>
           Namespaces
         </Title>
-        <Alert variant="danger" title="Error loading namespaces">
-          {error.message}
-        </Alert>
+        <ErrorState title="Error loading namespaces" error={error} />
       </div>
     );
   }
@@ -191,7 +172,7 @@ const Namespaces: React.FC = () => {
                     <Button
                       variant="link"
                       component="a"
-                      href={`${process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data'}${namespace.path}`}
+                      href={`${getDataDirUrl()}${namespace.path}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       icon={<ExternalLinkAltIcon />}

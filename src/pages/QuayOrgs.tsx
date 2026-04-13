@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
 import { Link } from 'react-router-dom';
@@ -10,8 +10,6 @@ import {
   Toolbar,
   ToolbarContent,
   ToolbarItem,
-  Spinner,
-  Alert,
   Pagination,
   PaginationVariant,
   Button
@@ -25,6 +23,10 @@ import {
   Td
 } from '@patternfly/react-table';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
+import { useFilteredPagination } from '../hooks/useFilteredPagination';
+import LoadingState from '../components/LoadingState';
+import ErrorState from '../components/ErrorState';
+import { getDataDirUrl } from '../utils/env';
 
 const GET_QUAYORGS = gql`
   query QuayOrgs {
@@ -47,39 +49,24 @@ interface QuayOrgsData {
 }
 
 const QuayOrgs: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(20);
-
   const { loading, error, data } = useQuery<QuayOrgsData>(GET_QUAYORGS);
 
-  const filteredQuayOrgs = useMemo(() => {
-    if (!data?.quay_orgs_v1) return [];
-
-    return data.quay_orgs_v1.filter((org: QuayOrg) =>
-      org.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      org.description?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [data, searchTerm]);
-
-  const paginatedQuayOrgs = useMemo(() => {
-    const startIndex = (page - 1) * perPage;
-    const endIndex = startIndex + perPage;
-    return filteredQuayOrgs.slice(startIndex, endIndex);
-  }, [filteredQuayOrgs, page, perPage]);
-
-  const onSetPage = (_event: React.MouseEvent | React.KeyboardEvent | MouseEvent, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const onPerPageSelect = (
-    _event: React.MouseEvent | React.KeyboardEvent | MouseEvent,
-    newPerPage: number,
-    newPage: number
-  ) => {
-    setPerPage(newPerPage);
-    setPage(newPage);
-  };
+  const {
+    searchTerm,
+    setSearchTerm,
+    page,
+    setPage,
+    perPage,
+    filteredItems: filteredQuayOrgs,
+    paginatedItems: paginatedQuayOrgs,
+    onSetPage,
+    onPerPageSelect,
+  } = useFilteredPagination({
+    items: data?.quay_orgs_v1 || [],
+    filterFn: (org, term) =>
+      org.name.toLowerCase().includes(term.toLowerCase()) ||
+      (org.description?.toLowerCase().includes(term.toLowerCase()) ?? false),
+  });
 
   if (loading) {
     return (
@@ -87,10 +74,7 @@ const QuayOrgs: React.FC = () => {
         <Title headingLevel="h1" size="2xl" style={{ marginBottom: '2rem' }}>
           Quay Organizations
         </Title>
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
-          <Spinner size="lg" />
-          <p style={{ marginTop: '1rem' }}>Loading Quay organizations...</p>
-        </div>
+        <LoadingState message="Loading Quay organizations..." />
       </div>
     );
   }
@@ -101,9 +85,7 @@ const QuayOrgs: React.FC = () => {
         <Title headingLevel="h1" size="2xl" style={{ marginBottom: '2rem' }}>
           Quay Organizations
         </Title>
-        <Alert variant="danger" title="Error loading Quay organizations">
-          {error.message}
-        </Alert>
+        <ErrorState title="Error loading Quay organizations" error={error} />
       </div>
     );
   }
@@ -168,7 +150,7 @@ const QuayOrgs: React.FC = () => {
                     <Button
                       variant="link"
                       component="a"
-                      href={`${process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data'}${org.path}`}
+                      href={`${getDataDirUrl()}${org.path}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       icon={<ExternalLinkAltIcon />}

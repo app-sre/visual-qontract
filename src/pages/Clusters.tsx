@@ -7,8 +7,6 @@ import {
   Card,
   CardTitle,
   CardBody,
-  Spinner,
-  Alert,
   Button,
   TextInput,
   Toolbar,
@@ -25,6 +23,9 @@ import {
   Td
 } from '@patternfly/react-table';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
+import { useFilteredPagination } from '../hooks/useFilteredPagination';
+import LoadingState from '../components/LoadingState';
+import ErrorState from '../components/ErrorState';
 
 const GET_CLUSTERS = gql`
   query Clusters {
@@ -215,20 +216,11 @@ const Clusters: React.FC = () => {
   };
 
   if (loading) {
-    return (
-      <div style={{ textAlign: 'center', padding: '2rem' }}>
-        <Spinner size="lg" />
-        <p style={{ marginTop: '1rem' }}>Loading clusters...</p>
-      </div>
-    );
+    return <LoadingState message="Loading clusters..." />;
   }
 
   if (error) {
-    return (
-      <Alert variant="danger" title="Error loading clusters">
-        {error.message}
-      </Alert>
-    );
+    return <ErrorState title="Error loading clusters" error={error} />;
   }
 
   return (

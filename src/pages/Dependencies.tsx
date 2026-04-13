@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
 import { Link } from 'react-router-dom';
@@ -10,8 +10,6 @@ import {
   Toolbar,
   ToolbarContent,
   ToolbarItem,
-  Spinner,
-  Alert,
   Pagination,
   PaginationVariant,
   Button
@@ -25,6 +23,10 @@ import {
   Td
 } from '@patternfly/react-table';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
+import { useFilteredPagination } from '../hooks/useFilteredPagination';
+import LoadingState from '../components/LoadingState';
+import ErrorState from '../components/ErrorState';
+import { getDataDirUrl } from '../utils/env';
 
 const GET_DEPENDENCIES = gql`
   query Dependencies {
@@ -63,41 +65,26 @@ interface DependenciesData {
 }
 
 const Dependencies: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(20);
-
   const { loading, error, data } = useQuery<DependenciesData>(GET_DEPENDENCIES);
 
-  const filteredDependencies = useMemo(() => {
-    if (!data?.dependencies_v1) return [];
-
-    return data.dependencies_v1.filter((dependency: Dependency) =>
-      dependency.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      dependency.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      dependency.statefulness?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      dependency.opsModel?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [data, searchTerm]);
-
-  const paginatedDependencies = useMemo(() => {
-    const startIndex = (page - 1) * perPage;
-    const endIndex = startIndex + perPage;
-    return filteredDependencies.slice(startIndex, endIndex);
-  }, [filteredDependencies, page, perPage]);
-
-  const onSetPage = (_event: React.MouseEvent | React.KeyboardEvent | MouseEvent, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const onPerPageSelect = (
-    _event: React.MouseEvent | React.KeyboardEvent | MouseEvent,
-    newPerPage: number,
-    newPage: number
-  ) => {
-    setPerPage(newPerPage);
-    setPage(newPage);
-  };
+  const {
+    searchTerm,
+    setSearchTerm,
+    page,
+    setPage,
+    perPage,
+    filteredItems: filteredDependencies,
+    paginatedItems: paginatedDependencies,
+    onSetPage,
+    onPerPageSelect,
+  } = useFilteredPagination({
+    items: data?.dependencies_v1 || [],
+    filterFn: (dependency, term) =>
+      dependency.name.toLowerCase().includes(term.toLowerCase()) ||
+      (dependency.description?.toLowerCase().includes(term.toLowerCase()) ?? false) ||
+      (dependency.statefulness?.toLowerCase().includes(term.toLowerCase()) ?? false) ||
+      (dependency.opsModel?.toLowerCase().includes(term.toLowerCase()) ?? false),
+  });
 
   if (loading) {
     return (
@@ -105,10 +92,7 @@ const Dependencies: React.FC = () => {
         <Title headingLevel="h1" size="2xl" style={{ marginBottom: '2rem' }}>
           Dependencies
         </Title>
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
-          <Spinner size="lg" />
-          <p style={{ marginTop: '1rem' }}>Loading dependencies...</p>
-        </div>
+        <LoadingState message="Loading dependencies..." />
       </div>
     );
   }
@@ -119,9 +103,7 @@ const Dependencies: React.FC = () => {
         <Title headingLevel="h1" size="2xl" style={{ marginBottom: '2rem' }}>
           Dependencies
         </Title>
-        <Alert variant="danger" title="Error loading dependencies">
-          {error.message}
-        </Alert>
+        <ErrorState title="Error loading dependencies" error={error} />
       </div>
     );
   }
@@ -198,7 +180,7 @@ const Dependencies: React.FC = () => {
                     <Button
                       variant="link"
                       component="a"
-                      href={`${process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data'}${dependency.path}`}
+                      href={`${getDataDirUrl()}${dependency.path}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       icon={<ExternalLinkAltIcon />}

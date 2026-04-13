@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
 import { Link } from 'react-router-dom';
@@ -10,8 +10,6 @@ import {
   Toolbar,
   ToolbarContent,
   ToolbarItem,
-  Spinner,
-  Alert,
   Pagination,
   PaginationVariant,
   Button
@@ -25,6 +23,10 @@ import {
   Td
 } from '@patternfly/react-table';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
+import { useFilteredPagination } from '../hooks/useFilteredPagination';
+import LoadingState from '../components/LoadingState';
+import ErrorState from '../components/ErrorState';
+import { getDataDirUrl } from '../utils/env';
 
 const GET_ROLES = gql`
   query Roles {
@@ -47,39 +49,24 @@ interface RolesQueryData {
 }
 
 const Roles: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(20);
-
   const { loading, error, data } = useQuery<RolesQueryData>(GET_ROLES);
 
-  const filteredRoles = useMemo(() => {
-    if (!data?.roles_v1) return [];
-
-    return data.roles_v1.filter((role: Role) =>
-      role.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      role.description?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [data, searchTerm]);
-
-  const paginatedRoles = useMemo(() => {
-    const startIndex = (page - 1) * perPage;
-    const endIndex = startIndex + perPage;
-    return filteredRoles.slice(startIndex, endIndex);
-  }, [filteredRoles, page, perPage]);
-
-  const onSetPage = (_event: React.MouseEvent | React.KeyboardEvent | MouseEvent, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const onPerPageSelect = (
-    _event: React.MouseEvent | React.KeyboardEvent | MouseEvent,
-    newPerPage: number,
-    newPage: number
-  ) => {
-    setPerPage(newPerPage);
-    setPage(newPage);
-  };
+  const {
+    searchTerm,
+    setSearchTerm,
+    page,
+    setPage,
+    perPage,
+    filteredItems: filteredRoles,
+    paginatedItems: paginatedRoles,
+    onSetPage,
+    onPerPageSelect,
+  } = useFilteredPagination({
+    items: data?.roles_v1 || [],
+    filterFn: (role, term) =>
+      role.name.toLowerCase().includes(term.toLowerCase()) ||
+      (role.description?.toLowerCase().includes(term.toLowerCase()) ?? false),
+  });
 
   if (loading) {
     return (
@@ -87,10 +74,7 @@ const Roles: React.FC = () => {
         <Title headingLevel="h1" size="2xl" style={{ marginBottom: '2rem' }}>
           Roles
         </Title>
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
-          <Spinner size="lg" />
-          <p style={{ marginTop: '1rem' }}>Loading roles...</p>
-        </div>
+        <LoadingState message="Loading roles..." />
       </div>
     );
   }
@@ -101,9 +85,7 @@ const Roles: React.FC = () => {
         <Title headingLevel="h1" size="2xl" style={{ marginBottom: '2rem' }}>
           Roles
         </Title>
-        <Alert variant="danger" title="Error loading roles">
-          {error.message}
-        </Alert>
+        <ErrorState title="Error loading roles" error={error} />
       </div>
     );
   }
@@ -168,7 +150,7 @@ const Roles: React.FC = () => {
                     <Button
                       variant="link"
                       component="a"
-                      href={`${process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data'}${role.path}`}
+                      href={`${getDataDirUrl()}${role.path}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       icon={<ExternalLinkAltIcon />}
