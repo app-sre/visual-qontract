@@ -284,8 +284,8 @@ const Clusters: React.FC = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {paginatedOpenShiftClusters.map((cluster, index) => (
-                <Tr key={index}>
+              {paginatedOpenShiftClusters.map((cluster) => (
+                <Tr key={cluster.path}>
                   <Td>
                     <div>
                       <Link
@@ -385,8 +385,8 @@ const Clusters: React.FC = () => {
                           {cluster.apps.length} app{cluster.apps.length !== 1 ? 's' : ''}
                         </div>
                         <div style={{ maxHeight: '120px', overflowY: 'auto' }}>
-                          {cluster.apps.map((app, index) => (
-                            <div key={index} style={{
+                          {cluster.apps.map((app) => (
+                            <div key={app.path} style={{
                               fontSize: '0.875rem',
                               padding: '0.125rem 0'
                             }}>
@@ -419,8 +419,8 @@ const Clusters: React.FC = () => {
                     {cluster.upgradePolicy?.workloads ? (
                       <div>
                         {Array.isArray(cluster.upgradePolicy.workloads) ? (
-                          cluster.upgradePolicy.workloads.map((workload, index) => (
-                            <div key={index}>{workload}</div>
+                          cluster.upgradePolicy.workloads.map((workload) => (
+                            <div key={workload}>{workload}</div>
                           ))
                         ) : (
                           <div>{cluster.upgradePolicy.workloads}</div>
@@ -471,8 +471,8 @@ const Clusters: React.FC = () => {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {paginatedExternalClusters.map((cluster, index) => (
-                    <Tr key={index}>
+                  {paginatedExternalClusters.map((cluster) => (
+                    <Tr key={cluster.path}>
                       <Td>
                         <div>
                           <Link
@@ -558,8 +558,8 @@ const Clusters: React.FC = () => {
                               {cluster.apps.length} app{cluster.apps.length !== 1 ? 's' : ''}
                             </div>
                             <div style={{ maxHeight: '120px', overflowY: 'auto' }}>
-                              {cluster.apps.map((app, index) => (
-                                <div key={index} style={{
+                              {cluster.apps.map((app) => (
+                                <div key={app.path} style={{
                                   fontSize: '0.875rem',
                                   padding: '0.125rem 0'
                                 }}>
