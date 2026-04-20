@@ -1,15 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Table } from 'patternfly-react';
 import { Link } from 'react-router-dom';
+import { Form, FormGroup, FormSelect, FormSelectOption } from '@patternfly/react-core';
 import { sortByName } from '../../components/Utils';
 import OnboardingStatus from '../../components/OnboardingStatus';
 
-function Services({ services, omitParentApp }) {
+function collectServiceOwnerNames(services) {
+  const seen = new Map();
+  services.forEach(s =>
+    (s.serviceOwners || []).forEach(o => {
+      if (o && o.name) {
+        const key = o.name.toLowerCase();
+        if (!seen.has(key)) seen.set(key, o.name);
+      }
+    })
+  );
+  return Array.from(seen.values()).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+}
+
+function ServicesTable({ services, omitParentApp }) {
   const headerFormat = value => <Table.Heading>{value}</Table.Heading>;
   const cellFormat = value => <Table.Cell>{value}</Table.Cell>;
   const onboardingStatusFormat = value => <OnboardingStatus state={value} />;
 
-  services = sortByName(services.slice()).map(s => {
+  const rows = sortByName(services.slice()).map(s => {
     s.name_path = [s.name, s.path];
     if (s.parentApp) {
       s.parentAppLink = <Link to={{ pathname: '/services', hash: s.parentApp.path }}>{s.parentApp.name}</Link>;
@@ -98,8 +112,40 @@ function Services({ services, omitParentApp }) {
   return (
     <Table.PfProvider striped bordered columns={columns}>
       <Table.Header />
-      <Table.Body rows={sortByName(services)} rowKey="name" />
+      <Table.Body rows={sortByName(rows)} rowKey="name" />
     </Table.PfProvider>
+  );
+}
+
+function Services({ services, omitParentApp }) {
+  const ownerNames = collectServiceOwnerNames(services);
+  const [selectedOwner, setSelectedOwner] = useState('');
+
+  const filteredServices = selectedOwner
+    ? services.filter(s =>
+        (s.serviceOwners || []).some(o => o && o.name && o.name.toLowerCase() === selectedOwner.toLowerCase())
+      )
+    : services;
+
+  return (
+    <React.Fragment>
+      <Form isHorizontal style={{ maxWidth: '400px', marginBottom: '20px' }}>
+        <FormGroup label="Service owner" fieldId="service-owner-select">
+          <FormSelect
+            id="service-owner-select"
+            value={selectedOwner}
+            onChange={value => setSelectedOwner(value)}
+            aria-label="Filter services by owner"
+          >
+            <FormSelectOption value="" label="All services" />
+            {ownerNames.map(name => (
+              <FormSelectOption key={name} value={name} label={name} />
+            ))}
+          </FormSelect>
+        </FormGroup>
+      </Form>
+      <ServicesTable services={filteredServices} omitParentApp={omitParentApp} />
+    </React.Fragment>
   );
 }
 
