@@ -6,7 +6,7 @@ import { sortByName } from '../../components/Utils';
 import OnboardingStatus from '../../components/OnboardingStatus';
 
 function collectServiceOwnerNames(services) {
-  const names     = services.flatMap(s => (s.serviceOwners || []).map(o => o?.name).filter(Boolean));
+  const names = services.flatMap(s => (s.serviceOwners || []).map(o => o && o.name).filter(Boolean));
   const uniqNames = new Map(names.map(n => [n.toLowerCase(), n]));
   return Array.from(uniqNames.values()).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
 }
