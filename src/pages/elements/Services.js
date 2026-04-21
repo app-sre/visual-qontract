@@ -6,16 +6,9 @@ import { sortByName } from '../../components/Utils';
 import OnboardingStatus from '../../components/OnboardingStatus';
 
 function collectServiceOwnerNames(services) {
-  const seen = new Map();
-  services.forEach(s =>
-    (s.serviceOwners || []).forEach(o => {
-      if (o && o.name) {
-        const key = o.name.toLowerCase();
-        if (!seen.has(key)) seen.set(key, o.name);
-      }
-    })
-  );
-  return Array.from(seen.values()).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+  const names     = services.flatMap(s => (s.serviceOwners || []).map(o => o?.name).filter(Boolean));
+  const uniqNames = new Map(names.map(n => [n.toLowerCase(), n]));
+  return Array.from(uniqNames.values()).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
 }
 
 function ServicesTable({ services, omitParentApp }) {
