@@ -1,4 +1,35 @@
+# Environment and config
 .env*
-.gitignore
+public/env/env.js.bak
+
+# Version control
 .git
+.gitignore
+
+# IDE
+.vscode
 .claude
+
+# Dependencies (will be installed fresh via npm ci)
+node_modules
+
+# Build outputs (will be generated during build)
+build
+coverage
+
+# Compiled PatternFly assets
+src/css/*
+src/img/*
+src/fonts/*
+src/sass/*
+
+# Misc
+.DS_Store
+.eslintcache
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# CSS map files
+**/*.css.map
