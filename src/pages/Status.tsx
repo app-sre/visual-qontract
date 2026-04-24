@@ -2,6 +2,7 @@ import React from 'react';
 import { Title, Alert, Spinner, Card, CardTitle, CardBody, DescriptionList, DescriptionListGroup, DescriptionListTerm, DescriptionListDescription } from '@patternfly/react-core';
 import { CheckCircleIcon, ExclamationCircleIcon } from '@patternfly/react-icons';
 import { useGraphQLConnection } from '../hooks/useGraphQLConnection';
+import { ENV } from '../utils/env';
 
 const Status: React.FC = () => {
   const { isConnected, isLoading, error } = useGraphQLConnection();
@@ -32,7 +33,7 @@ const Status: React.FC = () => {
                 <DescriptionListGroup>
                   <DescriptionListTerm>Endpoint</DescriptionListTerm>
                   <DescriptionListDescription>
-                    {process.env.REACT_APP_GRAPHQL_ENDPOINT || 'http://localhost:4000/graphql'}
+                    {ENV.GRAPHQL_ENDPOINT}
                   </DescriptionListDescription>
                 </DescriptionListGroup>
                 <DescriptionListGroup>
@@ -55,7 +56,7 @@ const Status: React.FC = () => {
                 <DescriptionListGroup>
                   <DescriptionListTerm>Endpoint</DescriptionListTerm>
                   <DescriptionListDescription>
-                    {process.env.REACT_APP_GRAPHQL_ENDPOINT || 'http://localhost:4000/graphql'}
+                    {ENV.GRAPHQL_ENDPOINT}
                   </DescriptionListDescription>
                 </DescriptionListGroup>
                 <DescriptionListGroup>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '@patternfly/react-core';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
+import { ENV } from '../utils/env';
 
 interface GrafanaUrlProps {
   cluster: string;
@@ -30,7 +31,7 @@ const GrafanaUrl: React.FC<GrafanaUrlProps> = ({
       dashboardName = 'k8s-compute-resources-namespace-pods/kubernetes-compute-resources-namespace-pods';
       additionalVars = `&var-namespace=${namespace}`;
     }
-    const grafanaBaseUrl = process.env.REACT_APP_GRAFANA_URL || 'https://path/to/grafana';
+    const grafanaBaseUrl = ENV.GRAFANA_URL;
     grafanaUrl = `${grafanaBaseUrl}/d/${dashboardName}?var-datasource=${dataSource}${additionalVars}`;
   }
 

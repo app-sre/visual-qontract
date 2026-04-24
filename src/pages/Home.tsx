@@ -2,28 +2,29 @@ import React from 'react';
 import { Card, CardTitle, CardBody, Title, Grid, GridItem, List, ListItem, Button } from '@patternfly/react-core';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import { Link } from 'react-router-dom';
+import { ENV } from '../utils/env';
 
 const Home: React.FC = () => {
-  
+
   const externalLinks = [
     {
       name: 'Data',
-      url: process.env.REACT_APP_DATA_DIR_URL || 'https://path/to/data',
+      url: ENV.DATA_DIR_URL,
       description: 'Browse application interface data'
     },
     {
       name: 'Docs',
-      url: process.env.REACT_APP_DOCS_DIR_URL || 'https://path/to/docs',
+      url: ENV.DOCS_DIR_URL,
       description: 'Documentation and guides'
     },
     {
       name: 'Schemas',
-      url: process.env.REACT_APP_SCHEMAS_DIR || 'https://path/to/schemas',
+      url: ENV.SCHEMAS_DIR,
       description: 'Qontract schema definitions'
     },
     {
       name: 'Grafana',
-      url: process.env.REACT_APP_GRAFANA_URL || 'https://path/to/grafana',
+      url: ENV.GRAFANA_URL,
       description: 'Monitoring dashboards'
     }
   ];
