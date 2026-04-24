@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
 import { Link } from 'react-router-dom';
@@ -13,7 +13,10 @@ import {
   Label,
   Pagination,
   PaginationVariant,
-  Button
+  Button,
+  FormGroup,
+  FormSelect,
+  FormSelectOption
 } from '@patternfly/react-core';
 import {
   Table,
@@ -63,8 +66,26 @@ interface AppsQueryData {
   apps_v1: Service[];
 }
 
+const collectServiceOwnerNames = (services: Service[]): string[] => {
+  const seen = new Map<string, string>();
+  services.forEach(service =>
+    (service.serviceOwners || []).forEach(owner => {
+      if (owner?.name) {
+        const key = owner.name.toLowerCase();
+        if (!seen.has(key)) {
+          seen.set(key, owner.name);
+        }
+      }
+    })
+  );
+  return Array.from(seen.values()).sort((a, b) =>
+    a.toLowerCase().localeCompare(b.toLowerCase())
+  );
+};
+
 const Services: React.FC = () => {
   const { loading, error, data } = useQuery<AppsQueryData>(GET_SERVICES);
+  const [selectedOwner, setSelectedOwner] = useState<string>('');
 
   const getStatusLabelColor = (status: string) => {
     switch (status) {
@@ -83,6 +104,21 @@ const Services: React.FC = () => {
     }
   };
 
+  const ownerNames = useMemo(
+    () => collectServiceOwnerNames(data?.apps_v1 || []),
+    [data]
+  );
+
+  // First filter by owner, then by search term
+  const ownerFilteredServices = useMemo(() => {
+    if (!selectedOwner) return data?.apps_v1 || [];
+    return (data?.apps_v1 || []).filter(service =>
+      (service.serviceOwners || []).some(
+        owner => owner?.name && owner.name.toLowerCase() === selectedOwner.toLowerCase()
+      )
+    );
+  }, [data, selectedOwner]);
+
   const {
     searchTerm,
     setSearchTerm,
@@ -94,7 +130,7 @@ const Services: React.FC = () => {
     onSetPage,
     onPerPageSelect,
   } = useFilteredPagination({
-    items: data?.apps_v1 || [],
+    items: ownerFilteredServices,
     filterFn: (service, term) =>
       service.name.toLowerCase().includes(term.toLowerCase()) ||
       (service.description?.toLowerCase().includes(term.toLowerCase()) ?? false) ||
@@ -133,6 +169,24 @@ const Services: React.FC = () => {
         <CardBody>
           <Toolbar>
             <ToolbarContent>
+              <ToolbarItem>
+                <FormGroup label="Service owner" fieldId="service-owner-select">
+                  <FormSelect
+                    id="service-owner-select"
+                    value={selectedOwner}
+                    onChange={(_event, value) => {
+                      setSelectedOwner(value as string);
+                      setPage(1); // Reset to first page when changing filter
+                    }}
+                    aria-label="Filter services by owner"
+                  >
+                    <FormSelectOption value="" label="All services" />
+                    {ownerNames.map(name => (
+                      <FormSelectOption key={name} value={name} label={name} />
+                    ))}
+                  </FormSelect>
+                </FormGroup>
+              </ToolbarItem>
               <ToolbarItem>
                 <TextInput
                   name="search"
