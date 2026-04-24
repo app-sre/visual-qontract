@@ -14,7 +14,6 @@ import {
   Pagination,
   PaginationVariant,
   Button,
-  FormGroup,
   FormSelect,
   FormSelectOption
 } from '@patternfly/react-core';
@@ -170,22 +169,20 @@ const Services: React.FC = () => {
           <Toolbar>
             <ToolbarContent>
               <ToolbarItem>
-                <FormGroup label="Service owner" fieldId="service-owner-select">
-                  <FormSelect
-                    id="service-owner-select"
-                    value={selectedOwner}
-                    onChange={(_event, value) => {
-                      setSelectedOwner(value as string);
-                      setPage(1); // Reset to first page when changing filter
-                    }}
-                    aria-label="Filter services by owner"
-                  >
-                    <FormSelectOption value="" label="All services" />
-                    {ownerNames.map(name => (
-                      <FormSelectOption key={name} value={name} label={name} />
-                    ))}
-                  </FormSelect>
-                </FormGroup>
+                <FormSelect
+                  id="service-owner-select"
+                  value={selectedOwner}
+                  onChange={(_event, value) => {
+                    setSelectedOwner(value as string);
+                    setPage(1); // Reset to first page when changing filter
+                  }}
+                  aria-label="Filter services by owner"
+                >
+                  <FormSelectOption value="" label="All service owners" />
+                  {ownerNames.map(name => (
+                    <FormSelectOption key={name} value={name} label={name} />
+                  ))}
+                </FormSelect>
               </ToolbarItem>
               <ToolbarItem>
                 <TextInput
