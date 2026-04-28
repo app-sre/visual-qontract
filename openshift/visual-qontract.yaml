@@ -57,6 +57,11 @@ objects:
           imagePullPolicy: Always
           name: visual-qontract
           env:
+          - name: GRAPHQL_URI
+            valueFrom:
+              configMapKeyRef:
+                  key: graphql.uri
+                  name: visual-qontract
           - name: AUTHORIZATION
             valueFrom:
               secretKeyRef:
@@ -149,6 +154,11 @@ objects:
           imagePullPolicy: Always
           name: visual-qontract
           env:
+          - name: GRAPHQL_URI
+            valueFrom:
+              configMapKeyRef:
+                  key: graphql.uri
+                  name: visual-qontract
           - name: AUTHORIZATION
             valueFrom:
               secretKeyRef:
