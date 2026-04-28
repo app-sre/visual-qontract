@@ -2,8 +2,8 @@
 set -e
 
 # Template nginx configuration with environment variables
-envsubst '${GRAPHQL_URI} ${AUTHORIZATION}' < /etc/nginx/nginx.conf > /tmp/nginx.conf
-mv /tmp/nginx.conf /etc/nginx/nginx.conf
+# Use /var/run for runtime files (owned by user 1001)
+envsubst '${GRAPHQL_URI} ${AUTHORIZATION}' < /etc/nginx/nginx.conf > /var/run/nginx.conf
 
-# Start nginx
-exec nginx -g "daemon off;"
+# Start nginx with custom config location
+exec nginx -c /var/run/nginx.conf -g "daemon off;"
