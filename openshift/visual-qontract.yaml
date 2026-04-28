@@ -86,7 +86,8 @@ objects:
               memory: ${MEMORY_LIMIT}
           volumeMounts:
             - name: visual-qontract-env
-              mountPath: /opt/visual-qontract/build/
+              mountPath: /opt/visual-qontract/build/env-config.js
+              subPath: env-config.js
               readOnly: true
         volumes:
         - name: visual-qontract-env
@@ -178,7 +179,8 @@ objects:
               memory: ${MEMORY_LIMIT}
           volumeMounts:
             - name: visual-qontract-env
-              mountPath: /opt/visual-qontract/build/
+              mountPath: /opt/visual-qontract/build/env-config.js
+              subPath: env-config.js
               readOnly: true
         volumes:
         - name: visual-qontract-env
