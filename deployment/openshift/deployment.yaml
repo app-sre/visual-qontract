@@ -1,0 +1,106 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: visual-app-interface
+  labels:
+    app: visual-app-interface
+    component: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: visual-app-interface
+  template:
+    metadata:
+      labels:
+        app: visual-app-interface
+        component: frontend
+    spec:
+      containers:
+      - name: visual-app-interface
+        image: visual-qontract-v2:latest
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        env:
+        # GraphQL API Configuration
+        - name: REACT_APP_GRAPHQL_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: visual-app-interface-config
+              key: graphql-endpoint
+        - name: AUTHORIZATION
+          valueFrom:
+            secretKeyRef:
+              name: visual-app-interface-secrets
+              key: authorization-token
+
+        # External Service URLs
+        - name: REACT_APP_DATA_DIR_URL
+          valueFrom:
+            configMapKeyRef:
+              name: visual-app-interface-config
+              key: data-dir-url
+        - name: REACT_APP_DOCS_DIR_URL
+          valueFrom:
+            configMapKeyRef:
+              name: visual-app-interface-config
+              key: docs-dir-url
+        - name: REACT_APP_SCHEMAS_DIR
+          valueFrom:
+            configMapKeyRef:
+              name: visual-app-interface-config
+              key: schemas-dir
+        - name: REACT_APP_GRAFANA_URL
+          valueFrom:
+            configMapKeyRef:
+              name: visual-app-interface-config
+              key: grafana-url
+
+        # Health checks
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+
+        # Resource limits
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+
+        # Security context
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          runAsUser: 1001
+          capabilities:
+            drop:
+            - ALL
+          seccompProfile:
+            type: RuntimeDefault
+
+      # Pod security context
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        fsGroup: 1001
+
+      # Restart policy
+      restartPolicy: Always

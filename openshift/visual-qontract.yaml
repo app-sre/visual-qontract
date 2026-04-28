@@ -57,38 +57,23 @@ objects:
           imagePullPolicy: Always
           name: visual-qontract
           env:
-          - name: GRAPHQL_URI
-            valueFrom:
-              configMapKeyRef:
-                key: graphql.uri
-                name: visual-qontract
           - name: AUTHORIZATION
             valueFrom:
               secretKeyRef:
                   key: authorization
                   name: visual-qontract
-          - name: API_URI
-            valueFrom:
-              configMapKeyRef:
-                key: api.uri
-                name: visual-qontract
-          - name: API_AUTH
-            valueFrom:
-              secretKeyRef:
-                  key: api.auth
-                  name: visual-qontract
           ports:
           - containerPort: 8080
           livenessProbe:
             httpGet:
-              path: /graphql?query={__schema{types{name}}}
+              path: /
               port: 8080
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 3
           readinessProbe:
             httpGet:
-              path: /graphql?query={__schema{types{name}}}
+              path: /
               port: 8080
             initialDelaySeconds: 3
             periodSeconds: 10
@@ -101,7 +86,7 @@ objects:
               memory: ${MEMORY_LIMIT}
           volumeMounts:
             - name: visual-qontract-env
-              mountPath: /opt/visual-qontract/build/env/
+              mountPath: /opt/visual-qontract/build/
               readOnly: true
         volumes:
         - name: visual-qontract-env
@@ -109,7 +94,7 @@ objects:
             name: visual-qontract
             items:
             - key: env
-              path: env.js
+              path: env-config.js
 # Canary
 - apiVersion: apps/v1
   kind: Deployment
@@ -164,38 +149,23 @@ objects:
           imagePullPolicy: Always
           name: visual-qontract
           env:
-          - name: GRAPHQL_URI
-            valueFrom:
-              configMapKeyRef:
-                key: graphql.uri
-                name: visual-qontract
           - name: AUTHORIZATION
             valueFrom:
               secretKeyRef:
                   key: authorization
                   name: visual-qontract
-          - name: API_URI
-            valueFrom:
-              configMapKeyRef:
-                key: api.uri
-                name: visual-qontract
-          - name: API_AUTH
-            valueFrom:
-              secretKeyRef:
-                  key: api.auth
-                  name: visual-qontract
           ports:
           - containerPort: 8080
           livenessProbe:
             httpGet:
-              path: /graphql?query={__schema{types{name}}}
+              path: /
               port: 8080
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 3
           readinessProbe:
             httpGet:
-              path: /graphql?query={__schema{types{name}}}
+              path: /
               port: 8080
             initialDelaySeconds: 3
             periodSeconds: 10
@@ -208,7 +178,7 @@ objects:
               memory: ${MEMORY_LIMIT}
           volumeMounts:
             - name: visual-qontract-env
-              mountPath: /opt/visual-qontract/build/env/
+              mountPath: /opt/visual-qontract/build/
               readOnly: true
         volumes:
         - name: visual-qontract-env
@@ -216,7 +186,7 @@ objects:
             name: visual-qontract
             items:
             - key: env
-              path: env.js
+              path: env-config.js
 - apiVersion: v1
   kind: Service
   metadata:

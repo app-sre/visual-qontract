@@ -1,0 +1,32 @@
+services:
+  visual-app-interface:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: prod
+    image: visual-qontract-v2:latest
+    container_name: visual-app-interface
+    ports:
+      - "${HOST_PORT:-8080}:8080"
+    environment:
+      - AUTHORIZATION=${AUTHORIZATION:-}
+      - REACT_APP_GRAFANA_URL=${REACT_APP_GRAFANA_URL:-https://grafana.devshift.net}
+      - REACT_APP_SCHEMAS_DIR=${REACT_APP_SCHEMAS_DIR:-https://schemas.devshift.net}
+      - REACT_APP_DOCS_DIR_URL=${REACT_APP_DOCS_DIR_URL:-https://docs.devshift.net}
+      - REACT_APP_DATA_DIR_URL=${REACT_APP_DATA_DIR_URL:-https://data.devshift.net}
+      - REACT_APP_GRAPHQL_ENDPOINT=${REACT_APP_GRAPHQL_ENDPOINT:-https://app-interface.devshift.net/graphql}
+    env_file:
+      - .env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - visual-app-interface-network
+
+networks:
+  visual-app-interface-network:
+    driver: bridge
