@@ -138,7 +138,7 @@ const JenkinsInstances: React.FC = () => {
               {paginatedJenkinsInstances.map((instance: JenkinsInstance) => (
                 <Tr key={instance.path}>
                   <Td dataLabel="Name">
-                    <Link to={`/jenkins-instance/${encodeURIComponent(instance.path)}`} style={{ textDecoration: 'none' }}>
+                    <Link to={`/jenkins-instance${instance.path}`} style={{ textDecoration: 'none' }}>
                       <Button
                         variant="link"
                         style={{ padding: 0, fontSize: 'inherit', fontWeight: 'bold' }}

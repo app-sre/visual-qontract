@@ -169,7 +169,7 @@ const Notifications: React.FC = () => {
               {paginatedNotifications.map((notification: Notification) => (
                 <Tr key={notification.path}>
                   <Td dataLabel="Name">
-                    <Link to={`/notification/${encodeURIComponent(notification.path)}`} style={{ textDecoration: 'none' }}>
+                    <Link to={`/notification${notification.path}`} style={{ textDecoration: 'none' }}>
                       <Button
                         variant="link"
                         style={{ padding: 0, fontSize: 'inherit', fontWeight: 'bold' }}

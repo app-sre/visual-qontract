@@ -53,7 +53,7 @@ const UsersTable: React.FC<UsersTableProps> = ({
             {showName && (
               <Td>
                 <Link
-                  to={`/user/${encodeURIComponent(user.path)}`}
+                  to={`/user${user.path}`}
                   style={{ textDecoration: 'none' }}
                 >
                   <Button

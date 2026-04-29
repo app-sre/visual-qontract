@@ -145,7 +145,7 @@ const AWSGroups: React.FC = () => {
               {paginatedAWSGroups.map((group: AWSGroup) => (
                 <Tr key={group.path}>
                   <Td dataLabel="Name">
-                    <Link to={`/aws-group/${encodeURIComponent(group.path)}`} style={{ textDecoration: 'none' }}>
+                    <Link to={`/aws-group${group.path}`} style={{ textDecoration: 'none' }}>
                       <Button
                         variant="link"
                         style={{ padding: 0, fontSize: 'inherit', fontWeight: 'bold' }}

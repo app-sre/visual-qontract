@@ -134,7 +134,7 @@ const AWSAccounts: React.FC = () => {
               {paginatedAWSAccounts.map((account: AWSAccount) => (
                 <Tr key={account.path}>
                   <Td dataLabel="Name">
-                    <Link to={`/aws-account/${encodeURIComponent(account.path)}`} style={{ textDecoration: 'none' }}>
+                    <Link to={`/aws-account${account.path}`} style={{ textDecoration: 'none' }}>
                       <Button
                         variant="link"
                         style={{ padding: 0, fontSize: 'inherit', fontWeight: 'bold' }}

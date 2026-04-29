@@ -45,9 +45,9 @@ interface GitHubOrgData {
 }
 
 const GitHubOrg: React.FC = () => {
-  const { path } = useParams<{ path: string }>();
+  const { '*': path } = useParams<{ '*': string }>();
   const { loading, error, data } = useQuery<GitHubOrgData>(GET_GITHUBORG, {
-    variables: { path: decodeURIComponent(path || '') }
+    variables: { path: path ? `/${path}` : '' }
   });
 
   if (loading) {

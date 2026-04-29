@@ -116,8 +116,8 @@ interface RoleData {
 }
 
 const Role: React.FC = () => {
-  const { path } = useParams<{ path: string }>();
-  const decodedPath = path ? decodeURIComponent(path) : '';
+  const { '*': path } = useParams<{ '*': string }>();
+  const decodedPath = path ? `/${path}` : '';
 
   const { loading, error, data } = useQuery<RoleData>(GET_ROLE, {
     variables: { path: decodedPath },
@@ -276,7 +276,7 @@ const Role: React.FC = () => {
                     <Tr key={index}>
                       <Td>
                         <Link
-                          to={`/namespace/${encodeURIComponent(access.namespace!.path)}`}
+                          to={`/namespace${access.namespace!.path}`}
                           style={{ textDecoration: 'none' }}
                         >
                           <Button
@@ -289,7 +289,7 @@ const Role: React.FC = () => {
                       </Td>
                       <Td>
                         <Link
-                          to={`/cluster/${encodeURIComponent(access.namespace!.cluster.path)}`}
+                          to={`/cluster${access.namespace!.cluster.path}`}
                           style={{ textDecoration: 'none' }}
                         >
                           <Button
@@ -326,7 +326,7 @@ const Role: React.FC = () => {
                     <Tr key={index}>
                       <Td>
                         <Link
-                          to={`/cluster/${encodeURIComponent(access.cluster!.path)}`}
+                          to={`/cluster${access.cluster!.path}`}
                           style={{ textDecoration: 'none' }}
                         >
                           <Button

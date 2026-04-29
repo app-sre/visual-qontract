@@ -138,7 +138,7 @@ const Integrations: React.FC = () => {
               {paginatedIntegrations.map((integration: Integration) => (
                 <Tr key={integration.path}>
                   <Td dataLabel="Name">
-                    <Link to={`/integration/${encodeURIComponent(integration.path)}`} style={{ textDecoration: 'none' }}>
+                    <Link to={`/integration${integration.path}`} style={{ textDecoration: 'none' }}>
                       <Button
                         variant="link"
                         style={{ padding: 0, fontSize: 'inherit', fontWeight: 'bold' }}

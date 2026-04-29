@@ -155,7 +155,7 @@ const Dependencies: React.FC = () => {
               {paginatedDependencies.map((dependency: Dependency) => (
                 <Tr key={dependency.path}>
                   <Td dataLabel="Name">
-                    <Link to={`/dependency/${encodeURIComponent(dependency.path)}`} style={{ textDecoration: 'none' }}>
+                    <Link to={`/dependency${dependency.path}`} style={{ textDecoration: 'none' }}>
                       <Button
                         variant="link"
                         style={{ padding: 0, fontSize: 'inherit', fontWeight: 'bold' }}

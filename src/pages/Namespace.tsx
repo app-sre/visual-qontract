@@ -132,8 +132,8 @@ interface NamespaceData {
 }
 
 const Namespace: React.FC = () => {
-  const { namespacePath } = useParams<{ namespacePath: string }>();
-  const decodedPath = namespacePath ? decodeURIComponent(namespacePath) : '';
+  const { '*': path } = useParams<{ '*': string }>();
+  const decodedPath = path ? `/${path}` : '';
 
   const { loading, error, data } = useQuery<NamespaceData>(GET_NAMESPACE, {
     variables: { path: decodedPath },
@@ -265,7 +265,7 @@ const Namespace: React.FC = () => {
                   <DescriptionListTerm>Application</DescriptionListTerm>
                   <DescriptionListDescription>
                     <Link
-                      to={`/service/${encodeURIComponent(namespace.app.path)}`}
+                      to={`/service${namespace.app.path}`}
                       style={{ textDecoration: 'none' }}
                     >
                       <Button

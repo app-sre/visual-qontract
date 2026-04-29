@@ -41,9 +41,9 @@ interface IntegrationData {
 }
 
 const Integration: React.FC = () => {
-  const { path } = useParams<{ path: string }>();
+  const { '*': path } = useParams<{ '*': string }>();
   const { loading, error, data } = useQuery<IntegrationData>(GET_INTEGRATION, {
-    variables: { path: decodeURIComponent(path || '') }
+    variables: { path: path ? `/${path}` : '' }
   });
 
   if (loading) {

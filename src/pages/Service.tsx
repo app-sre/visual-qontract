@@ -346,8 +346,8 @@ interface ServiceData {
 }
 
 const Service: React.FC = () => {
-  const { servicePath } = useParams<{ servicePath: string }>();
-  const decodedPath = servicePath ? decodeURIComponent(servicePath) : '';
+  const { '*': path } = useParams<{ '*': string }>();
+  const decodedPath = path ? `/${path}` : '';
   const [namespaceSearchTerm, setNamespaceSearchTerm] = useState('');
 
   const { loading, error, data } = useQuery<ServiceData>(GET_SERVICE, {
@@ -822,7 +822,7 @@ const Service: React.FC = () => {
                       <Tr key={index}>
                         <Td>
                           <Link
-                            to={`/namespace/${encodeURIComponent(namespace.path)}`}
+                            to={`/namespace${namespace.path}`}
                             style={{ textDecoration: 'none' }}
                           >
                             <Button
@@ -912,7 +912,7 @@ const Service: React.FC = () => {
                       <Tr key={index}>
                         <Td>
                           <Link
-                            to={`/service/${encodeURIComponent(child.path)}`}
+                            to={`/service${child.path}`}
                             style={{ textDecoration: 'none' }}
                           >
                             <Button

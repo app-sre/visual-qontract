@@ -157,7 +157,7 @@ const Namespaces: React.FC = () => {
                 <Tr key={namespace.path}>
                   <Td dataLabel="Namespace Name">
                     <Link
-                      to={`/namespace/${encodeURIComponent(namespace.path)}`}
+                      to={`/namespace${namespace.path}`}
                       style={{ textDecoration: 'none' }}
                     >
                       <Button
@@ -184,7 +184,7 @@ const Namespaces: React.FC = () => {
                   </Td>
                   <Td dataLabel="App">
                     <Link
-                      to={`/service/${encodeURIComponent(namespace.app.path)}`}
+                      to={`/service${namespace.app.path}`}
                       style={{ textDecoration: 'none' }}
                     >
                       <Button
