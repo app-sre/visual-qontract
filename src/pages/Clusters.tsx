@@ -283,7 +283,7 @@ const Clusters: React.FC = () => {
                   <Td>
                     <div>
                       <Link
-                        to={`/cluster/${encodeURIComponent(cluster.path)}`}
+                        to={`/cluster${cluster.path}`}
                         style={{ textDecoration: 'none' }}
                       >
                         <Button
@@ -385,7 +385,7 @@ const Clusters: React.FC = () => {
                               padding: '0.125rem 0'
                             }}>
                               <Link
-                                to={`/service/${encodeURIComponent(app.path)}`}
+                                to={`/service${app.path}`}
                                 style={{ textDecoration: 'none' }}
                               >
                                 <Button
@@ -470,7 +470,7 @@ const Clusters: React.FC = () => {
                       <Td>
                         <div>
                           <Link
-                            to={`/cluster/${encodeURIComponent(cluster.path)}`}
+                            to={`/cluster${cluster.path}`}
                             style={{ textDecoration: 'none' }}
                           >
                             <Button
@@ -558,7 +558,7 @@ const Clusters: React.FC = () => {
                                   padding: '0.125rem 0'
                                 }}>
                                   <Link
-                                    to={`/service/${encodeURIComponent(app.path)}`}
+                                    to={`/service${app.path}`}
                                     style={{ textDecoration: 'none' }}
                                   >
                                     <Button

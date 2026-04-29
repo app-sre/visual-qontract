@@ -43,9 +43,9 @@ interface QuayOrgData {
 }
 
 const QuayOrg: React.FC = () => {
-  const { path } = useParams<{ path: string }>();
+  const { '*': path } = useParams<{ '*': string }>();
   const { loading, error, data } = useQuery<QuayOrgData>(GET_QUAYORG, {
-    variables: { path: decodeURIComponent(path || '') }
+    variables: { path: path ? `/${path}` : '' }
   });
 
   if (loading) {

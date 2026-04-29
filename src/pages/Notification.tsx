@@ -62,9 +62,9 @@ interface NotificationData {
 }
 
 const Notification: React.FC = () => {
-  const { path } = useParams<{ path: string }>();
+  const { '*': path } = useParams<{ '*': string }>();
   const { loading, error, data } = useQuery<NotificationData>(GET_NOTIFICATION, {
-    variables: { path: decodeURIComponent(path || '') }
+    variables: { path: path ? `/${path}` : '' }
   });
 
   if (loading) {
@@ -169,7 +169,7 @@ const Notification: React.FC = () => {
               <List>
                 {notification.to.users.map((user) => (
                   <ListItem key={user.path}>
-                    <Link to={`/user/${encodeURIComponent(user.path)}`} style={{ textDecoration: 'none' }}>
+                    <Link to={`/user${user.path}`} style={{ textDecoration: 'none' }}>
                       <Button
                         variant="link"
                         style={{ padding: 0, fontSize: 'inherit', fontWeight: 'bold' }}

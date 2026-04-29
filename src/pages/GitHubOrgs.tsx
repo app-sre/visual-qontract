@@ -134,7 +134,7 @@ const GitHubOrgs: React.FC = () => {
               {paginatedGitHubOrgs.map((org: GitHubOrg) => (
                 <Tr key={org.path}>
                   <Td dataLabel="Name">
-                    <Link to={`/github-org/${encodeURIComponent(org.path)}`} style={{ textDecoration: 'none' }}>
+                    <Link to={`/github-org${org.path}`} style={{ textDecoration: 'none' }}>
                       <Button
                         variant="link"
                         style={{ padding: 0, fontSize: 'inherit', fontWeight: 'bold' }}

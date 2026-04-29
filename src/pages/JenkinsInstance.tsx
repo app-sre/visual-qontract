@@ -41,9 +41,9 @@ interface JenkinsInstanceData {
 }
 
 const JenkinsInstance: React.FC = () => {
-  const { path } = useParams<{ path: string }>();
+  const { '*': path } = useParams<{ '*': string }>();
   const { loading, error, data } = useQuery<JenkinsInstanceData>(GET_INSTANCE, {
-    variables: { path: decodeURIComponent(path || '') }
+    variables: { path: path ? `/${path}` : '' }
   });
 
   if (loading) {

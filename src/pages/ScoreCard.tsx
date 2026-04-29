@@ -62,9 +62,9 @@ interface ScoreCardData {
 }
 
 const ScoreCard: React.FC = () => {
-  const { path } = useParams<{ path: string }>();
+  const { '*': path } = useParams<{ '*': string }>();
   const { loading, error, data } = useQuery<ScoreCardData>(GET_SCORECARD, {
-    variables: { path: decodeURIComponent(path || '') }
+    variables: { path: path ? `/${path}` : '' }
   });
 
   const getStatusIcon = (status: string) => {

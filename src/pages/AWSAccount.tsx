@@ -43,8 +43,8 @@ interface AWSAccountData {
 }
 
 const AWSAccount: React.FC = () => {
-  const { path } = useParams<{ path: string }>();
-  const decodedPath = path ? decodeURIComponent(path) : '';
+  const { '*': path } = useParams<{ '*': string }>();
+  const decodedPath = path ? `/${path}` : '';
 
   const { loading, error, data } = useQuery<AWSAccountData>(GET_AWSACCOUNT, {
     variables: { path: decodedPath },

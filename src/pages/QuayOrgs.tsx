@@ -134,7 +134,7 @@ const QuayOrgs: React.FC = () => {
               {paginatedQuayOrgs.map((org: QuayOrg) => (
                 <Tr key={org.path}>
                   <Td dataLabel="Name">
-                    <Link to={`/quay-org/${encodeURIComponent(org.path)}`} style={{ textDecoration: 'none' }}>
+                    <Link to={`/quay-org${org.path}`} style={{ textDecoration: 'none' }}>
                       <Button
                         variant="link"
                         style={{ padding: 0, fontSize: 'inherit', fontWeight: 'bold' }}

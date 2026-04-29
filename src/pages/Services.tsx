@@ -221,7 +221,7 @@ const Services: React.FC = () => {
                 <Tr key={service.path}>
                   <Td dataLabel="Service Name">
                     <Link 
-                      to={`/service/${encodeURIComponent(service.path)}`}
+                      to={`/service${service.path}`}
                       style={{ textDecoration: 'none' }}
                     >
                       <Button
@@ -240,7 +240,7 @@ const Services: React.FC = () => {
                   <Td dataLabel="Parent App">
                     {service.parentApp ? (
                       <Link
-                        to={`/service/${encodeURIComponent(service.parentApp.path)}`}
+                        to={`/service${service.parentApp.path}`}
                         style={{ textDecoration: 'none' }}
                       >
                         <Button

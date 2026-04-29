@@ -139,7 +139,7 @@ const Permissions: React.FC = () => {
                 <Tr key={permission.path}>
                   <Td dataLabel="Name">
                     <Link
-                      to={`/permission/${encodeURIComponent(permission.path)}`}
+                      to={`/permission${permission.path}`}
                       style={{ textDecoration: 'none' }}
                     >
                       <Button

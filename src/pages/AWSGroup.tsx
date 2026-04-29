@@ -55,9 +55,9 @@ interface AWSGroupData {
 }
 
 const AWSGroup: React.FC = () => {
-  const { path } = useParams<{ path: string }>();
+  const { '*': path } = useParams<{ '*': string }>();
   const { loading, error, data } = useQuery<AWSGroupData>(GET_AWSGROUP, {
-    variables: { path: decodeURIComponent(path || '') }
+    variables: { path: path ? `/${path}` : '' }
   });
 
   if (loading) {
@@ -152,7 +152,7 @@ const AWSGroup: React.FC = () => {
             <div style={{ display: 'grid', gap: '0.5rem' }}>
               <div>
                 <strong>Account Name:</strong>{' '}
-                <Link to={`/aws-account/${encodeURIComponent(group.account.path)}`} style={{ textDecoration: 'none' }}>
+                <Link to={`/aws-account${group.account.path}`} style={{ textDecoration: 'none' }}>
                   <Button
                     variant="link"
                     style={{ padding: 0, fontSize: 'inherit', fontWeight: 'bold' }}

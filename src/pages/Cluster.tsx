@@ -152,8 +152,8 @@ interface ClusterData {
 }
 
 const Cluster: React.FC = () => {
-  const { path } = useParams<{ path: string }>();
-  const decodedPath = path ? decodeURIComponent(path) : '';
+  const { '*': path } = useParams<{ '*': string }>();
+  const decodedPath = path ? `/${path}` : '';
 
   const { loading, error, data } = useQuery<ClusterData>(GET_CLUSTER, {
     variables: { path: decodedPath },
@@ -436,7 +436,7 @@ const Cluster: React.FC = () => {
                     <Tr key={index}>
                       <Td>
                         <Link
-                          to={`/namespace/${encodeURIComponent(namespace.path)}`}
+                          to={`/namespace${namespace.path}`}
                           style={{ textDecoration: 'none' }}
                         >
                           <Button
@@ -484,7 +484,7 @@ const Cluster: React.FC = () => {
                       <Tr key={index}>
                         <Td>
                           <Link
-                            to={`/role/${encodeURIComponent(role.path)}`}
+                            to={`/role${role.path}`}
                             style={{ textDecoration: 'none' }}
                           >
                             <Button

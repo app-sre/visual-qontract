@@ -73,8 +73,8 @@ interface PermissionData {
 }
 
 const Permission: React.FC = () => {
-  const { path } = useParams<{ path: string }>();
-  const decodedPath = path ? decodeURIComponent(path) : '';
+  const { '*': path } = useParams<{ '*': string }>();
+  const decodedPath = path ? `/${path}` : '';
 
   const { loading, error, data } = useQuery<PermissionData>(GET_PERMISSION, {
     variables: { path: decodedPath },
@@ -202,7 +202,7 @@ const Permission: React.FC = () => {
                     <Tr key={index}>
                       <Td>
                         <Link
-                          to={`/role/${encodeURIComponent(role.path)}`}
+                          to={`/role${role.path}`}
                           style={{ textDecoration: 'none' }}
                         >
                           <Button

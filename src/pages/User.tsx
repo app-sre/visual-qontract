@@ -63,8 +63,8 @@ interface UserData {
 }
 
 const User: React.FC = () => {
-  const { path } = useParams<{ path: string }>();
-  const decodedPath = path ? decodeURIComponent(path) : '';
+  const { '*': path } = useParams<{ '*': string }>();
+  const decodedPath = path ? `/${path}` : '';
 
   const { loading, error, data } = useQuery<UserData>(GET_USER, {
     variables: { path: decodedPath },
@@ -251,7 +251,7 @@ const User: React.FC = () => {
                     <Tr key={index}>
                       <Td>
                         <Link
-                          to={`/role/${encodeURIComponent(role.path)}`}
+                          to={`/role${role.path}`}
                           style={{ textDecoration: 'none' }}
                         >
                           <Button

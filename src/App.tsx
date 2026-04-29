@@ -129,35 +129,35 @@ function App() {
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/services" element={<Services />} />
-                  <Route path="/service/:servicePath" element={<Service />} />
+                  <Route path="/service/*" element={<Service />} />
                   <Route path="/clusters" element={<Clusters />} />
-                  <Route path="/cluster/:path" element={<Cluster />} />
+                  <Route path="/cluster/*" element={<Cluster />} />
                   <Route path="/namespaces" element={<Namespaces />} />
-                  <Route path="/namespace/:namespacePath" element={<Namespace />} />
+                  <Route path="/namespace/*" element={<Namespace />} />
                   <Route path="/roles" element={<Roles />} />
-                  <Route path="/role/:path" element={<Role />} />
+                  <Route path="/role/*" element={<Role />} />
                   <Route path="/users" element={<Users />} />
-                  <Route path="/user/:path" element={<User />} />
+                  <Route path="/user/*" element={<User />} />
                   <Route path="/permissions" element={<Permissions />} />
-                  <Route path="/permission/:path" element={<Permission />} />
+                  <Route path="/permission/*" element={<Permission />} />
                   <Route path="/aws-accounts" element={<AWSAccounts />} />
-                  <Route path="/aws-account/:path" element={<AWSAccount />} />
+                  <Route path="/aws-account/*" element={<AWSAccount />} />
                   <Route path="/aws-groups" element={<AWSGroups />} />
-                  <Route path="/aws-group/:path" element={<AWSGroup />} />
+                  <Route path="/aws-group/*" element={<AWSGroup />} />
                   <Route path="/integrations" element={<Integrations />} />
-                  <Route path="/integration/:path" element={<Integration />} />
+                  <Route path="/integration/*" element={<Integration />} />
                   <Route path="/github-orgs" element={<GitHubOrgs />} />
-                  <Route path="/github-org/:path" element={<GitHubOrg />} />
+                  <Route path="/github-org/*" element={<GitHubOrg />} />
                   <Route path="/quay-orgs" element={<QuayOrgs />} />
-                  <Route path="/quay-org/:path" element={<QuayOrg />} />
+                  <Route path="/quay-org/*" element={<QuayOrg />} />
                   <Route path="/jenkins-instances" element={<JenkinsInstances />} />
-                  <Route path="/jenkins-instance/:path" element={<JenkinsInstance />} />
+                  <Route path="/jenkins-instance/*" element={<JenkinsInstance />} />
                   <Route path="/dependencies" element={<Dependencies />} />
-                  <Route path="/dependency/:path" element={<Dependency />} />
+                  <Route path="/dependency/*" element={<Dependency />} />
                   <Route path="/notifications" element={<Notifications />} />
-                  <Route path="/notification/:path" element={<Notification />} />
+                  <Route path="/notification/*" element={<Notification />} />
                   <Route path="/scorecards" element={<ScoreCards />} />
-                  <Route path="/scorecard/:path" element={<ScoreCard />} />
+                  <Route path="/scorecard/*" element={<ScoreCard />} />
                   <Route path="/status" element={<Status />} />
                 </Routes>
               </ErrorBoundary>

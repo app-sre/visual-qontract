@@ -140,7 +140,7 @@ const ScoreCards: React.FC = () => {
               {paginatedScoreCards.map((scorecard: ScoreCard) => (
                 <Tr key={scorecard.path}>
                   <Td dataLabel="App Name">
-                    <Link to={`/scorecard/${encodeURIComponent(scorecard.path)}`} style={{ textDecoration: 'none' }}>
+                    <Link to={`/scorecard${scorecard.path}`} style={{ textDecoration: 'none' }}>
                       <Button
                         variant="link"
                         style={{ padding: 0, fontSize: 'inherit', fontWeight: 'bold' }}

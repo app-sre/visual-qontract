@@ -135,7 +135,7 @@ const Roles: React.FC = () => {
                 <Tr key={role.path}>
                   <Td dataLabel="Name">
                     <Link
-                      to={`/role/${encodeURIComponent(role.path)}`}
+                      to={`/role${role.path}`}
                       style={{ textDecoration: 'none' }}
                     >
                       <Button
