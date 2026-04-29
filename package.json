@@ -58,7 +58,7 @@
     "resolve": "^1.20.0",
     "resolve-url-loader": "^4.0.0",
     "semver": "^7.3.5",
-    "source-map-loader": "^3.0.0",
+    "source-map-loader": "^5.0.0",
     "style-loader": "^3.3.1",
     "terser-webpack-plugin": "^5.2.5",
     "typescript": "^4.9.5",
