@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client/react';
 import { gql } from '@apollo/client';
@@ -27,7 +27,7 @@ import {
   Tbody,
   Td
 } from '@patternfly/react-table';
-import { ExternalLinkAltIcon } from '@patternfly/react-icons';
+import { ExternalLinkAltIcon, CopyIcon } from '@patternfly/react-icons';
 import GrafanaUrl from '../components/GrafanaUrl';
 import LoadingState from '../components/LoadingState';
 import ErrorState from '../components/ErrorState';
@@ -154,11 +154,18 @@ interface ClusterData {
 const Cluster: React.FC = () => {
   const { '*': path } = useParams<{ '*': string }>();
   const decodedPath = path ? `/${path}` : '';
+  const [copied, setCopied] = useState(false);
 
   const { loading, error, data } = useQuery<ClusterData>(GET_CLUSTER, {
     variables: { path: decodedPath },
     skip: !decodedPath
   });
+
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   if (loading) {
     return <LoadingState message="Loading cluster details..." />;
@@ -262,6 +269,52 @@ const Cluster: React.FC = () => {
                       <DescriptionListDescription>{cluster.jumpHost.hostname}</DescriptionListDescription>
                     </DescriptionListGroup>
                   )}
+                  {cluster.jumpHost && cluster.network?.vpc && (
+                    <DescriptionListGroup>
+                      <DescriptionListTerm>Sshuttle Command</DescriptionListTerm>
+                      <DescriptionListDescription>
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'stretch',
+                          gap: '0.5rem',
+                          maxWidth: 'fit-content'
+                        }}>
+                          <code style={{
+                            fontFamily: '"JetBrains Mono", "Fira Code", "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace',
+                            fontSize: '0.875rem',
+                            padding: '0.75rem 1rem',
+                            backgroundColor: 'var(--pf-v6-global--BackgroundColor--200)',
+                            border: '1px solid var(--pf-v6-global--BorderColor--100)',
+                            borderRadius: '6px',
+                            color: 'var(--pf-v6-global--Color--100)',
+                            display: 'block',
+                            lineHeight: '1.5',
+                            whiteSpace: 'nowrap',
+                            overflow: 'auto',
+                            boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
+                            transition: 'all 0.2s ease'
+                          }}>
+                            sshuttle -r {cluster.jumpHost.hostname} {cluster.network.vpc}
+                          </code>
+                          <Button
+                            variant="control"
+                            aria-label={copied ? "Copied!" : "Copy command"}
+                            onClick={() => handleCopy(`sshuttle -r ${cluster.jumpHost!.hostname} ${cluster.network!.vpc}`)}
+                            icon={<CopyIcon />}
+                            style={{
+                              transition: 'all 0.2s ease',
+                              minWidth: '2.5rem',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center'
+                            }}
+                          >
+                            {copied ? '✓' : ''}
+                          </Button>
+                        </div>
+                      </DescriptionListDescription>
+                    </DescriptionListGroup>
+                  )}
                 </DescriptionList>
               </GridItem>
               <GridItem span={6}>
@@ -294,65 +347,115 @@ const Cluster: React.FC = () => {
         <Card>
           <CardTitle>External Links</CardTitle>
           <CardBody>
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+            <DescriptionList>
               {cluster.consoleUrl && (
-                <Button
-                  variant="secondary"
-                  component="a"
-                  href={cluster.consoleUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  icon={<ExternalLinkAltIcon />}
-                  iconPosition="right"
-                >
-                  Console
-                </Button>
+                <DescriptionListGroup>
+                  <DescriptionListTerm>
+                    Console
+                  </DescriptionListTerm>
+                  <DescriptionListDescription>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <a href={cluster.consoleUrl} target="_blank" rel="noopener noreferrer">
+                        {cluster.consoleUrl}
+                      </a>
+                      <Button
+                        variant="plain"
+                        aria-label="Copy Console URL"
+                        onClick={() => navigator.clipboard.writeText(cluster.consoleUrl || '')}
+                        icon={<CopyIcon />}
+                        style={{ padding: '0.25rem' }}
+                      />
+                    </div>
+                  </DescriptionListDescription>
+                </DescriptionListGroup>
               )}
-              <GrafanaUrl
-                cluster={cluster.name}
-                url={cluster.grafanaUrl}
-                variant="secondary"
-              />
+              {cluster.grafanaUrl && (
+                <DescriptionListGroup>
+                  <DescriptionListTerm>
+                    Grafana
+                  </DescriptionListTerm>
+                  <DescriptionListDescription>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <GrafanaUrl
+                        cluster={cluster.name}
+                        url={cluster.grafanaUrl}
+                        style={{ padding: 0 }}
+                      />
+                      <Button
+                        variant="plain"
+                        aria-label="Copy Grafana URL"
+                        onClick={() => navigator.clipboard.writeText(cluster.grafanaUrl || '')}
+                        icon={<CopyIcon />}
+                        style={{ padding: '0.25rem' }}
+                      />
+                    </div>
+                  </DescriptionListDescription>
+                </DescriptionListGroup>
+              )}
               {cluster.prometheusUrl && (
-                <Button
-                  variant="secondary"
-                  component="a"
-                  href={cluster.prometheusUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  icon={<ExternalLinkAltIcon />}
-                  iconPosition="right"
-                >
-                  Prometheus
-                </Button>
+                <DescriptionListGroup>
+                  <DescriptionListTerm>
+                    Prometheus
+                  </DescriptionListTerm>
+                  <DescriptionListDescription>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <a href={cluster.prometheusUrl} target="_blank" rel="noopener noreferrer">
+                        {cluster.prometheusUrl}
+                      </a>
+                      <Button
+                        variant="plain"
+                        aria-label="Copy Prometheus URL"
+                        onClick={() => navigator.clipboard.writeText(cluster.prometheusUrl || '')}
+                        icon={<CopyIcon />}
+                        style={{ padding: '0.25rem' }}
+                      />
+                    </div>
+                  </DescriptionListDescription>
+                </DescriptionListGroup>
               )}
               {cluster.alertmanagerUrl && (
-                <Button
-                  variant="secondary"
-                  component="a"
-                  href={cluster.alertmanagerUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  icon={<ExternalLinkAltIcon />}
-                  iconPosition="right"
-                >
-                  Alertmanager
-                </Button>
+                <DescriptionListGroup>
+                  <DescriptionListTerm>
+                    Alertmanager
+                  </DescriptionListTerm>
+                  <DescriptionListDescription>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <a href={cluster.alertmanagerUrl} target="_blank" rel="noopener noreferrer">
+                        {cluster.alertmanagerUrl}
+                      </a>
+                      <Button
+                        variant="plain"
+                        aria-label="Copy Alertmanager URL"
+                        onClick={() => navigator.clipboard.writeText(cluster.alertmanagerUrl || '')}
+                        icon={<CopyIcon />}
+                        style={{ padding: '0.25rem' }}
+                      />
+                    </div>
+                  </DescriptionListDescription>
+                </DescriptionListGroup>
               )}
               {cluster.kibanaUrl && (
-                <Button
-                  variant="secondary"
-                  component="a"
-                  href={cluster.kibanaUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  icon={<ExternalLinkAltIcon />}
-                  iconPosition="right"
-                >
-                  Kibana
-                </Button>
+                <DescriptionListGroup>
+                  <DescriptionListTerm>
+                    Kibana
+                  </DescriptionListTerm>
+                  <DescriptionListDescription>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <a href={cluster.kibanaUrl} target="_blank" rel="noopener noreferrer">
+                        {cluster.kibanaUrl}
+                      </a>
+                      <Button
+                        variant="plain"
+                        aria-label="Copy Kibana URL"
+                        onClick={() => navigator.clipboard.writeText(cluster.kibanaUrl || '')}
+                        icon={<CopyIcon />}
+                        style={{ padding: '0.25rem' }}
+                      />
+                    </div>
+                  </DescriptionListDescription>
+                </DescriptionListGroup>
               )}
-            </div>
+            </DescriptionList>
           </CardBody>
         </Card>
 
@@ -363,15 +466,15 @@ const Cluster: React.FC = () => {
             <CardBody>
               <DescriptionList isHorizontal>
                 <DescriptionListGroup>
-                  <DescriptionListTerm>VPC</DescriptionListTerm>
+                  <DescriptionListTerm>VPC CIDR</DescriptionListTerm>
                   <DescriptionListDescription>{cluster.network.vpc || '-'}</DescriptionListDescription>
                 </DescriptionListGroup>
                 <DescriptionListGroup>
-                  <DescriptionListTerm>Service</DescriptionListTerm>
+                  <DescriptionListTerm>Service CIDR</DescriptionListTerm>
                   <DescriptionListDescription>{cluster.network.service || '-'}</DescriptionListDescription>
                 </DescriptionListGroup>
                 <DescriptionListGroup>
-                  <DescriptionListTerm>Pod</DescriptionListTerm>
+                  <DescriptionListTerm>Pod CIDR</DescriptionListTerm>
                   <DescriptionListDescription>{cluster.network.pod || '-'}</DescriptionListDescription>
                 </DescriptionListGroup>
               </DescriptionList>
