@@ -1,5 +1,5 @@
 ### base image
-FROM registry.access.redhat.com/ubi9/nodejs-20@sha256:a30f4d8b632eb048c294b1e1fc71c1e574e14ee89cef73101d76d561420f6504 AS base
+FROM registry.access.redhat.com/ubi9/nodejs-24-minimal:9.7-1776863710@sha256:fc1fae40e750f420ece73963be06e42019de4d90ad56172ce10834c7458f3c05 AS base
 
 USER root
 ENV CI=1

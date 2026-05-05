@@ -16,7 +16,6 @@
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
-    "@types/node": "^16.18.126",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
     "babel-jest": "^27.4.2",
@@ -93,6 +92,7 @@
     ]
   },
   "devDependencies": {
+    "@types/node": "^24.12.2",
     "@types/react-router-dom": "^5.3.3",
     "sass-loader": "^16.0.7"
   },
