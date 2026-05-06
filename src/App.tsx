@@ -59,7 +59,7 @@ function App() {
 
   React.useEffect(() => {
     const handleResize = () => {
-      const mobile = window.innerWidth < 768;
+      const mobile = window.innerWidth < 1200;
       setIsMobile(mobile);
       if (mobile) {
         setIsSidebarOpen(false);
@@ -90,14 +90,20 @@ function App() {
           <BarsIcon />
         </PageToggleButton>
       </MastheadToggle>
-      <MastheadMain>
+      <MastheadMain style={{ flex: '1 1 auto', minWidth: 0 }}>
         <MastheadContent>
           <div className="app-title">
             Visual App-Interface
           </div>
         </MastheadContent>
       </MastheadMain>
-      <div style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)' }}>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        marginLeft: 'auto',
+        paddingRight: '1rem',
+        flex: '0 0 auto',
+      }}>
         <ThemeSwitch />
       </div>
     </Masthead>

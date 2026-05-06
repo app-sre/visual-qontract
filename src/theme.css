@@ -1,7 +1,10 @@
-/* App title styling */
+/* App title styling - responsive */
 .app-title {
-  font-size: 1.5rem;
+  font-size: clamp(1rem, 4vw, 1.5rem);
   font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Dark theme custom properties for PatternFly v6 */
@@ -51,14 +54,26 @@
   color: #000000;
 }
 
-/* Mobile responsive styles */
-@media (max-width: 767px) {
-  /* Hide hamburger toggle button on desktop, show on mobile */
+/* Small screens - adjust padding and spacing */
+@media (max-width: 576px) {
+  .pf-v6-c-page__main-section {
+    padding: 1rem !important;
+  }
+
+  .app-title {
+    font-size: 1rem !important;
+    max-width: 150px;
+  }
+}
+
+/* Tablet and smaller - collapsible sidebar */
+@media (max-width: 1199px) {
+  /* Show hamburger toggle button */
   .pf-v6-c-masthead__toggle {
     display: block !important;
   }
-  
-  /* Ensure sidebar behaves properly on mobile */
+
+  /* Ensure sidebar behaves properly on smaller screens */
   .pf-v6-c-page__sidebar {
     position: fixed;
     z-index: 1000;
@@ -66,12 +81,12 @@
     transform: translateX(-100%);
     transition: transform 0.3s ease-in-out;
   }
-  
+
   .pf-v6-c-page__sidebar.pf-m-expanded {
     transform: translateX(0);
   }
-  
-  /* Add overlay when sidebar is open on mobile */
+
+  /* Add overlay when sidebar is open */
   .pf-v6-c-page__sidebar.pf-m-expanded::before {
     content: '';
     position: fixed;
@@ -82,11 +97,36 @@
     background-color: rgba(0, 0, 0, 0.5);
     z-index: -1;
   }
+
+  /* Reduce page section padding */
+  .pf-v6-c-page__main-section {
+    padding: 1.5rem !important;
+  }
 }
 
-@media (min-width: 768px) {
+/* Desktop - sidebar always visible */
+@media (min-width: 1200px) {
   /* Hide hamburger toggle button on desktop */
   .pf-v6-c-masthead__toggle {
     display: none !important;
   }
+}
+
+/* Ensure cards don't get too small */
+.pf-v6-c-card {
+  min-width: 0;
+  width: 100%;
+}
+
+/* Ensure titles and headings are responsive */
+h1, .pf-v6-c-title {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+/* Make page content responsive */
+#main-content {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
 }

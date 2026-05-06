@@ -71,7 +71,7 @@ const Home: React.FC = () => {
       </Title>
 
       <Grid hasGutter>
-        <GridItem span={4}>
+        <GridItem sm={12} md={6} lg={4}>
           <Card>
             <CardTitle>
               <Link to="/services" style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -84,7 +84,7 @@ const Home: React.FC = () => {
           </Card>
         </GridItem>
 
-        <GridItem span={4}>
+        <GridItem sm={12} md={6} lg={4}>
           <Card>
             <CardTitle>
               <Link to="/clusters" style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -97,7 +97,7 @@ const Home: React.FC = () => {
           </Card>
         </GridItem>
 
-        <GridItem span={4}>
+        <GridItem sm={12} md={6} lg={4}>
           <Card>
             <CardTitle>
               <Link to="/namespaces" style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -110,7 +110,7 @@ const Home: React.FC = () => {
           </Card>
         </GridItem>
 
-        <GridItem span={4}>
+        <GridItem sm={12} md={6} lg={4}>
           <Card>
             <CardTitle>
               <Link to="/roles" style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -123,7 +123,7 @@ const Home: React.FC = () => {
           </Card>
         </GridItem>
 
-        <GridItem span={4}>
+        <GridItem sm={12} md={6} lg={4}>
           <Card>
             <CardTitle>
               <Link to="/users" style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -136,7 +136,7 @@ const Home: React.FC = () => {
           </Card>
         </GridItem>
 
-        <GridItem span={4}>
+        <GridItem sm={12} md={6} lg={4}>
           <Card>
             <CardTitle>
               <Link to="/permissions" style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -149,7 +149,7 @@ const Home: React.FC = () => {
           </Card>
         </GridItem>
 
-        <GridItem span={4}>
+        <GridItem sm={12} md={6} lg={4}>
           <Card>
             <CardTitle>
               <Link to="/aws-accounts" style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -162,7 +162,7 @@ const Home: React.FC = () => {
           </Card>
         </GridItem>
 
-        <GridItem span={4}>
+        <GridItem sm={12} md={6} lg={4}>
           <Card>
             <CardTitle>
               <Link to="/aws-groups" style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -175,7 +175,7 @@ const Home: React.FC = () => {
           </Card>
         </GridItem>
 
-        <GridItem span={4}>
+        <GridItem sm={12} md={6} lg={4}>
           <Card>
             <CardTitle>
               <Link to="/integrations" style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -188,7 +188,7 @@ const Home: React.FC = () => {
           </Card>
         </GridItem>
 
-        <GridItem span={4}>
+        <GridItem sm={12} md={6} lg={4}>
           <Card>
             <CardTitle>
               <Link to="/github-orgs" style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -201,7 +201,7 @@ const Home: React.FC = () => {
           </Card>
         </GridItem>
 
-        <GridItem span={4}>
+        <GridItem sm={12} md={6} lg={4}>
           <Card>
             <CardTitle>
               <Link to="/quay-orgs" style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -214,7 +214,7 @@ const Home: React.FC = () => {
           </Card>
         </GridItem>
 
-        <GridItem span={4}>
+        <GridItem sm={12} md={6} lg={4}>
           <Card>
             <CardTitle>
               <Link to="/jenkins-instances" style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -227,7 +227,7 @@ const Home: React.FC = () => {
           </Card>
         </GridItem>
 
-        <GridItem span={4}>
+        <GridItem sm={12} md={6} lg={4}>
           <Card>
             <CardTitle>
               <Link to="/dependencies" style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -240,7 +240,7 @@ const Home: React.FC = () => {
           </Card>
         </GridItem>
 
-        <GridItem span={4}>
+        <GridItem sm={12} md={6} lg={4}>
           <Card>
             <CardTitle>
               <Link to="/notifications" style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -253,7 +253,7 @@ const Home: React.FC = () => {
           </Card>
         </GridItem>
 
-        <GridItem span={4}>
+        <GridItem sm={12} md={6} lg={4}>
           <Card>
             <CardTitle>
               <Link to="/scorecards" style={{ textDecoration: 'none', color: 'inherit' }}>
