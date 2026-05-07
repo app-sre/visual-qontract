@@ -384,6 +384,14 @@ const Service: React.FC = () => {
     );
   }, [service?.namespaces, namespaceSearchTerm]);
 
+  const filteredSaasFiles = useMemo(() => {
+    if (!data?.saas_files_v2 || !service) return [];
+
+    return data.saas_files_v2.filter((saasFile) =>
+      saasFile.app.name === service.name
+    );
+  }, [data?.saas_files_v2, service]);
+
   if (loading) {
     return <LoadingState message="Loading service details..." />;
   }
@@ -642,7 +650,7 @@ const Service: React.FC = () => {
         )}
 
         {/* SaaS Files */}
-        {data?.saas_files_v2 && (
+        {filteredSaasFiles.length > 0 && (
           <GridItem span={12}>
             <Card>
               <CardTitle>SaaS Files</CardTitle>
@@ -655,14 +663,14 @@ const Service: React.FC = () => {
                     </Tr>
                   </Thead>
                   <Tbody>
-                    {data?.saas_files_v2?.length === 0 ? (
+                    {filteredSaasFiles.length === 0 ? (
                       <Tr>
                         <Td colSpan={2} style={{ textAlign: 'center', padding: '2rem' }}>
                           No SaaS files found for this service
                         </Td>
                       </Tr>
                     ) : (
-                      data?.saas_files_v2?.map((saasFile, index) => {
+                      filteredSaasFiles.map((saasFile, index) => {
                       const pp_cluster_console_url = saasFile.pipelinesProvider?.namespace?.cluster?.consoleUrl;
                       const pp_ns_name = saasFile.pipelinesProvider?.namespace?.name;
 
