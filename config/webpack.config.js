@@ -100,7 +100,7 @@ module.exports = function (webpackEnv) {
   const shouldUseReactRefresh = env.raw.FAST_REFRESH;
 
   // common function to get style loaders
-  const getStyleLoaders = (cssOptions, preProcessor) => {
+  const getStyleLoaders = (cssOptions) => {
     const loaders = [
       isEnvDevelopment && require.resolve('style-loader'),
       isEnvProduction && {
@@ -161,23 +161,6 @@ module.exports = function (webpackEnv) {
         },
       },
     ].filter(Boolean);
-    if (preProcessor) {
-      loaders.push(
-        {
-          loader: require.resolve('resolve-url-loader'),
-          options: {
-            sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
-            root: paths.appSrc,
-          },
-        },
-        {
-          loader: require.resolve(preProcessor),
-          options: {
-            sourceMap: true,
-          },
-        }
-      );
-    }
     return loaders;
   };
 
@@ -368,32 +351,6 @@ module.exports = function (webpackEnv) {
                 dataUrlCondition: {
                   maxSize: imageInlineSizeLimit,
                 },
-              },
-            },
-            {
-              test: /\.svg$/,
-              use: [
-                {
-                  loader: require.resolve('@svgr/webpack'),
-                  options: {
-                    prettier: false,
-                    svgo: false,
-                    svgoConfig: {
-                      plugins: [{ removeViewBox: false }],
-                    },
-                    titleProp: true,
-                    ref: true,
-                  },
-                },
-                {
-                  loader: require.resolve('file-loader'),
-                  options: {
-                    name: 'static/media/[name].[hash].[ext]',
-                  },
-                },
-              ],
-              issuer: {
-                and: [/\.(ts|tsx|js|jsx|md|mdx)$/],
               },
             },
             // Process application JS with Babel.
