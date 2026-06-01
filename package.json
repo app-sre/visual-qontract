@@ -10,7 +10,6 @@
     "@patternfly/react-icons": "^6.3.1",
     "@patternfly/react-table": "^6.3.1",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
-    "@svgr/webpack": "^5.5.0",
     "@testing-library/jest-dom": "^6.8.0",
     "@types/jest": "^27.5.2",
     "@types/react": "^19.1.13",
@@ -29,7 +28,6 @@
     "eslint": "^8.3.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-webpack-plugin": "^3.1.1",
-    "file-loader": "^6.2.0",
     "fs-extra": "11.3.5",
     "graphql": "^16.11.0",
     "html-webpack-plugin": "^5.5.0",
@@ -43,19 +41,16 @@
     "postcss-normalize": "^10.0.1",
     "postcss-preset-env": "^7.0.1",
     "react": "^19.1.1",
-    "react-app-polyfill": "^3.0.0",
     "react-dev-utils": "^12.0.1",
     "react-dom": "^19.1.1",
     "react-refresh": "^0.11.0",
     "react-router-dom": "^7.9.0",
     "resolve": "^1.20.0",
-    "resolve-url-loader": "5.0.0",
     "semver": "^7.3.5",
     "source-map-loader": "5.0.0",
     "style-loader": "4.0.0",
     "terser-webpack-plugin": "^5.2.5",
     "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4",
     "webpack": "^5.64.4",
     "webpack-dev-server": "^4.6.0",
     "webpack-manifest-plugin": "^4.0.2"
@@ -95,9 +90,6 @@
       "src/**/*.{js,jsx,ts,tsx}",
       "!src/**/*.d.ts"
     ],
-    "setupFiles": [
-      "react-app-polyfill/jsdom"
-    ],
     "setupFilesAfterEnv": [
       "<rootDir>/src/setupTests.ts"
     ],
@@ -114,12 +106,12 @@
     },
     "transformIgnorePatterns": [
       "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$",
-      "^.+\\.module\\.(css|sass|scss)$"
+      "^.+\\.module\\.css$"
     ],
     "modulePaths": [],
     "moduleNameMapper": {
       "^react-native$": "react-native-web",
-      "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
+      "^.+\\.module\\.css$": "identity-obj-proxy"
     },
     "moduleFileExtensions": [
       "web.js",
