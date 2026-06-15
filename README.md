@@ -1,6 +1,6 @@
 # visual-qontract
 
-visual-qontract is the web UI for the data served by AppSRE's team [qontract-server](https://github.com/app-sre/qontract-server/) instance.
+visual-qontract (Also known as Visual app-interface) is the web UI for the data served by AppSRE's team [qontract-server](https://github.com/app-sre/qontract-server/) instance.
 
 It is written in [React](https://reactjs.org/) and uses [PatternFly 6](https://www.patternfly.org/) as the UI framework.
 
