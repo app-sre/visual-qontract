@@ -52,10 +52,21 @@ objects:
                 topologyKey: topology.kubernetes.io/zone
               weight: 100
         serviceAccountName: visual-qontract
+        automountServiceAccountToken: false
+        securityContext:
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
         containers:
         - image: ${IMAGE}:${IMAGE_TAG}
           imagePullPolicy: Always
           name: visual-qontract
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
           env:
           - name: GRAPHQL_URI
             valueFrom:
@@ -94,6 +105,12 @@ objects:
               mountPath: /opt/visual-qontract/build/env-config.js
               subPath: env-config.js
               readOnly: true
+            - name: nginx-cache
+              mountPath: /var/cache/nginx
+            - name: nginx-log
+              mountPath: /var/log/nginx
+            - name: nginx-run
+              mountPath: /var/run
         volumes:
         - name: visual-qontract-env
           configMap:
@@ -101,6 +118,12 @@ objects:
             items:
             - key: env
               path: env-config.js
+        - name: nginx-cache
+          emptyDir: {}
+        - name: nginx-log
+          emptyDir: {}
+        - name: nginx-run
+          emptyDir: {}
 # Canary
 - apiVersion: apps/v1
   kind: Deployment
@@ -150,10 +173,21 @@ objects:
                 topologyKey: topology.kubernetes.io/zone
               weight: 100
         serviceAccountName: visual-qontract
+        automountServiceAccountToken: false
+        securityContext:
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
         containers:
         - image: ${IMAGE}:${IMAGE_TAG_CANARY}
           imagePullPolicy: Always
           name: visual-qontract
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
           env:
           - name: GRAPHQL_URI
             valueFrom:
@@ -192,6 +226,12 @@ objects:
               mountPath: /opt/visual-qontract/build/env-config.js
               subPath: env-config.js
               readOnly: true
+            - name: nginx-cache
+              mountPath: /var/cache/nginx
+            - name: nginx-log
+              mountPath: /var/log/nginx
+            - name: nginx-run
+              mountPath: /var/run
         volumes:
         - name: visual-qontract-env
           configMap:
@@ -199,6 +239,12 @@ objects:
             items:
             - key: env
               path: env-config.js
+        - name: nginx-cache
+          emptyDir: {}
+        - name: nginx-log
+          emptyDir: {}
+        - name: nginx-run
+          emptyDir: {}
 - apiVersion: v1
   kind: Service
   metadata:
@@ -220,13 +266,13 @@ parameters:
   displayName: visual qontract image
   description: visual qontract docker image. Defaults to quay.io/app-sre/visual-qontract
 - name: IMAGE_TAG
-  value: latest
+  required: true
   displayName: visual qontract version
-  description: visual qontract version which defaults to latest
+  description: visual qontract version, must be explicitly provided
 - name: IMAGE_TAG_CANARY
-  value: latest
+  required: true
   displayName: visual qontract canary version
-  description: visual qontract canary version which defaults to latest
+  description: visual qontract canary version, must be explicitly provided
 - name: MEMORY_REQUESTS
   value: 16Mi
 - name: MEMORY_LIMIT
