@@ -4,8 +4,8 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^4.0.5",
-    "@babel/core": "^7.16.0",
-    "@babel/runtime": "^7.29.2",
+    "@babel/core": "^8.0.0",
+    "@babel/runtime": "^8.0.0",
     "@patternfly/react-core": "^6.3.1",
     "@patternfly/react-icons": "^6.3.1",
     "@patternfly/react-table": "^6.3.1",
