@@ -1,5 +1,5 @@
 ### base image
-FROM registry.access.redhat.com/ubi9/nodejs-24-minimal@sha256:e76548c58c4a29907cef1e01cb6a4cab426eb071ffe28ac1f25dd58d14a89569 AS base
+FROM registry.access.redhat.com/ubi9/nodejs-24-minimal@sha256:c23f4bd66ff13561ed7226a8525ddeb259d70f5b4106dc8e289e2db4a3152ed1 AS base
 
 USER root
 ENV CI=1
@@ -18,7 +18,7 @@ FROM base AS test
 RUN npm run lint && npm test -- --coverage --ci --watchAll=false
 
 ### prod image
-FROM registry.access.redhat.com/ubi9/nginx-124@sha256:19d549defb6f6085c511ae3fda163870d66c9208bad12e30300b30b177c2ca82 AS prod
+FROM registry.access.redhat.com/ubi9/nginx-124@sha256:da54bbccb61ef4c1229b501276e6af35878455471598426346bb3014571843ed AS prod
 
 # Copy nginx configuration and entrypoint
 COPY deployment/nginx.conf /etc/nginx/nginx.conf
