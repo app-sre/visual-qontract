@@ -27,7 +27,7 @@
     "dotenv-expand": "^5.1.0",
     "eslint": "^8.3.0",
     "eslint-config-react-app": "^7.0.1",
-    "eslint-webpack-plugin": "^3.1.1",
+    "eslint-webpack-plugin": "^6.0.0",
     "fs-extra": "11.3.5",
     "graphql": "^16.11.0",
     "html-webpack-plugin": "^5.5.0",
